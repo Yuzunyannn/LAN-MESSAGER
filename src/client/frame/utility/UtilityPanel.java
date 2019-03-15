@@ -1,4 +1,4 @@
-package frame.utility;
+package client.frame.utility;
 
 import java.awt.Color;
 

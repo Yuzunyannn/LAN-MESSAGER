@@ -1,6 +1,6 @@
 package core;
 
-import frame.MainFrame;
+import client.frame.MainFrame;
 import util.PlatformHelper;
 
 public class Main {

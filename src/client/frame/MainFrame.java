@@ -1,4 +1,4 @@
-package frame;
+package client.frame;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -7,8 +7,8 @@ import java.awt.LayoutManager;
 
 import javax.swing.JFrame;
 
-import frame.info.InfoPanel;
-import frame.utility.UtilityPanel;
+import client.frame.info.InfoPanel;
+import client.frame.utility.UtilityPanel;
 
 public class MainFrame extends JFrame {
 
@@ -28,14 +28,12 @@ public class MainFrame extends JFrame {
 		@Override
 		public void layoutContainer(Container parent) {
 			Component[] cons = parent.getComponents();
-			//Component titleBar = cons[0];
 			Component info = cons[0];
 			Component utility = cons[1];
 			int height = parent.getHeight();
 			int width = parent.getWidth();
 			info.setSize(INFO_RIGION_WIDTH, height);
 			utility.setSize(width - INFO_RIGION_WIDTH, height);
-			//titleBar.setSize(width, 25);
 		}
 
 		@Override
@@ -58,8 +56,6 @@ public class MainFrame extends JFrame {
 	private InfoPanel infoPanel = new InfoPanel();
 	/** 右侧功能区域 */
 	private UtilityPanel utilityPanel = new UtilityPanel();
-	/** 标题栏 */
-	//private TitleBarPanel titleBarPanel = new TitleBarPanel();
 
 	/** 构造函数 */
 	public MainFrame() {
@@ -68,14 +64,9 @@ public class MainFrame extends JFrame {
 		this.setIconImage(null);
 		// 设置关闭操作
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// 自定义标题栏
-		// this.setUndecorated(true);
 		// 设置布局
 		Container content = this.getContentPane();
 		content.setLayout(layout);
-		//content.add(titleBarPanel);
-		//titleBarPanel.frame = this;
-		//titleBarPanel.setLocation(0, 0);
 		content.add(infoPanel);
 		infoPanel.setLocation(0, 0);
 		content.add(utilityPanel);
