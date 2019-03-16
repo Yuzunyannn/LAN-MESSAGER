@@ -33,6 +33,7 @@ import javax.swing.text.ViewFactory;
 
 import client.frame.Theme;
 import util.FileHelper;
+import util.PlatformHelper;
 
 public class ChatInputPanel extends JPanel {
 
@@ -211,6 +212,9 @@ public class ChatInputPanel extends JPanel {
 			// 如果没有读取成功，表明这个文件不是图片
 			if (icon.getIconWidth() <= 0) {
 				// 获取文件的图标
+				if(PlatformHelper.getOSName().equals("Mac OS X")) {
+					return FileHelper.getIconFromMac(file);
+				}
 				icon = FileHelper.getIconFromFile(file);
 			}
 			if (icon == null)
@@ -223,7 +227,7 @@ public class ChatInputPanel extends JPanel {
 				} else {
 					icon.setImage(icon.getImage().getScaledInstance(64 * icon.getIconWidth() / icon.getIconHeight(), 64,
 							Image.SCALE_DEFAULT));
-					;
+					
 				}
 			}
 			return icon;
