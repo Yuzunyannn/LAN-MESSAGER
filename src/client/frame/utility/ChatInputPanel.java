@@ -33,7 +33,6 @@ import javax.swing.text.ViewFactory;
 
 import client.frame.Theme;
 import util.FileHelper;
-import util.PlatformHelper;
 
 public class ChatInputPanel extends JPanel {
 
@@ -156,16 +155,17 @@ public class ChatInputPanel extends JPanel {
 					return vf;
 				}
 			});
-			//鼠标双击图片
+			// 鼠标双击图片
 			this.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					int st = getSelectionStart();
 					int ed = getSelectionEnd();
-					if(ed-st==0)return;
+					if (ed - st == 0)
+						return;
 					Element e1 = getStyledDocument().getCharacterElement(st);
-					if (e1.getName().equals("icon") ) {
-						
+					if (e1.getName().equals("icon")) {
+
 					}
 				}
 			});
@@ -208,32 +208,30 @@ public class ChatInputPanel extends JPanel {
 
 		/** 获取图标 */
 		private Icon getIconWithInfo(File file) {
-			ImageIcon icon = new ImageIcon(file.getPath());
+			Icon icon = new ImageIcon(file.getPath());
 			// 如果没有读取成功，表明这个文件不是图片
 			if (icon.getIconWidth() <= 0) {
 				// 获取文件的图标
-				if(PlatformHelper.getOSName().equals("Mac OS X")) {
-					return FileHelper.getIconFromMac(file);
-				}
 				icon = FileHelper.getIconFromFile(file);
 			}
-			if (icon == null)
-				return null;
-			// 根据逻辑进行缩放
-			if (icon.getIconWidth() > 64 || icon.getIconHeight() > 64) {
-				if (icon.getIconWidth() > icon.getIconHeight()) {
-					icon.setImage(icon.getImage().getScaledInstance(64, 64 * icon.getIconHeight() / icon.getIconWidth(),
-							Image.SCALE_DEFAULT));
-				} else {
-					icon.setImage(icon.getImage().getScaledInstance(64 * icon.getIconWidth() / icon.getIconHeight(), 64,
-							Image.SCALE_DEFAULT));
-					
+			if (icon != null && icon instanceof ImageIcon) {
+				ImageIcon imgIcon = (ImageIcon) icon;
+				// 根据逻辑进行缩放
+				if (imgIcon.getIconWidth() > 64 || imgIcon.getIconHeight() > 64) {
+					if (imgIcon.getIconWidth() > imgIcon.getIconHeight()) {
+						imgIcon.setImage(imgIcon.getImage().getScaledInstance(64,
+								64 * imgIcon.getIconHeight() / imgIcon.getIconWidth(), Image.SCALE_DEFAULT));
+					} else {
+						imgIcon.setImage(imgIcon.getImage().getScaledInstance(
+								64 * imgIcon.getIconWidth() / imgIcon.getIconHeight(), 64, Image.SCALE_DEFAULT));
+
+					}
 				}
 			}
 			return icon;
 		}
 
-		/** 遍历输出 ，测试用！！*/
+		/** 遍历输出 ，测试用！！ */
 		@SuppressWarnings("unused")
 		public void eachChar() {
 			StyledDocument doc = this.getStyledDocument();
