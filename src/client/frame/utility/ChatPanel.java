@@ -17,7 +17,7 @@ public class ChatPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	/** 输入区域的大小 */
-	private int inputRegionHeight = 320;
+	private int inputRegionHeight = 225;
 
 	/** 聊天区域自定义布局 */
 	private LayoutManager layout = new LayoutManager() {

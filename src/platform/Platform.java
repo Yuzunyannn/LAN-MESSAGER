@@ -37,4 +37,9 @@ public class Platform {
 		return Toolkit.getDefaultToolkit().isFrameStateSupported(JFrame.MAXIMIZED_BOTH);
 	}
 
+	/** 字符串 */
+	@Override
+	public String toString() {
+		return this.name;
+	}
 }
