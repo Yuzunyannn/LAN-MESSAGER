@@ -30,7 +30,7 @@ public class RecvDealValidation implements IRecvDeal {
 				RecvDealValidation.sendValidation(con);
 			}
 		} else {
-			Logger.log.impart(con, "验证验证失败！", "Side:", con.side.ordinal());
+			Logger.log.warn(con + "验证验证失败！" + "Side:" + con.side.ordinal());
 			con.close();
 		}
 	}

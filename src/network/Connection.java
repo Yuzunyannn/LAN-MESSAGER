@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
@@ -70,6 +71,9 @@ public class Connection implements Runnable {
 		while (!socket.isClosed()) {
 			try {
 				deal.deal(this);
+			} catch (SocketException e) {
+				Logger.log.warn(this.toString() + "出现socket错误", e);
+				break;
 			} catch (EOFException e) {
 				break;
 			} catch (IOException e) {
@@ -101,6 +105,7 @@ public class Connection implements Runnable {
 			Logger.log.warn(this.toString() + "在close时出现异常", e);
 			return false;
 		}
+		Logger.log.impart(this, "断开连接！");
 		return true;
 	}
 
@@ -126,7 +131,7 @@ public class Connection implements Runnable {
 
 	@Override
 	public String toString() {
-		return "连接[" + this.getInetAddress() + "]";
+		return "[连接" + this.getInetAddress() + "]";
 	}
 
 }

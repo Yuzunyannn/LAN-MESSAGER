@@ -61,11 +61,11 @@ public class Network implements Runnable {
 			Connection con = null;
 			try {
 				con = new Connection(socket, Side.SERVER);
+				Logger.log.impart("新的连接：" + con.getInetAddress());
 			} catch (IOException e) {
 				Logger.log.warn("连接建立失败", e);
 				continue;
 			}
-			Logger.log.impart("新的连接：" + con.getInetAddress());
 			// 发送验证消息
 			RecvDealValidation.sendValidation(con);
 			// 加入列表
