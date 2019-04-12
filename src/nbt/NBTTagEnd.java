@@ -1,4 +1,4 @@
-package nbt;
+﻿package nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;

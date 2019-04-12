@@ -16,7 +16,7 @@ import java.util.zip.GZIPInputStream;
 
 public class NBTStream {
 
-	/** ´ÓbufferÀï¶ÁÈë */
+	/** ä»bufferé‡Œè¯»å…¥ */
 	public static NBTTagCompound read(ByteBuffer buffer) throws IOException {
 		InputStream inputStream = new ByteArrayInputStream(buffer.array());
 		DataInputStream dataInputStream = new DataInputStream(inputStream);
@@ -27,7 +27,7 @@ public class NBTStream {
 		}
 	}
 
-	/** ÏòbufferÀïĞ´Èë */
+	/** å‘bufferé‡Œå†™å…¥ */
 	public static void write(ByteBuffer buffer, NBTTagCompound nbt) throws IOException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
@@ -39,7 +39,7 @@ public class NBTStream {
 		}
 	}
 
-	/** ¶ÁÈ¡NBT´ÓFileÖĞ */
+	/** è¯»å–NBTä»Fileä¸­ */
 	@SuppressWarnings("resource")
 	public static NBTTagCompound read(File file) throws IOException {
 		if (!file.exists())
@@ -62,7 +62,7 @@ public class NBTStream {
 		return nbt;
 	}
 
-	/** Ğ´ÈëNBTµ½FileÖĞ */
+	/** å†™å…¥NBTåˆ°Fileä¸­ */
 	public static void write(File file, NBTTagCompound nbt) throws IOException {
 		DataOutputStream dataInputStream = new DataOutputStream(new FileOutputStream(file));
 		try {
@@ -72,24 +72,24 @@ public class NBTStream {
 		}
 	}
 
-	/** ¶ÁÈ¡NBT´ÓStreamÖĞ */
+	/** è¯»å–NBTä»Streamä¸­ */
 	public static NBTTagCompound read(DataInput input) throws IOException {
 		NBTBase nbtbase = read(input, 0);
 		if (nbtbase instanceof NBTTagCompound) {
 			return (NBTTagCompound) nbtbase;
 		} else {
-			throw new IOException("¸ùÄ¿tag±ØĞëÎªcompound");
+			throw new IOException("æ ¹ç›®tagå¿…é¡»ä¸ºcompound");
 		}
 	}
 
-	/** Ğ´ÈëNBTµ½StreamÖĞ */
+	/** å†™å…¥NBTåˆ°Streamä¸­ */
 	public static void write(DataOutput output, NBTTagCompound nbt, String name) throws IOException {
 		output.writeByte(NBTBase.TAG_COMPOUND);
 		output.writeUTF(name);
 		nbt.write(output);
 	}
 
-	/** ¶ÁÈ¡NBT´ÓStreamÖĞ */
+	/** è¯»å–NBTä»Streamä¸­ */
 	private static NBTBase read(DataInput input, int depth) throws IOException {
 		byte tagId = input.readByte();
 		if (tagId == 0) {
@@ -98,7 +98,7 @@ public class NBTStream {
 			input.readUTF();
 			NBTBase nbtbase = NBTBase.createNewByType(tagId);
 			if (nbtbase == null)
-				throw new RuntimeException("ÎŞĞ§µÄTAG±êÇ©£¬tagID:" + tagId);
+				throw new RuntimeException("æ— æ•ˆçš„TAGæ ‡ç­¾ï¼ŒtagID:" + tagId);
 			try {
 				nbtbase.read(input, depth);
 				return nbtbase;
@@ -109,7 +109,7 @@ public class NBTStream {
 		}
 	}
 
-	/** ¼ÇÂ¼´íÎó±¨¸æ */
+	/** è®°å½•é”™è¯¯æŠ¥å‘Š */
 	protected static void ExceptionReport(IOException e) {
 
 	}

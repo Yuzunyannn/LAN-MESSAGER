@@ -4,10 +4,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-/** Ê¹ÓÃMinecraftµÄNBT½á¹¹µÄ»ùÀà */
+/** ä½¿ç”¨Minecraftçš„NBTç»“æ„çš„åŸºç±» */
 public abstract class NBTBase {
 
-	/** NBT²»Í¬µÄÀàĞÍ¶ÔÓ¦µÄ±àºÅ */
+	/** NBTä¸åŒçš„ç±»å‹å¯¹åº”çš„ç¼–å· */
 
 	public static final int TAG_END = 0;
 	public static final int TAG_BYTE = 1;
@@ -23,21 +23,21 @@ public abstract class NBTBase {
 	public static final int TAG_INTS = 11;
 	public static final int TAG_LONGS = 12;
 
-	/** tagĞ´Êı¾İ */
+	/** tagå†™æ•°æ® */
 	abstract void write(DataOutput output) throws IOException;
 
-	/** tag¶ÁÊı¾İ */
+	/** tagè¯»æ•°æ® */
 	abstract void read(DataInput input, int depth) throws IOException;
 
-	/** tagµÄid */
+	/** tagçš„id */
 	public abstract byte getId();
 
-	/** ·µ»ØtagÊÇ·ñÃ»ÓĞÄÚÈİ */
+	/** è¿”å›tagæ˜¯å¦æ²¡æœ‰å†…å®¹ */
 	public boolean hasNoTags() {
 		return false;
 	}
 
-	/** ¸´ÖÆ */
+	/** å¤åˆ¶ */
 	public abstract NBTBase copy();
 
 	@Override
@@ -55,7 +55,7 @@ public abstract class NBTBase {
 		return this.copy();
 	}
 
-	/** ¸ù¾İid´´½¨Tag */
+	/** æ ¹æ®idåˆ›å»ºTag */
 	protected static NBTBase createNewByType(byte id) {
 		switch (id) {
 		case 0:

@@ -1,4 +1,4 @@
-package nbt;
+ï»¿package nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class NBTTagShort extends NBTBase {
 
-	/** Êı¾İ */
+	/** æ•°æ® */
 	private short data;
 
 	public NBTTagShort() {

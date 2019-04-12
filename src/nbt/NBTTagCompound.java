@@ -1,4 +1,4 @@
-package nbt;
+ï»¿package nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class NBTTagCompound extends NBTBase {
 
-	/** Êı¾İÍ¼ */
+	/** æ•°æ®å›¾ */
 	private final Map<String, NBTBase> tagMap = new HashMap<String, NBTBase>();
 
 	@Override
@@ -31,7 +31,7 @@ public class NBTTagCompound extends NBTBase {
 	@Override
 	void read(DataInput input, int depth) throws IOException {
 		if (depth > 512)
-			throw new RuntimeException("NBT±êÇ©µÄ¹ıÓÚ¸´ÔÓ£¬Éî¶È£º" + depth);
+			throw new RuntimeException("NBTæ ‡ç­¾çš„è¿‡äºå¤æ‚ï¼Œæ·±åº¦ï¼š" + depth);
 		this.tagMap.clear();
 		byte b;
 		while ((b = input.readByte()) != 0) {
@@ -41,11 +41,11 @@ public class NBTTagCompound extends NBTBase {
 		}
 	}
 
-	/** ¶ÁÒ»¸ötag */
+	/** è¯»ä¸€ä¸ªtag */
 	static NBTBase readNBT(byte tagId, String key, DataInput input, int depth) throws IOException {
 		NBTBase nbtbase = NBTBase.createNewByType(tagId);
 		if (nbtbase == null)
-			throw new RuntimeException("ÎŞĞ§µÄTAG±êÇ©£¬tagID:" + tagId);
+			throw new RuntimeException("æ— æ•ˆçš„TAGæ ‡ç­¾ï¼ŒtagID:" + tagId);
 		try {
 			nbtbase.read(input, depth);
 			return nbtbase;
@@ -80,7 +80,7 @@ public class NBTTagCompound extends NBTBase {
 		return super.hashCode() ^ this.tagMap.hashCode();
 	}
 
-	/** ºÏ²¢ */
+	/** åˆå¹¶ */
 	public void merge(NBTTagCompound other) {
 		for (String key : other.tagMap.keySet()) {
 			NBTBase nbtbase = other.tagMap.get(key);
@@ -97,33 +97,33 @@ public class NBTTagCompound extends NBTBase {
 		}
 	}
 
-	/** »ñÈ¡tagÊıÁ¿ */
+	/** è·å–tagæ•°é‡ */
 	public int getSize() {
 		return this.tagMap.size();
 	}
 
-	/** »ñÈ¡keyµÄ¼¯ºÏ */
+	/** è·å–keyçš„é›†åˆ */
 	public Set<String> getKeySet() {
 		return this.tagMap.keySet();
 	}
 
-	/** ÉèÖÃtag */
+	/** è®¾ç½®tag */
 	public void setTag(String key, NBTBase value) {
 		this.tagMap.put(key, value);
 	}
 
-	/** »ñÈ¡tagµÄid */
+	/** è·å–tagçš„id */
 	public byte getTagId(String key) {
 		NBTBase nbtbase = this.tagMap.get(key);
 		return nbtbase == null ? 0 : nbtbase.getId();
 	}
 
-	/** ÊÇ·ñÓĞÖ¸¶¨key */
+	/** æ˜¯å¦æœ‰æŒ‡å®škey */
 	public boolean hasKey(String key) {
 		return this.tagMap.containsKey(key);
 	}
 
-	/** ÊÇ·ñÓĞÖ¸¶¨ÀàĞÍµÄkey */
+	/** æ˜¯å¦æœ‰æŒ‡å®šç±»å‹çš„key */
 	public boolean hasKey(String key, int type) {
 		int i = this.getTagId(key);
 		if (i == type) {
@@ -132,12 +132,12 @@ public class NBTTagCompound extends NBTBase {
 		return false;
 	}
 
-	/** ÒÆ³ıtag */
+	/** ç§»é™¤tag */
 	public void removeTag(String key) {
 		this.tagMap.remove(key);
 	}
 
-	/** »ñÈ¡Ö¸¶¨Î»ÖÃÊÇCompoundµÄtag */
+	/** è·å–æŒ‡å®šä½ç½®æ˜¯Compoundçš„tag */
 	public NBTTagCompound getCompoundTag(String key) {
 		if (this.hasKey(key, NBTBase.TAG_COMPOUND)) {
 			return (NBTTagCompound) this.tagMap.get(key);

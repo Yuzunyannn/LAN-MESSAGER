@@ -1,4 +1,4 @@
-package nbt;
+ï»¿package nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -8,14 +8,14 @@ import java.util.Iterator;
 import java.util.List;
 
 public class NBTTagList extends NBTBase implements java.lang.Iterable<NBTBase> {
-	/** ÏßĞÔ±í */
+	/** çº¿æ€§è¡¨ */
 	private List<NBTBase> tagList = new ArrayList<NBTBase>();
-	/** List¹æ¶¨ËùÓĞµÄÏîÄ¿±ØĞëÒ»Ñù£¬¸Ã±äÁ¿¼ÇÂ¼µÚÒ»¸ö¼ÓÈëµÄÀàĞÍ */
+	/** Listè§„å®šæ‰€æœ‰çš„é¡¹ç›®å¿…é¡»ä¸€æ ·ï¼Œè¯¥å˜é‡è®°å½•ç¬¬ä¸€ä¸ªåŠ å…¥çš„ç±»å‹ */
 	private byte tagType = 0;
 
 	@Override
 	void write(DataOutput output) throws IOException {
-		// ´ÓĞÂ²âÊÔµÚÒ»¸öÀàĞÍ
+		// ä»æ–°æµ‹è¯•ç¬¬ä¸€ä¸ªç±»å‹
 		if (this.tagList.isEmpty()) {
 			this.tagType = 0;
 		} else {
@@ -31,13 +31,13 @@ public class NBTTagList extends NBTBase implements java.lang.Iterable<NBTBase> {
 	@Override
 	void read(DataInput input, int depth) throws IOException {
 		if (depth > 512)
-			throw new RuntimeException("NBT±êÇ©µÄ¹ıÓÚ¸´ÔÓ£¬Éî¶È£º" + depth);
-		// ÀàĞÍ
+			throw new RuntimeException("NBTæ ‡ç­¾çš„è¿‡äºå¤æ‚ï¼Œæ·±åº¦ï¼š" + depth);
+		// ç±»å‹
 		this.tagType = input.readByte();
-		// Êı×é³¤¶È
+		// æ•°ç»„é•¿åº¦
 		int i = input.readInt();
 		if (this.tagType == 0 && i > 0)
-			throw new RuntimeException("NBTagTList¼ÇÂ¼µÄTag³öÏÖ´íÎó£¡");
+			throw new RuntimeException("NBTagTListè®°å½•çš„Tagå‡ºç°é”™è¯¯ï¼");
 		this.tagList = new ArrayList<NBTBase>(i);
 		for (int j = 0; j < i; j++) {
 			NBTBase nbtbase = NBTBase.createNewByType(this.tagType);
@@ -94,7 +94,7 @@ public class NBTTagList extends NBTBase implements java.lang.Iterable<NBTBase> {
 		return super.hashCode() ^ this.tagList.hashCode();
 	}
 
-	/** »ñÈ¡¸ÃNBTTagListµÄÀàĞÍ */
+	/** è·å–è¯¥NBTTagListçš„ç±»å‹ */
 	public int getTagType() {
 		return this.tagType;
 	}
@@ -117,13 +117,13 @@ public class NBTTagList extends NBTBase implements java.lang.Iterable<NBTBase> {
 
 	public void appendTag(NBTBase nbt) {
 		if (nbt.getId() == 0) {
-			this.warn("NBTagTListÖĞÎŞ·¨Ìí¼ÓÎŞĞ§µÄ±êÇ©£¨NBTEnd£©");
+			this.warn("NBTagTListä¸­æ— æ³•æ·»åŠ æ— æ•ˆçš„æ ‡ç­¾ï¼ˆNBTEndï¼‰");
 			return;
 		}
 		if (this.tagType == 0) {
 			this.tagType = nbt.getId();
 		} else if (this.tagType != nbt.getId()) {
-			this.warn("NBTagTListÌí¼ÓµÄÄÚÈİÒªÓëÉÏÒ»´ÎÌí¼ÓµÄÄÚÈİÏàÍ¬");
+			this.warn("NBTagTListæ·»åŠ çš„å†…å®¹è¦ä¸ä¸Šä¸€æ¬¡æ·»åŠ çš„å†…å®¹ç›¸åŒ");
 			return;
 		}
 
@@ -132,23 +132,23 @@ public class NBTTagList extends NBTBase implements java.lang.Iterable<NBTBase> {
 
 	public void set(int idx, NBTBase nbt) {
 		if (nbt.getId() == 0) {
-			this.warn("NBTListÖĞÎŞ·¨Ìí¼ÓÎŞĞ§µÄ±êÇ©£¨NBTEnd£©");
+			this.warn("NBTListä¸­æ— æ³•æ·»åŠ æ— æ•ˆçš„æ ‡ç­¾ï¼ˆNBTEndï¼‰");
 			return;
 		}
 		if (idx >= 0 && idx < this.tagList.size()) {
 			if (this.tagType == 0) {
 				this.tagType = nbt.getId();
 			} else if (this.tagType != nbt.getId()) {
-				this.warn("NBTagTListÌí¼ÓµÄÄÚÈİÒªÓëÉÏÒ»´ÎÌí¼ÓµÄÄÚÈİÏàÍ¬");
+				this.warn("NBTagTListæ·»åŠ çš„å†…å®¹è¦ä¸ä¸Šä¸€æ¬¡æ·»åŠ çš„å†…å®¹ç›¸åŒ");
 				return;
 			}
 			this.tagList.set(idx, nbt);
 		} else {
-			this.warn("²Ù×÷NBTagTListµÄÊ±ÏÂ±êÔ½½çÁË£¡");
+			this.warn("æ“ä½œNBTagTListçš„æ—¶ä¸‹æ ‡è¶Šç•Œäº†ï¼");
 		}
 	}
 
-	/** É¾³ıtag */
+	/** åˆ é™¤tag */
 	public NBTBase removeTag(int index) {
 		return this.tagList.remove(index);
 	}

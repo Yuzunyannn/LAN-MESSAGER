@@ -1,11 +1,11 @@
-package nbt;
+ï»¿package nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 public class NBTTagString extends NBTBase {
-	/** Êı¾İ */
+	/** æ•°æ® */
 	private String data;
 
 	public NBTTagString() {
@@ -63,7 +63,7 @@ public class NBTTagString extends NBTBase {
 		return this.data;
 	}
 
-	/** ×Ö·û×ªÒå»¯ */
+	/** å­—ç¬¦è½¬ä¹‰åŒ– */
 	public static String quoteAndEscape(String str) {
 		StringBuilder stringbuilder = new StringBuilder("\"");
 		for (int i = 0; i < str.length(); ++i) {

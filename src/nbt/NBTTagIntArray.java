@@ -1,4 +1,4 @@
-package nbt;
+ï»¿package nbt;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NBTTagIntArray extends NBTBase {
-	/** Êı¾İ */
+	/** æ•°æ® */
 	private int[] data;
 
 	NBTTagIntArray() {
