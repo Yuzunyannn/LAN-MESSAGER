@@ -4,7 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class NBTTagByte extends NBTBase {
+public class NBTTagByte extends NBTPrimitive {
 
 	/** 数据 */
 	private byte data;
@@ -53,6 +53,36 @@ public class NBTTagByte extends NBTBase {
 
 	public byte get() {
 		return this.data;
+	}
+
+	@Override
+	public byte getByte() {
+		return (byte) this.data;
+	}
+
+	@Override
+	public short getShort() {
+		return (short) this.data;
+	}
+
+	@Override
+	public int getInt() {
+		return (int) this.data;
+	}
+
+	@Override
+	public long getLong() {
+		return (long) this.data;
+	}
+
+	@Override
+	public float getFloat() {
+		return (float) this.data;
+	}
+
+	@Override
+	public double getDouble() {
+		return (double) this.data;
 	}
 
 }

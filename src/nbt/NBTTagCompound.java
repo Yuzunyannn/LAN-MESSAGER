@@ -76,6 +76,11 @@ public class NBTTagCompound extends NBTBase {
 	}
 
 	@Override
+	public boolean hasNoTags() {
+		return this.tagMap.isEmpty();
+	}
+
+	@Override
 	public int hashCode() {
 		return super.hashCode() ^ this.tagMap.hashCode();
 	}
@@ -107,17 +112,6 @@ public class NBTTagCompound extends NBTBase {
 		return this.tagMap.keySet();
 	}
 
-	/** 设置tag */
-	public void setTag(String key, NBTBase value) {
-		this.tagMap.put(key, value);
-	}
-
-	/** 获取tag的id */
-	public byte getTagId(String key) {
-		NBTBase nbtbase = this.tagMap.get(key);
-		return nbtbase == null ? 0 : nbtbase.getId();
-	}
-
 	/** 是否有指定key */
 	public boolean hasKey(String key) {
 		return this.tagMap.containsKey(key);
@@ -128,13 +122,76 @@ public class NBTTagCompound extends NBTBase {
 		int i = this.getTagId(key);
 		if (i == type) {
 			return true;
-		}
-		return false;
+		} else if (type != NBTBase.TAG_NUMBER)
+			return false;
+		else
+			return i == NBTBase.TAG_BYTE || i == NBTBase.TAG_SHORT || i == NBTBase.TAG_INT || i == NBTBase.TAG_LONG
+					|| i == NBTBase.TAG_FLOAT || i == NBTBase.TAG_DOUBLE;
 	}
 
 	/** 移除tag */
 	public void removeTag(String key) {
 		this.tagMap.remove(key);
+	}
+
+	/** 获取tag的id */
+	public byte getTagId(String key) {
+		NBTBase nbtbase = this.tagMap.get(key);
+		return nbtbase == null ? 0 : nbtbase.getId();
+	}
+
+	/** 设置tag */
+	public void setTag(String key, NBTBase value) {
+		this.tagMap.put(key, value);
+	}
+
+	/** 获取tag */
+	public NBTBase getTag(String key) {
+		return this.tagMap.get(key);
+	}
+
+	public void setBoolean(String key, boolean value) {
+		this.setByte(key, (byte) (value ? 1 : 0));
+	}
+
+	public void setByte(String key, byte value) {
+		this.tagMap.put(key, new NBTTagByte(value));
+	}
+
+	public void setShort(String key, short value) {
+		this.tagMap.put(key, new NBTTagShort(value));
+	}
+
+	public void setInteger(String key, int value) {
+		this.tagMap.put(key, new NBTTagInt(value));
+	}
+
+	public void setLong(String key, long value) {
+		this.tagMap.put(key, new NBTTagLong(value));
+	}
+
+	public void setFloat(String key, float value) {
+		this.tagMap.put(key, new NBTTagFloat(value));
+	}
+
+	public void setDouble(String key, double value) {
+		this.tagMap.put(key, new NBTTagDouble(value));
+	}
+
+	public void setString(String key, String value) {
+		this.tagMap.put(key, new NBTTagString(value));
+	}
+
+	public void setByteArray(String key, byte[] value) {
+		this.tagMap.put(key, new NBTTagByteArray(value));
+	}
+
+	public void setIntArray(String key, int[] value) {
+		this.tagMap.put(key, new NBTTagIntArray(value));
+	}
+
+	public void setLongArray(String key, long[] value) {
+		this.tagMap.put(key, new NBTTagLongArray(value));
 	}
 
 	/** 获取指定位置是Compound的tag */
@@ -145,9 +202,68 @@ public class NBTTagCompound extends NBTBase {
 		return new NBTTagCompound();
 	}
 
-	@Override
-	public boolean hasNoTags() {
-		return this.tagMap.isEmpty();
+	public boolean getBoolean(String key) {
+		return this.getByte(key) != 0;
+	}
+
+	public byte getByte(String key) {
+		if (this.hasKey(key, NBTBase.TAG_NUMBER))
+			return ((NBTPrimitive) this.tagMap.get(key)).getByte();
+		return 0;
+	}
+
+	public short getShort(String key) {
+		if (this.hasKey(key, NBTBase.TAG_NUMBER))
+			return ((NBTPrimitive) this.tagMap.get(key)).getShort();
+		return 0;
+	}
+
+	public int getInteger(String key) {
+		if (this.hasKey(key, NBTBase.TAG_NUMBER))
+			return ((NBTPrimitive) this.tagMap.get(key)).getInt();
+		return 0;
+	}
+
+	public long getLong(String key) {
+		if (this.hasKey(key, NBTBase.TAG_NUMBER))
+			return ((NBTPrimitive) this.tagMap.get(key)).getLong();
+		return 0;
+	}
+
+	public float getFloat(String key) {
+		if (this.hasKey(key, NBTBase.TAG_NUMBER))
+			return ((NBTPrimitive) this.tagMap.get(key)).getFloat();
+		return 0;
+	}
+
+	public double getDouble(String key) {
+		if (this.hasKey(key, NBTBase.TAG_NUMBER))
+			return ((NBTPrimitive) this.tagMap.get(key)).getDouble();
+		return 0;
+	}
+
+	public String getString(String key) {
+		if (this.hasKey(key, NBTBase.TAG_STRING))
+			return ((NBTBase) this.tagMap.get(key)).toString();
+		return "";
+	}
+
+	public byte[] getByteArray(String key) {
+		if (this.hasKey(key, NBTBase.TAG_BYTES))
+			return ((NBTTagByteArray) this.tagMap.get(key)).getByteArray();
+		return new byte[0];
+	}
+
+	public int[] getIntArray(String key) {
+		if (this.hasKey(key, NBTBase.TAG_INTS))
+			return ((NBTTagIntArray) this.tagMap.get(key)).getIntArray();
+		return new int[0];
+	}
+
+	public long[] getLongArray(String key) {
+		if (this.hasKey(key, NBTBase.TAG_INTS))
+			return ((NBTTagLongArray) this.tagMap.get(key)).getLongArray();
+		return new long[0];
 	}
 
 	@Override

@@ -63,6 +63,11 @@ public class NBTTagString extends NBTBase {
 		return this.data;
 	}
 
+	/** 获取字符串 */
+	public String get() {
+		return this.data;
+	}
+
 	/** 字符转义化 */
 	public static String quoteAndEscape(String str) {
 		StringBuilder stringbuilder = new StringBuilder("\"");

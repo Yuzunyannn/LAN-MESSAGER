@@ -4,7 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class NBTTagInt extends NBTBase {
+public class NBTTagInt extends NBTPrimitive {
 
 	/** 数据 */
 	private int data;
@@ -47,14 +47,44 @@ public class NBTTagInt extends NBTBase {
 	public int hashCode() {
 		return super.hashCode() ^ this.data;
 	}
-	
+
 	@Override
-    public boolean equals(Object other)
-    {
-        return super.equals(other) && this.data == ((NBTTagInt)other).data;
-    }
-	
+	public boolean equals(Object other) {
+		return super.equals(other) && this.data == ((NBTTagInt) other).data;
+	}
+
 	public int get() {
 		return this.data;
 	}
+
+	@Override
+	public byte getByte() {
+		return (byte) this.data;
+	}
+
+	@Override
+	public short getShort() {
+		return (short) this.data;
+	}
+
+	@Override
+	public int getInt() {
+		return (int) this.data;
+	}
+
+	@Override
+	public long getLong() {
+		return (long) this.data;
+	}
+
+	@Override
+	public float getFloat() {
+		return (float) this.data;
+	}
+
+	@Override
+	public double getDouble() {
+		return (double) this.data;
+	}
+
 }

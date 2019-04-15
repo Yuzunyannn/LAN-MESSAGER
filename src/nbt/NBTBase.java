@@ -22,6 +22,8 @@ public abstract class NBTBase {
 	public static final int TAG_COMPOUND = 10;
 	public static final int TAG_INTS = 11;
 	public static final int TAG_LONGS = 12;
+	/** 数字判定使用 */
+	public static final int TAG_NUMBER = 99;
 
 	/** tag写数据 */
 	abstract void write(DataOutput output) throws IOException;

@@ -99,22 +99,27 @@ public class NBTTagList extends NBTBase implements java.lang.Iterable<NBTBase> {
 		return this.tagType;
 	}
 
+	/** 警告使用 */
 	private void warn(String str) {
 
 	}
 
+	/** 标签数量 */
 	public int tagCount() {
 		return this.tagList.size();
 	}
 
+	/** 大小（同 标签数量） */
 	public int size() {
 		return this.tagList.size();
 	}
 
+	/** 获取tag */
 	public NBTBase get(int idx) {
 		return (NBTBase) (idx >= 0 && idx < this.tagList.size() ? (NBTBase) this.tagList.get(idx) : new NBTTagEnd());
 	}
 
+	/** 添加tag */
 	public void appendTag(NBTBase nbt) {
 		if (nbt.getId() == 0) {
 			this.warn("NBTagTList中无法添加无效的标签（NBTEnd）");
@@ -130,6 +135,7 @@ public class NBTTagList extends NBTBase implements java.lang.Iterable<NBTBase> {
 		this.tagList.add(nbt);
 	}
 
+	/** 设置tag */
 	public void set(int idx, NBTBase nbt) {
 		if (nbt.getId() == 0) {
 			this.warn("NBTList中无法添加无效的标签（NBTEnd）");
@@ -151,6 +157,30 @@ public class NBTTagList extends NBTBase implements java.lang.Iterable<NBTBase> {
 	/** 删除tag */
 	public NBTBase removeTag(int index) {
 		return this.tagList.remove(index);
+	}
+
+	/** 获取指定位置的compuound */
+	public NBTTagCompound getCompoundTagAt(int idx) {
+		NBTBase nbtbase = this.get(idx);
+		if (nbtbase.getId() == NBTBase.TAG_COMPOUND)
+			return (NBTTagCompound) nbtbase;
+		return new NBTTagCompound();
+	}
+
+	/** 获取指定位置的int */
+	public int getIntAt(int idx) {
+		NBTBase nbtbase = this.get(idx);
+		if (nbtbase.getId() == NBTBase.TAG_INT)
+			return ((NBTTagInt) nbtbase).get();
+		return 0;
+	}
+
+	/** 获取指定位置的float */
+	public float getFloatAt(int idx) {
+		NBTBase nbtbase = this.get(idx);
+		if (nbtbase.getId() == NBTBase.TAG_FLOAT)
+			return ((NBTTagFloat) nbtbase).get();
+		return 0;
 	}
 
 	@Override
