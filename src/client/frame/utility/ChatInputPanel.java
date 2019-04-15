@@ -8,9 +8,6 @@ import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 
@@ -21,8 +18,6 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.TransferHandler;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
 
 import client.frame.Theme;
 
