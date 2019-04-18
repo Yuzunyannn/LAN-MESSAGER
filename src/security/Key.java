@@ -118,9 +118,10 @@ public class Key {
 	public byte[] decrypt(byte[] data) {
 		try {
 			return this.crypt(data, Cipher.DECRYPT_MODE, 128);
-		} catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException
-				| IOException e) {
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | IOException e) {
 			Logger.log.error("解密时候出现问题！", e);
+		} catch (BadPaddingException e) {
+			Logger.log.warn("您的密钥和数据不匹配", e);
 		}
 		return null;
 	}

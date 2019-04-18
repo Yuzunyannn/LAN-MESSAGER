@@ -19,7 +19,7 @@ public class Logger {
 
 	/** 显示错误的轨迹 */
 	private void print(Throwable e) {
-		e.printStackTrace(System.out);
+		e.printStackTrace();
 	}
 
 	/** 打印 */
@@ -59,7 +59,7 @@ public class Logger {
 	}
 
 	/** 输出一条警告信息 */
-	public void warn(String str, Exception e) {
+	public void warn(String str, Throwable e) {
 		this.warn(str + ":" + e.getMessage());
 		this.print(e);
 	}
@@ -71,7 +71,7 @@ public class Logger {
 	}
 
 	/** 输出一条错误信息 */
-	public void error(String str, Exception e) {
+	public void error(String str, Throwable e) {
 		this.error(str + ":" + e.getMessage());
 		this.print(e);
 	}
