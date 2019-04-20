@@ -12,4 +12,6 @@ public class Theme {
 	public static Color COLOR2 = new Color(0xaed6f1);
 	/** 主题的第三种颜色 */
 	public static Color COLOR3 = new Color(0x4876FF);
+	/** 主题的第四种颜色 */
+	public static Color COLOR4 = Color.BLACK;
 }

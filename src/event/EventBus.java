@@ -46,19 +46,19 @@ public class EventBus implements IEventExceptionHandle {
 			Logger.log.warn("EventBus注册事件的对象不能为空！");
 			return;
 		}
+		if (obj instanceof Class) {
+			Logger.log.warn("EventBus目前不支持静态类注册！");
+			return;
+		}
 		if (objSet.contains(obj)) {
 			Logger.log.warn("EventBus无法添加重复的事件对象");
 			return;
 		}
-		boolean isStatic = obj instanceof Class;
 		boolean haveEvent = false;
-		Method[]methods = isStatic?((Class<?>)obj).getMethods():obj.getClass().getMethods();
 		// 遍历所有方法
-		for (Method method : methods) {
-			// 如果是方法和传入的静态不符合
-			if (!isStatic && Modifier.isStatic(method.getModifiers()))
-				continue;
-			else if (isStatic && !Modifier.isStatic(method.getModifiers()))
+		for (Method method : obj.getClass().getMethods()) {
+			// 如果是静态方法
+			if (Modifier.isStatic(method.getModifiers()))
 				continue;
 			// 如果没有注解
 			if (!method.isAnnotationPresent(SubscribeEvent.class))
