@@ -1,5 +1,9 @@
 package core;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import client.frame.LoginFrame;
 import client.frame.MainFrame;
 import log.Logger;
 import network.Side;
@@ -12,6 +16,8 @@ public class ClientProxy extends Proxy {
 
 	/** 窗体 */
 	MainFrame frame = null;
+	/** 登录窗体 */
+	LoginFrame logFrame = null;
 
 	@Override
 	public void init() {
@@ -24,6 +30,14 @@ public class ClientProxy extends Proxy {
 		super.lunch();
 		Logger.log.impart("正在启动客户端...");
 		// 启动窗体
-		frame = new MainFrame();
+		logFrame = new LoginFrame();
+		logFrame.setLoginListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				logFrame.setVisible(false);
+				frame = new MainFrame();
+			}
+		});
 	}
 }

@@ -1,6 +1,7 @@
 package client.frame.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,6 +18,7 @@ public class NormalButtonUI extends ButtonUI {
 	@Override
 	public void installUI(JComponent c) {
 		super.installUI(c);
+		c.setFont(new Font("黑体", 0, 16));// 这句设置字体，在运行前，会发白一下？
 		c.setBackground(Theme.COLOR1);
 		c.setBorder(BorderFactory.createLineBorder(Theme.COLOR2));
 		c.addMouseListener(mouseListenser);
@@ -47,7 +49,7 @@ public class NormalButtonUI extends ButtonUI {
 		int strWidth = g.getFontMetrics(g.getFont()).stringWidth(str);
 		int strHeight = g.getFontMetrics(g.getFont()).getHeight();
 		g.setColor(Color.BLACK);
-		g.drawString(str, (width - strWidth) / 2, strHeight);
+		g.drawString(str, (width - strWidth) / 2, strHeight + (height - strHeight) / 4);
 	}
 
 	boolean isOver = false;
