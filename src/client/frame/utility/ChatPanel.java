@@ -125,7 +125,7 @@ public class ChatPanel extends JPanel {
 			inputPanel.doLayout();
 		}
 	};
-	private ChatDialogPanel dialogPanel = new ChatDialogPanel();
+	private JPanel dialogPanel = new JPanel();
 	private ChatInputPanel inputPanel = new ChatInputPanel();
 	
 
