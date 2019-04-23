@@ -7,10 +7,7 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import client.frame.Theme;
@@ -21,9 +18,6 @@ public class ChatPanel extends JPanel {
 
 	/** 输入区域的大小 */
 	private int inputRegionHeight = 225;
-	
-	/** 对话框区域的大小 */
-	private int dialogRegionHeight = 450;  
 
 	/** 聊天区域自定义布局 */
 	private LayoutManager layout = new LayoutManager() {
@@ -42,7 +36,7 @@ public class ChatPanel extends JPanel {
 				inputRegionHeight = height / 2;
 			input.setLocation(0, height - inputRegionHeight);
 			input.setSize(width, inputRegionHeight);
-			
+
 			Component dialog = cons[0];
 			dialog.setLocation(0, 0);
 			dialog.setSize(width, height - inputRegionHeight);
@@ -127,7 +121,6 @@ public class ChatPanel extends JPanel {
 	};
 	private JPanel dialogPanel = new JPanel();
 	private ChatInputPanel inputPanel = new ChatInputPanel();
-	
 
 	public ChatPanel() {
 		// 默认颜色
