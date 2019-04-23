@@ -7,7 +7,10 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import client.frame.Theme;
@@ -18,6 +21,9 @@ public class ChatPanel extends JPanel {
 
 	/** 输入区域的大小 */
 	private int inputRegionHeight = 225;
+	
+	/** 对话框区域的大小 */
+	private int dialogRegionHeight = 450;  
 
 	/** 聊天区域自定义布局 */
 	private LayoutManager layout = new LayoutManager() {
@@ -29,13 +35,17 @@ public class ChatPanel extends JPanel {
 		@Override
 		public void layoutContainer(Container parent) {
 			Component[] cons = parent.getComponents();
-			Component input = cons[0];
+			Component input = cons[1];
 			int height = parent.getHeight();
 			int width = parent.getWidth();
 			if (inputRegionHeight > height / 2)
 				inputRegionHeight = height / 2;
 			input.setLocation(0, height - inputRegionHeight);
 			input.setSize(width, inputRegionHeight);
+			
+			Component dialog = cons[0];
+			dialog.setLocation(0, 0);
+			dialog.setSize(width, height - inputRegionHeight);
 		}
 
 		@Override
@@ -115,14 +125,16 @@ public class ChatPanel extends JPanel {
 			inputPanel.doLayout();
 		}
 	};
-
+	private ChatDialogPanel dialogPanel = new ChatDialogPanel();
 	private ChatInputPanel inputPanel = new ChatInputPanel();
+	
 
 	public ChatPanel() {
 		// 默认颜色
 		this.setBackground(Theme.COLOR0);
 		// 设置默认布局
 		this.setLayout(layout);
+		this.add(dialogPanel);
 		this.add(inputPanel);
 		// 添加鼠标监听者
 		this.addMouseListener(mouselistener);
