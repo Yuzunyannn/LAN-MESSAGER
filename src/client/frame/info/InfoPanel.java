@@ -11,32 +11,31 @@ import client.frame.Theme;
 public class InfoPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private ListScrollPanel memberField;
+	private SearchPanel searchField;
+	private UserPanel userField;
 	public InfoPanel() {
 		this.setBackground(Theme.COLOR2);
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-		UserPanel c1=new UserPanel();
-		SearchPanel c2=new SearchPanel();
-		ListScrollPanel c3=new ListScrollPanel();
-		this.add(c1);
-		this.add(c2);
-		this.add(c3);
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-		c3.addNewMember("1");
-//		this.add(c2,BorderLayout.CENTER);
-		c1.setPreferredSize(new Dimension(0,80));
-		c2.setPreferredSize(new Dimension(0,50));
+		 userField=new UserPanel();
+		 searchField=new SearchPanel();
+		memberField=new ListScrollPanel();
+		this.add(userField);
+		this.add(searchField);
+		this.add(memberField);
+		String[] members=new String[]{"1","1","1"};
+//		String[] members=new String[]{"1","1","1","1","1","1","1","1","1","1","1","1","1"};
+		this.addMembers(members);
+//		this.add(searchField,BorderLayout.CENTER);
+		userField.setPreferredSize(new Dimension(0,80));
+		searchField.setPreferredSize(new Dimension(0,50));
 		
 
+	}
+	/*暂时作为测试*/
+	public void addMembers(String[] members) {
+		for(int i=0;i<members.length;i++) {
+			memberField.addNewMember(members[i]);
+		}
 	}
 }

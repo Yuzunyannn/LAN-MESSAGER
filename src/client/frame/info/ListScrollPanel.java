@@ -1,6 +1,8 @@
 package client.frame.info;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -11,7 +13,7 @@ import client.frame.Theme;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
-	/* 添加列表中的成员数量时可能需要改变 */
+	/** 添加列表中的成员数量时可能需要改变 */
 	private int height = 0;
 	JPanel p;
 
@@ -35,11 +37,11 @@ public class ListScrollPanel extends JScrollPane {
 
 	}
 
-	public int getHeight() {
+	public int getPHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public void setPHeight(int height) {
 		this.height = height;
 	}
 
@@ -48,6 +50,38 @@ public class ListScrollPanel extends JScrollPane {
 		p.add(new MemberButton(name));
 		height += MemberButton.MEMBERBUTTON_HEIGHT;
 		int width = super.getWidth();
+		standardHeight(super.getPreferredSize());
+		/*测试信息*/
+//		System.out.println("scroll"+super.getPreferredSize().height);
+//		System.out.println("height"+this.height);
 		p.setPreferredSize(new Dimension(width, height));
+	}
+	public void deductMember(String name) {
+		for(int i=p.getComponentCount();i>0;i--) {
+			MemberButton temp=(MemberButton) p.getComponent(i);
+			if(temp.getText().equals(name)) {
+				p.remove(i);
+				height-=MemberButton.MEMBERBUTTON_HEIGHT;
+				
+			}
+			int width = super.getWidth();
+			standardHeight(super.getPreferredSize());
+			
+			p.setPreferredSize(new Dimension(width, height));
+			}
+	}
+	public void standardHeight(Dimension d) {
+		if(p.getComponentCount()<(int) (d.height/MemberButton.MEMBERBUTTON_HEIGHT))
+			this.height=d.height+10;
+		/*测试信息*/
+//		System.out.println("count"+p.getComponentCount());
+	}
+	@Override
+	public void paint(Graphics g) {
+	
+		g.setColor(Color.black);
+		g.drawRect(0, 0, super.getWidth()+1,super.getHeight());
+		
+		super.paint(g);
 	}
 }
