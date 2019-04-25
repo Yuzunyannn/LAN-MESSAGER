@@ -30,12 +30,19 @@ public class Connection implements Runnable {
 	/**
 	 * 建立客户端连接
 	 * 
-	 * @param ip
-	 *            ip地址
-	 * @param port目标端口
+	 * @param ip   ip地址
+	 * @param port 目标端口
 	 */
 	public Connection(String ip, int port) throws UnknownHostException, IOException {
 		this(new Socket(ip, port), Side.CLIENT);
+		// 等待验证成功
+		try {
+			synchronized (this) {
+				this.wait();
+			}
+		} catch (InterruptedException e) {
+			Logger.log.warn("connection再等待验证的时候出现异常：", e);
+		}
 	}
 
 	protected Connection(Socket socket, Side side) throws IOException {
@@ -72,6 +79,9 @@ public class Connection implements Runnable {
 			try {
 				deal.deal(this);
 			} catch (SocketException e) {
+				String excType = e.getMessage();
+				if (excType.equals("Socket closed"))
+					break;
 				Logger.log.warn(this.toString() + "出现socket错误", e);
 				break;
 			} catch (EOFException e) {

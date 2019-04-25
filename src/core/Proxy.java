@@ -43,6 +43,6 @@ public class Proxy {
 	}
 
 	/** 启动 */
-	public void lunch() {
+	public void launch() {
 	}
 }

@@ -25,6 +25,10 @@ public class RecvDealValidation implements IRecvDeal {
 		if (check) {
 			// 验证成功
 			Logger.log.impart(con, "验证验证成功！");
+			//唤醒等待验证成功的线程
+			synchronized (con) {
+				con.notify();
+			}
 			con.setRecvDeal(new RecvDealMessage());
 			if (con.isClient()) {
 				RecvDealValidation.sendValidation(con);

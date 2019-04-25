@@ -8,7 +8,7 @@ public class Core {
 
 	public static void main(String[] args) throws Exception {
 		proxy.init();
-		proxy.lunch();
+		proxy.launch();
 	}
 
 	/** 因为错误导致程序关闭时候 */

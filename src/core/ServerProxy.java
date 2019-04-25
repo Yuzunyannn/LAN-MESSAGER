@@ -17,8 +17,8 @@ public class ServerProxy extends Proxy {
 	}
 
 	@Override
-	public void lunch() {
-		super.lunch();
+	public void launch() {
+		super.launch();
 		Logger.log.impart("正在启动服务端...");
 		// 加载数据库
 		try {

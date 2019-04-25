@@ -1,7 +1,9 @@
 package core;
 
+import java.io.IOException;
+
 import debug.DebugMessageString;
-import network.Network;
+import network.Connection;
 import network.RecvDealMessage;
 import network.Side;
 
@@ -19,14 +21,17 @@ public class DebugProxy extends Proxy {
 
 	@SuppressWarnings("unused")
 	@Override
-	public void lunch() {
-		super.lunch();
+	public void launch() {
+		super.launch();
 		try {
-			Network net = new Network(25565);
-			for (int i = 0; i < 32 * 10; i++)
-				Thread.sleep(2000);
-		} catch (Exception e) {
+			Connection con = new Connection("10.26.23.115", 25565);
+			DebugMessageString msg = new DebugMessageString();
+			msg.str = "gay";
+			RecvDealMessage.send(con, msg);
+			con.close();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 }
