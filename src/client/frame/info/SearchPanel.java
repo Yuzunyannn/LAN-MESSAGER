@@ -22,6 +22,7 @@ public class SearchPanel extends JPanel {
 		this.setMaximumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, 30));
 		this.setBackground(Theme.COLOR2);
 		search = new TextField();
+		search.setFont(Theme.FONT3);
 		this.add(search);
 		JButton b1 = new JButton();
 		JButton set = new JButton();
@@ -45,12 +46,12 @@ class DefaultFocusListener implements FocusListener{
 	private String info;
 	private TextField textfield;
 	public DefaultFocusListener(String info,TextField textfield) {
-		this.info=info;
-		this.textfield=textfield;
+		this.info = info;
+		this.textfield = textfield;
 	}
 	@Override
 	public void focusGained(FocusEvent e) {
-		String temp=textfield.getText();
+		String temp = textfield.getText();
 		if(temp.equals(info)) {
 			textfield.setText(null);
 			textfield.setForeground(Color.BLACK);
@@ -59,7 +60,7 @@ class DefaultFocusListener implements FocusListener{
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		String temp=textfield.getText();
+		String temp = textfield.getText();
 		if(temp.equals("")) {
 			textfield.setForeground(Color.GRAY);
 			textfield.setText(info);

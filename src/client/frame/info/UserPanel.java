@@ -25,7 +25,7 @@ public class UserPanel extends JPanel {
 
 		JLabel username = new JLabel();
 		username.setText(name);
-		username.setFont(new Font("黑体", Font.PLAIN, 45));
+		username.setFont(Theme.FONT0);
 		this.add(username);
 		username.setSize(150, 50);
 		username.setLocation(USERPANEL_WIDTH - 175, 15);

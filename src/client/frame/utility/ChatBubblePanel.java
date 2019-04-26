@@ -6,12 +6,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import client.frame.Theme;
+
 public class ChatBubblePanel extends JPanel {
 	private JButton userIcon;
 	private JLabel userName;
 	private JLabel userDialog;
 
-	//构造函数，生成一个对话气泡，显示信息的参数待定！
+	/** 构造函数，生成一个对话气泡，显示信息的参数待定！*/
 	public ChatBubblePanel(boolean isMySelf, String info) {
 		// TODO Auto-generated constructor stub
 		ImageIcon imageIcon = new ImageIcon("src/img/1.png");
@@ -35,7 +37,8 @@ public class ChatBubblePanel extends JPanel {
 			this.add(userName);
 			this.add(userDialog);
 		}
-		//icon 
+		userDialog.setFont(Theme.FONT1);
+		userName.setFont(Theme.FONT1);
 		
 		this.setVisible(true);
 	}	

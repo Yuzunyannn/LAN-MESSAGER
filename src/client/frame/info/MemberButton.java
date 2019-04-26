@@ -21,7 +21,7 @@ public class MemberButton extends JButton {
 		this.add(member);
 		member.setSize(150, 30);
 		member.setLocation(0, 20);
-		member.setFont(new Font("微软雅黑", Font.PLAIN, 30));
+		member.setFont(Theme.FONT2);
 		Dimension size = new Dimension(275, MEMBERBUTTON_HEIGHT);
 		this.setPreferredSize(size);
 		this.setMinimumSize(size);

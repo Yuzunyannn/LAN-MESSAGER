@@ -45,6 +45,7 @@ public class ChatDialogPanel extends JScrollPane {
 		
 	}
 	
+	/** 添加一个对话气泡 */
 	public void addBubble(boolean isMySelf, String info) {
 		// TODO Auto-generated method stub
 		panel.setSize(panel.getWidth(), panel.getHeight() + 20);
