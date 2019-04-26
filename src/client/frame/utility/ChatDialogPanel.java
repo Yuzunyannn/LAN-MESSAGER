@@ -1,15 +1,12 @@
 package client.frame.utility;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 import client.frame.utility.ChatBubblePanel;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.text.DefaultCaret;
+import javax.swing.SwingUtilities;
 
 public class ChatDialogPanel extends JScrollPane {
 	private ChatBubblePanel chatBubble;
@@ -17,25 +14,44 @@ public class ChatDialogPanel extends JScrollPane {
 
 	public ChatDialogPanel() {
 		super(panel);
-		chatBubble = new ChatBubblePanel(true, "hhhhh");
 		panel.setLayout(new GridLayout(0, 1));
-		panel.add(chatBubble);
 		panel.setVisible(true);
 		this.setVisible(true);
-		JScrollBar sBar = this.getVerticalScrollBar(); 
-		sBar.setValue(sBar.getMaximum());
+		
+		
+		//测试区域
+		this.addBubble(true, "hhhhhhhh");
+		this.addBubble(false, "yyyyyyy");
 		this.addBubble(false, "yyyyyyy");
 		this.addBubble(true, "zzzzzz");
 		this.addBubble(false, "fffffffff");
 		this.addBubble(true, "lllllllll");
 		this.addBubble(false, "iiiiiiiiiiiiiiii");
+		this.addBubble(true, "hhhhhhhh");
+		this.addBubble(false, "yyyyyyy");
+		this.addBubble(false, "yyyyyyy");
+		this.addBubble(true, "zzzzzz");
+		this.addBubble(false, "fffffffff");
+		this.addBubble(true, "lllllllll");
+		this.addBubble(false, "iiiiiiiiiiiiiiii");
+		JScrollBar scrollBar = this.getVerticalScrollBar();
+		//数据添加可能是在调用setValue之后发生，所以此处引入runnable
+		SwingUtilities.invokeLater(new Runnable() {
+			  public void run() {
+			   scrollBar.setValue(scrollBar.getMaximum());
+			 }
+		}
+		);
 		
 	}
 	
 	public void addBubble(boolean isMySelf, String info) {
 		// TODO Auto-generated method stub
+		panel.setSize(panel.getWidth(), panel.getHeight() + 20);
 		chatBubble = new ChatBubblePanel(isMySelf, info);
 		panel.add(chatBubble);
 		panel.setVisible(true);
+		System.out.println(this.verticalScrollBar.getMaximum());
+		
 	}
 }
