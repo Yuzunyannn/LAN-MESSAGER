@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import client.frame.Theme;
 
@@ -119,7 +120,8 @@ public class ChatPanel extends JPanel {
 			inputPanel.doLayout();
 		}
 	};
-	private JPanel dialogPanel = new JPanel();
+	/** 对话面板 */
+	private ChatDialogPanel chatDialogPanel = new ChatDialogPanel();
 	private ChatInputPanel inputPanel = new ChatInputPanel();
 
 	public ChatPanel() {
@@ -127,7 +129,8 @@ public class ChatPanel extends JPanel {
 		this.setBackground(Theme.COLOR0);
 		// 设置默认布局
 		this.setLayout(layout);
-		this.add(dialogPanel);
+		//添加输入和对话面板
+		this.add(chatDialogPanel);
 		this.add(inputPanel);
 		// 添加鼠标监听者
 		this.addMouseListener(mouselistener);

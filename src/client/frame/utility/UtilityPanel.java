@@ -1,5 +1,6 @@
 package client.frame.utility;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -45,6 +46,7 @@ public class UtilityPanel extends JPanel {
 	/** 聊天面板 */
 	private ChatPanel chatPanel = new ChatPanel();
 
+
 	public UtilityPanel() {
 		// 设置默认背景颜色
 		this.setBackground(Theme.COLOR0);
@@ -53,6 +55,7 @@ public class UtilityPanel extends JPanel {
 		// 添加默认聊天（临时！）
 		chatPanel.setLocation(0, 0);
 		this.add(chatPanel);
+		
 
 	}
 
