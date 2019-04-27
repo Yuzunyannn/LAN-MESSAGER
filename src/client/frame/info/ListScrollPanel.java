@@ -1,6 +1,7 @@
 package client.frame.info;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -10,12 +11,13 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import client.frame.Theme;
+import log.Logger;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 	/** 添加列表中的成员数量时可能需要改变 */
 	private int height = 0;
-	JPanel p;
+	private JPanel p;
 
 	public ListScrollPanel() {
 		super();
@@ -34,9 +36,45 @@ public class ListScrollPanel extends JScrollPane {
 		this.setVerticalScrollBar(bar);
 		this.setBorder(null);
 		bar.setBackground(Theme.COLOR1);
+		
 
 	}
-
+	/*在加入User类后需要修改*/
+	public void setTop(String name) {
+		int temp;
+		temp=this.getMember(name);
+		Component tempbutton;
+		tempbutton=p.getComponent(temp);
+		
+		Component[]  re;
+		re=p.getComponents();
+		for(int i=temp;i>0;i--) {
+			re[i]=re[i-1];
+		}
+		re[0]=tempbutton;
+		p.removeAll();
+		for(Component i:re)
+		p.add(i);
+		
+	
+//		
+		for(Component i:p.getComponents())
+			 System.out.println(((MemberButton)i).getMemberName());
+		
+	}
+	public int getMember(String name) {
+		MemberButton temp;
+		for(int i=0;i<p.getComponentCount();i++) {
+			temp=(MemberButton) p.getComponent(i);
+		 if(temp.getMemberName().equals(name)) {
+//			 System.out.println(i);
+			 return i;
+			 
+		 }
+		 }
+		return -1;
+		
+	}
 	public int getPHeight() {
 		return height;
 	}
@@ -64,6 +102,8 @@ public class ListScrollPanel extends JScrollPane {
 				height-=MemberButton.MEMBERBUTTON_HEIGHT;
 				
 			}
+			else 
+				Logger.log.error(name+"查无此人");
 			int width = super.getWidth();
 			standardHeight(super.getPreferredSize());
 			
@@ -76,12 +116,5 @@ public class ListScrollPanel extends JScrollPane {
 		/*测试信息*/
 //		System.out.println("count"+p.getComponentCount());
 	}
-	@Override
-	public void paint(Graphics g) {
-	
-		g.setColor(Color.black);
-		g.drawRect(0, 0, super.getWidth()+1,super.getHeight());
-		
-		super.paint(g);
-	}
+
 }

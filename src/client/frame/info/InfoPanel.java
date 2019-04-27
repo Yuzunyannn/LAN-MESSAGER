@@ -1,5 +1,6 @@
 package client.frame.info;
 
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
@@ -23,10 +24,11 @@ public class InfoPanel extends JPanel {
 		this.add(userField);
 		this.add(searchField);
 		this.add(memberField);
-		String[] members=new String[]{"1","1","1"};
-//		String[] members=new String[]{"1","1","1","1","1","1","1","1","1","1","1","1","1"};
+		String[] members=new String[]{"1","2","3"};
+//		String[] members=new String[]{"1","2","3","4","5","6","1","1","1","1","1","1","1"};
 		this.addMembers(members);
-//		this.add(searchField,BorderLayout.CENTER);
+//		memberField.setTop("3");
+
 		userField.setPreferredSize(new Dimension(0,80));
 		searchField.setPreferredSize(new Dimension(0,50));
 		
@@ -37,5 +39,22 @@ public class InfoPanel extends JPanel {
 		for(int i=0;i<members.length;i++) {
 			memberField.addNewMember(members[i]);
 		}
+	
+	}
+	
+	public void addMember(String member) {
+		memberField.addNewMember(member);
+	}
+	
+	public void removeMember(String[] members) {
+		for(String i:members)
+			memberField.deductMember(i);
+	}
+	public void removeMember(String member) {
+		memberField.deductMember(member);
+	}
+	
+	public void setMemberTop(String member) {
+		memberField.setTop(member);
 	}
 }
