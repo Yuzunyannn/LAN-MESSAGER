@@ -5,15 +5,14 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
-import java.awt.Scrollbar;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 
 import client.frame.Theme;
+import client.word.Word;
 
 /** 聊天界面 */
 public class ChatPanel extends JPanel {
@@ -131,7 +130,7 @@ public class ChatPanel extends JPanel {
 		this.setBackground(Theme.COLOR0);
 		// 设置默认布局
 		this.setLayout(layout);
-		//添加输入和对话面板
+		// 添加输入和对话面板
 		this.add(chatDialogPanel);
 		this.add(inputPanel);
 		// 添加鼠标监听者
@@ -140,6 +139,13 @@ public class ChatPanel extends JPanel {
 		// 建立指针
 		this.cursorResize = new Cursor(Cursor.N_RESIZE_CURSOR);
 		this.cursorNormal = this.getCursor();
+	}
+
+	/** 当点击发送时候调用 */
+	public void onSendMsg(List<Word> words) {
+		for (Word w : words) {
+			chatDialogPanel.addBubble(true, w.toString());
+		}
 	}
 
 }
