@@ -8,9 +8,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import event.EventBusSynchronized;
+import event.IEventBus;
 import log.Logger;
+import network.event.EventNewConnection;
+import network.event.EventSocketAccept;
 
 public class Network implements Runnable {
+
+	/** 网络事件 */
+	final public static IEventBus eventHandle = new EventBusSynchronized();
 
 	/** 首次验证数据 */
 	final public static String VALIDATION = "nyan~";
@@ -29,6 +36,8 @@ public class Network implements Runnable {
 		serverThread = new Thread(this);
 		// 设置优先级
 		serverThread.setPriority(Thread.NORM_PRIORITY - 2);
+		// 设置名称
+		serverThread.setName("ServerNetwork");
 		// 启动服务器
 		serverThread.start();
 		Logger.log.impart("Network启动启动构造完成！");
@@ -58,6 +67,16 @@ public class Network implements Runnable {
 				Logger.log.error("服务端accpet接受到的socket为null");
 				break;
 			}
+			// 传播事件
+			boolean ok = eventHandle.post(new EventSocketAccept(this, socket));
+			if (ok == false) {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					Logger.log.warn("服务器拒绝socket连接调用close的时候出现异常！", e);
+				}
+				continue;
+			}
 			Connection con = null;
 			try {
 				con = new Connection(socket, Side.SERVER);
@@ -70,13 +89,14 @@ public class Network implements Runnable {
 			RecvDealValidation.sendValidation(con);
 			// 加入列表
 			connectList.add(con);
-			// newConnectList.add(con);
 			// 检查更新删除不需要的连接
-			 this.checkAndDealConnects();
-			// // 唤醒等待的一个线程，告诉有新的连接来了！
-			// synchronized (this) {
-			// this.notify();
-			// }
+			this.checkAndDealConnects();
+			// 传播事件
+			ok = eventHandle.post(new EventNewConnection(this, con));
+			if (ok == false) {
+				con.close();
+				this.checkAndDealConnects();
+			}
 		}
 		Logger.log.impart("Network线程已退出！");
 	}
@@ -93,5 +113,4 @@ public class Network implements Runnable {
 		}
 	}
 
-	
 }

@@ -146,6 +146,10 @@ public class RecvDealMessage implements IRecvDeal {
 		// 恢复
 		msg.fromBytes(buffer);
 		// 执行
+		this.execute(msg, con);
+	}
+	
+	protected void execute(IMessage msg,Connection con){
 		msg.execute(con);
 	}
 

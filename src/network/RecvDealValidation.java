@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import log.Logger;
+import network.event.EventValidationSuccess;
 
 public class RecvDealValidation implements IRecvDeal {
 
@@ -17,30 +18,39 @@ public class RecvDealValidation implements IRecvDeal {
 		con.send(buff);
 	}
 
+	/** 检测是校验成功 */
+	static public boolean check(Connection con) {
+		return !(con.deal instanceof RecvDealValidation);
+	}
+
 	@Override
 	public void deal(Connection con) throws IOException {
 		int flags = con.input.read();
 		// 检测是否验证成功
-		boolean check = flags == 0 && this.check(con);
+		boolean check = flags == 0 && this.checkValidation(con);
 		if (check) {
 			// 验证成功
 			Logger.log.impart(con, "验证验证成功！");
-			//唤醒等待验证成功的线程
-			synchronized (con) {
-				con.notify();
-			}
-			con.setRecvDeal(new RecvDealMessage());
-			if (con.isClient()) {
+			Network.eventHandle.post(new EventValidationSuccess(con));
+			if (con.deal == this)
+				con.setRecvDeal(new RecvDealMessage());
+			if (con.isClient())
 				RecvDealValidation.sendValidation(con);
-			}
 		} else {
-			Logger.log.warn(con + "验证验证失败！" + "Side:" + con.side.ordinal());
+			if (flags == -1)
+				Logger.log.warn(con + "对面拒绝接受！" + "Side:" + con.side.ordinal());
+			else
+				Logger.log.warn(con + "验证验证失败！" + "Side:" + con.side.ordinal());
 			con.close();
+		}
+		// 唤醒等待验证成功的线程
+		synchronized (con) {
+			con.notify();
 		}
 	}
 
 	/** 特殊检查 */
-	private boolean check(Connection con) throws IOException {
+	private boolean checkValidation(Connection con) throws IOException {
 		int flags = con.input.read();
 		if (flags == 0) {
 			byte[] check = Network.VALIDATION.getBytes();

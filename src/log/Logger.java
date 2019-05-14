@@ -18,7 +18,7 @@ public class Logger {
 
 	private Logger() {
 		Calendar cal = Calendar.getInstance();
-		String folderPath = cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH);
+		String folderPath = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1);
 		File folder = new File("./logs/" + folderPath);
 		if (!folder.exists())
 			folder.mkdirs();
@@ -74,23 +74,28 @@ public class Logger {
 				+ "]";
 	}
 
+	/** 获取当前线程名称 */
+	private String getCurThread() {
+		return "[" + Thread.currentThread().getName() + "]";
+	}
+
 	/** 显示错误的轨迹 */
-	private void print(Throwable e) {
+	synchronized private void print(Throwable e) {
 		e.printStackTrace(out);
 		e.printStackTrace();
 	}
 
 	/** 打印 */
-	private void print(String str) {
-		out.println(this.getCurTime() + str);
-		System.out.println(this.getCurTime() + str);
+	synchronized private void print(String str) {
+		out.println(this.getCurThread() + this.getCurTime() + str);
+		System.out.println(this.getCurThread() + this.getCurTime() + str);
 	}
 
 	/** 打印 */
-	private void print(String format, Object... objs) {
-		out.printf(this.getCurTime() + format, objs);
+	synchronized private void print(String format, Object... objs) {
+		out.printf(this.getCurThread() + this.getCurTime() + format, objs);
 		out.println();
-		System.out.printf(this.getCurTime() + format, objs);
+		System.out.printf(this.getCurThread() + this.getCurTime() + format, objs);
 		System.out.println();
 	}
 

@@ -10,7 +10,7 @@ import java.util.Set;
 
 import log.Logger;
 
-public class EventBus implements IEventExceptionHandle {
+public class EventBus implements IEventBus, IEventExceptionHandle {
 
 	/** 记录事件和处理事件对象的图 */
 	private Map<Class<? extends Event>, ArrayList<EventHandle>> eventsMap;
@@ -38,9 +38,11 @@ public class EventBus implements IEventExceptionHandle {
 	/**
 	 * 注册一个携带有event的对象
 	 * 
-	 * @param obj 携带有event的对象
+	 * @param obj
+	 *            携带有event的对象
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public void register(Object obj) {
 		if (obj == null) {
 			Logger.log.warn("EventBus注册事件的对象不能为空！");
@@ -52,7 +54,7 @@ public class EventBus implements IEventExceptionHandle {
 		}
 		boolean isStatic = obj instanceof Class;
 		boolean haveEvent = false;
-		Method[]methods = isStatic?((Class<?>)obj).getMethods():obj.getClass().getMethods();
+		Method[] methods = isStatic ? ((Class<?>) obj).getMethods() : obj.getClass().getMethods();
 		// 遍历所有方法
 		for (Method method : methods) {
 			// 如果是方法和传入的静态不符合
@@ -93,15 +95,17 @@ public class EventBus implements IEventExceptionHandle {
 	/***
 	 * 传递事件，在EventBus上
 	 * 
-	 * @param event 需要传递的事件
+	 * @param event
+	 *            需要传递的事件
 	 * @return 事件正常完成（未被取消）
 	 */
+	@Override
 	public boolean post(Event event) {
 		ArrayList<EventHandle> list = null;
 		if (eventsMap.containsKey(event.getClass()))
 			list = eventsMap.get(event.getClass());
 		if (list == null)
-			return false;
+			return true;
 		EventHandle handle = null;
 		try {
 			for (int i = 0; i < list.size(); i++) {
@@ -118,7 +122,7 @@ public class EventBus implements IEventExceptionHandle {
 	}
 
 	@Override
-	public void handleException(Throwable e, Event event, EventHandle eventHandle, EventBus eventBus) {
+	public void handleException(Throwable e, Event event, EventHandle eventHandle, IEventBus eventBus) {
 		Logger.log.warn("在传递事件的时候出现异常的事件：" + event);
 		Logger.log.warn("在传递事件的时候出现异常的函数：" + eventHandle.method);
 		Logger.log.warn("在传递事件的时候出现异常的EventBus：" + eventBus);

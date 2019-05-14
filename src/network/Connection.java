@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import log.Logger;
+import network.event.EventConnectionEnd;
 
 public class Connection implements Runnable {
 
@@ -25,13 +26,17 @@ public class Connection implements Runnable {
 	/** 输入流，接受 */
 	final public InputStream input;
 	/** 处理接受信息 */
-	private IRecvDeal deal = new RecvDealValidation();
+	IRecvDeal deal = new RecvDealValidation();
+	/**名称*/
+	private String name = null;
 
 	/**
 	 * 建立客户端连接
 	 * 
-	 * @param ip   ip地址
-	 * @param port 目标端口
+	 * @param ip
+	 *            ip地址
+	 * @param port
+	 *            目标端口
 	 */
 	public Connection(String ip, int port) throws UnknownHostException, IOException {
 		this(new Socket(ip, port), Side.CLIENT);
@@ -54,6 +59,12 @@ public class Connection implements Runnable {
 		// 启动连接处理线程
 		connectThread = new Thread(this);
 		connectThread.setPriority(Thread.NORM_PRIORITY - 1);
+		// 设置名称
+		if (side == Side.SERVER)
+			connectThread.setName("ServerConnection");
+		else
+			connectThread.setName("ClientConnection");
+		// 启动
 		connectThread.start();
 	}
 
@@ -95,6 +106,7 @@ public class Connection implements Runnable {
 			}
 		}
 		this.close();
+		Network.eventHandle.post(new EventConnectionEnd(this));
 		Logger.log.impart(this.toString() + "线程已退出！");
 	}
 
@@ -142,6 +154,14 @@ public class Connection implements Runnable {
 	@Override
 	public String toString() {
 		return "[连接" + this.getInetAddress() + "]";
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

@@ -1,10 +1,17 @@
 package core;
 
+import java.io.IOException;
+
 import log.Logger;
+import network.Network;
 import network.Side;
 import server.database.Database;
+import server.user.ULogin;
+import server.user.UOnlineServer;
 
 public class ServerProxy extends Proxy {
+
+	Network net;
 
 	public ServerProxy() {
 		super(Side.SERVER);
@@ -13,7 +20,10 @@ public class ServerProxy extends Proxy {
 	@Override
 	public void init() {
 		super.init();
+		Thread.currentThread().setName("Server");
 		Logger.log.impart("正在初始化服务端...");
+		Core.setUOnline(new UOnlineServer());
+		Network.eventHandle.register(ULogin.class);
 	}
 
 	@Override
@@ -28,5 +38,11 @@ public class ServerProxy extends Proxy {
 			Core.shutdownWithError();
 		}
 		Logger.log.impart("数据库驱动加载成功！");
+		try {
+			net = new Network(Core.SERVER_PORT);
+		} catch (IOException e) {
+			Logger.log.error("网络启动失败！", e);
+			Core.shutdownWithError();
+		}
 	}
 }
