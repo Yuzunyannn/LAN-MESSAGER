@@ -57,6 +57,7 @@ public class LoginFrame extends JFrame {
 	};
 
 	JButton loginButton;
+	JTextField userNameText;
 
 	public LoginFrame() {
 		// 设置标题
@@ -67,8 +68,8 @@ public class LoginFrame extends JFrame {
 		// 颜色
 		this.getContentPane().setBackground(Theme.COLOR0);
 		// 账号框
-		JTextField text = new JTextField();
-		this.add(text);
+		userNameText = new JTextField("guest");
+		this.add(userNameText);
 		// 密码框
 		JPasswordField password = new JPasswordField();
 		this.add(password);
@@ -89,5 +90,14 @@ public class LoginFrame extends JFrame {
 
 	public void setLoginListener(MouseListener listener) {
 		loginButton.addMouseListener(listener);
+	}
+
+	public String getUserName() {
+		return userNameText.getText();
+	}
+
+	public void setLoginButtonEnable(boolean enable) {
+		loginButton.setEnabled(enable);
+
 	}
 }

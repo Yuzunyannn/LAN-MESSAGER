@@ -6,7 +6,9 @@ import java.util.List;
 
 import log.Logger;
 import log.NeedLog;
+import network.RecvDealMessage;
 import platform.Platform;
+import user.message.MessageLogin;
 import util.ClassHelper;
 
 /** 代理类，区分客户端和服务器 */
@@ -18,8 +20,14 @@ public class Proxy {
 		this.side = side;
 	}
 
+	/** debug时作为记录，放置init重复运行 */
+	static boolean hasRun = false;
+
 	/** 初始化 */
 	public void init() {
+		if (hasRun)
+			return;
+		hasRun = true;
 		Logger.log.impart("当前平台：" + Platform.platform);
 		try {
 			// 初始化所有类中带有指定的标签内容
@@ -40,6 +48,8 @@ public class Proxy {
 			Logger.log.error("反射类，初始化时出现问题！", e);
 			Core.shutdownWithError();
 		}
+		// 注册消息
+		RecvDealMessage.registerMessage("login_msh", MessageLogin.class);
 	}
 
 	/** 启动 */
