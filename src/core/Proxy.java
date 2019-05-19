@@ -8,6 +8,7 @@ import log.Logger;
 import log.NeedLog;
 import network.RecvDealMessage;
 import platform.Platform;
+import user.message.MUSString;
 import user.message.MessageLogin;
 import util.ClassHelper;
 
@@ -49,10 +50,15 @@ public class Proxy {
 			Core.shutdownWithError();
 		}
 		// 注册消息
-		RecvDealMessage.registerMessage("login_msh", MessageLogin.class);
+		Proxy.registerAllMesage();
 	}
 
 	/** 启动 */
 	public void launch() {
+	}
+
+	private static void registerAllMesage() {
+		RecvDealMessage.registerMessage("login_msh", MessageLogin.class);
+		RecvDealMessage.registerMessage("us_str", MUSString.class);
 	}
 }

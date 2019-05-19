@@ -4,7 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-import client.event.FrontendEvents;
+import client.event.EventsBridge;
 import client.frame.LoginFrame;
 import client.frame.MainFrame;
 import client.user.UOnlineClient;
@@ -13,7 +13,6 @@ import event.SubscribeEvent;
 import log.Logger;
 import network.Connection;
 import network.Network;
-import network.RecvDealMessage;
 import network.RecvDealValidation;
 import network.Side;
 import user.UOnline;
@@ -42,7 +41,7 @@ public class ClientProxy extends Proxy {
 		if (UOnline.getInstance() == null)
 			Core.setUOnline(new UOnlineClient());
 		// 注册事件
-		FrontendEvents.eventHandle.register(this);
+		EventsBridge.fontendEventHandle.register(this);
 	}
 
 	@Override
@@ -72,7 +71,7 @@ public class ClientProxy extends Proxy {
 						return;
 					}
 					sendUsername = username;
-					RecvDealMessage.send(toServer, new MessageLogin(username, "132", Side.CLIENT));
+					UserClient.sendToServer(new MessageLogin(username, "132", Side.CLIENT));
 					logFrame.setLoginButtonEnable(false);
 				} catch (IOException e1) {
 					Logger.log.warn("连接服务器出现异常！", e1);

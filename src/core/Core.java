@@ -2,6 +2,8 @@ package core;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import log.Logger;
 import network.Side;
@@ -15,6 +17,7 @@ public class Core implements Runnable {
 	static final Proxy proxy = new DebugProxy(Side.SERVER);
 	static final Core core = new Core();
 	private LinkedList<Runnable> tasks = new LinkedList<Runnable>();
+	private Timer timer = new Timer();
 
 	public static void main(String[] args) {
 		proxy.init();
@@ -56,10 +59,20 @@ public class Core implements Runnable {
 
 	/** 添加一个同步任务 */
 	private void addTask(Runnable run) {
-		this.coreNotify();
 		synchronized (tasks) {
 			tasks.addFirst(run);
 		}
+		this.coreNotify();
+	}
+
+	/** 添加一个计时器任务 */
+	private void addTask(Runnable run, int ms) {
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				Core.task(run);
+			}
+		}, ms);
 	}
 
 	/** 获取同步任务 */
@@ -81,6 +94,15 @@ public class Core implements Runnable {
 			return;
 		}
 		core.addTask(run);
+	}
+
+	/** 添加一个全局的同步任务*/
+	public synchronized static void task(Runnable run, int msDelay) {
+		if (run == null) {
+			Logger.log.warn("添加计时同步任务的时候run出现null");
+			return;
+		}
+		core.addTask(run, msDelay);
 	}
 
 	/** 因为错误导致程序关闭时候 */

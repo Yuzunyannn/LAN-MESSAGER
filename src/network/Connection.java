@@ -27,7 +27,7 @@ public class Connection implements Runnable {
 	final public InputStream input;
 	/** 处理接受信息 */
 	IRecvDeal deal = new RecvDealValidation();
-	/**名称*/
+	/** 名称 */
 	private String name = null;
 
 	/**
@@ -162,6 +162,12 @@ public class Connection implements Runnable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void wake() {
+		synchronized (this) {
+			this.notify();
+		}
 	}
 
 }

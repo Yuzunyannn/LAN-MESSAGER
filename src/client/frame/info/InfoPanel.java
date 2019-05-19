@@ -1,6 +1,5 @@
 package client.frame.info;
 
-import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;

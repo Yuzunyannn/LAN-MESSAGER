@@ -1,6 +1,8 @@
 package client.user;
 
 import network.Connection;
+import network.IMessage;
+import network.RecvDealMessage;
 import user.User;
 
 public class UserClient extends User {
@@ -10,6 +12,15 @@ public class UserClient extends User {
 
 	public UserClient(String userName) {
 		super(userName);
+	}
+
+	public static boolean sendToServer(IMessage msg) {
+		return RecvDealMessage.send(UserClient.toServer, msg);
+	}
+
+	@Override
+	public boolean sendMesage(IMessage msg) {
+		return UserClient.sendToServer(msg);
 	}
 
 }

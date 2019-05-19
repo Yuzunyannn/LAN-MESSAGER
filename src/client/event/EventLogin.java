@@ -1,15 +1,15 @@
 package client.event;
 
-import event.Event;
+import user.UOnline;
 
-public class EventLogin extends Event {
+public class EventLogin extends EventRecv {
 
-	public final String username;
 	public final String info;
+	public final String username;
 
-	public EventLogin(String username,String info) {
-		super(false, false);
+	public EventLogin(String username, String info) {
+		super(UOnline.getInstance().getUser(username));
 		this.username = username;
-		this.info=info;
+		this.info = info;
 	}
 }

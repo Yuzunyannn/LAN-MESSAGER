@@ -111,7 +111,7 @@ public class ChatInputPanel extends JPanel {
 		}
 	};
 	/** 文本输入框 */
-	private ChatTextEditPane textEdit = new ChatTextEditPane();
+	private ChatTextEditPane textEdit = new ChatTextEditPane(this);
 
 	public ChatInputPanel() {
 		// 默认颜色
@@ -138,15 +138,7 @@ public class ChatInputPanel extends JPanel {
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ChatPanel parent = (ChatPanel) ChatInputPanel.this.getParent();
-				List<Word> words;
-				try {
-					words = textEdit.getValue();
-					textEdit.clear();
-					parent.onSendMsg(words);
-				} catch (BadLocationException e1) {
-					log.Logger.log.warn("读取消息输入框内容出现异常：", e1);
-				}
+				ChatInputPanel.this.sendWords();
 			}
 		});
 		this.add(button);
@@ -158,6 +150,20 @@ public class ChatInputPanel extends JPanel {
 		int width = this.getWidth();
 		g.setColor(Theme.COLOR2);
 		g.drawLine(0, 0, width, 0);
+	}
+
+	public void sendWords() {
+		ChatPanel parent = (ChatPanel) ChatInputPanel.this.getParent();
+		List<Word> words;
+		try {
+			words = textEdit.getValue();
+			if (words.isEmpty())
+				return;
+			textEdit.clear();
+			parent.onSendMsg(words);
+		} catch (BadLocationException e1) {
+			log.Logger.log.warn("读取消息输入框内容出现异常：", e1);
+		}
 	}
 
 }

@@ -27,13 +27,20 @@ public class UOnline {
 
 	}
 
+	/** 获取一个用户 */
+	public User getUser(String username) {
+		if (users.containsKey(username))
+			return users.get(username);
+		return null;
+	}
+
 	/** 用户上线 */
-	protected User userOnline(String username) {
+	public User userOnline(String username) {
 		return null;
 	}
 
 	/** 用户下线 */
-	protected User userOffline(String username) {
+	public User userOffline(String username) {
 		return null;
 	}
 

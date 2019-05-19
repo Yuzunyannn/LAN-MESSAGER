@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
+import client.event.EventsBridge;
 import core.Core;
-import core.EventsBridge;
 import log.Logger;
 import network.Connection;
 import network.IMessage;
@@ -48,7 +48,7 @@ public class MessageLogin implements IMessage {
 		String username = Cast.toStringUTF8(this.username);
 		String password = this.dataToString(this.password, con.side);
 		if (con.isClient()) {
-			EventsBridge.login(username,password);
+			EventsBridge.login(username, password);
 			return;
 		}
 		Core.task(new Runnable() {
@@ -57,6 +57,13 @@ public class MessageLogin implements IMessage {
 				UOnline.getInstance().login(username, password, con);
 			}
 		});
+		synchronized (con) {
+			try {
+				con.wait();
+			} catch (InterruptedException e) {
+				Logger.log.warn("在等待登录验证完成时，出现异常！", e);
+			}
+		}
 	}
 
 	private byte[] dataToBytes(String password, Side side) {

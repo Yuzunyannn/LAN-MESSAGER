@@ -1,8 +1,6 @@
 package client.frame.utility;
 
 import java.awt.GridLayout;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
