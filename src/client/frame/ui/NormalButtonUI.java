@@ -34,15 +34,20 @@ public class NormalButtonUI extends ButtonUI {
 	public void paint(Graphics g, JComponent c) {
 		int width = c.getWidth();
 		int height = c.getHeight();
-		// 按下
-		if (this.isPress) {
-			g.setColor(Theme.COLOR3);
+		if (!c.isEnabled()) {
+			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(0, 0, width, height);
-		}
-		// 位于上方
-		else if (this.isOver) {
-			g.setColor(Theme.COLOR2);
-			g.fillRect(0, 0, width, height);
+		} else {
+			// 按下
+			if (this.isPress) {
+				g.setColor(Theme.COLOR3);
+				g.fillRect(0, 0, width, height);
+			}
+			// 位于上方
+			else if (this.isOver) {
+				g.setColor(Theme.COLOR2);
+				g.fillRect(0, 0, width, height);
+			}
 		}
 		// 文字
 		String str = ((JButton) c).getText();

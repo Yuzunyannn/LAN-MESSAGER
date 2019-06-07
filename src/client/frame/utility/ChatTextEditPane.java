@@ -36,8 +36,10 @@ import util.FileHelper;
 /** 文本输入框的类 */
 public class ChatTextEditPane extends JTextPane {
 	private static final long serialVersionUID = 1L;
+	private final ChatInputPanel parent;
 
-	public ChatTextEditPane() {
+	public ChatTextEditPane(ChatInputPanel parent) {
+		this.parent = parent;
 		this.setBackground(Theme.COLOR1);
 		this.setFont(new Font(null, 0, 20));
 		// 重新创建EditorKit
@@ -74,6 +76,9 @@ public class ChatTextEditPane extends JTextPane {
 						if (e.isControlDown()) {
 							ChatTextEditPane.this.getStyledDocument().insertString(
 									ChatTextEditPane.this.getCaretPosition(), "\n", new SimpleAttributeSet());
+						} else {
+							e.consume();
+							ChatTextEditPane.this.parent.sendWords();
 						}
 					} catch (BadLocationException e1) {
 						e1.printStackTrace();
@@ -167,10 +172,10 @@ public class ChatTextEditPane extends JTextPane {
 
 	/** 获取内容 */
 	public List<Word> getValue() throws BadLocationException {
-		List<Word> words = new LinkedList<Word>();
+		LinkedList<Word> words = new LinkedList<Word>();
 		StyledDocument doc = this.getStyledDocument();
 		int lastStart = 0;
-		int length = this.getText().length();
+		int length = doc.getLength();
 		for (int i = 0; i < length; i++) {
 			Element ele = doc.getCharacterElement(i);
 			if (!ele.getName().equals("content")) {
@@ -185,6 +190,12 @@ public class ChatTextEditPane extends JTextPane {
 		}
 		if (lastStart != length)
 			words.add(new WordString(doc.getText(lastStart, length - lastStart)));
+		// if (!words.isEmpty()) {
+		// String str = words.getLast().toString();
+		// if (str.length() == 1 && str.charAt(0) == '\n') {
+		// words.removeLast();
+		// }
+		// }
 		return words;
 	}
 

@@ -60,7 +60,12 @@ public class RecvDealMessage implements IRecvDeal {
 	public static Map<Integer, Class<? extends IMessage>> msgMap = Collections
 			.synchronizedMap(new HashMap<Integer, Class<? extends IMessage>>());
 
-	/** 注册一个信息 */
+	/**
+	 * 注册一个信息
+	 * 
+	 * @param msgClass
+	 *            确保有无参的构造函数
+	 */
 	public static void registerMessage(Integer msgId, Class<? extends IMessage> msgClass) {
 		if (msgId == null)
 			throw new RuntimeException("注册是ID不能为null");
@@ -69,6 +74,17 @@ public class RecvDealMessage implements IRecvDeal {
 		if (msgMap.containsKey(msgId))
 			throw new RuntimeException("重复的注册：" + msgId);
 		msgMap.put(msgId, msgClass);
+	}
+
+	/** 注册一个信息，确保有无参的构造函数 */
+	public static void registerMessage(String msgName, Class<? extends IMessage> msgClass) {
+		int SEED = 131;
+		int hash = 0;
+		for (int i = 0; i < msgName.length(); i++) {
+			char ch = msgName.charAt(i);
+			hash = hash * SEED + ch;
+		}
+		registerMessage(hash, msgClass);
 	}
 
 	/**
@@ -108,7 +124,12 @@ public class RecvDealMessage implements IRecvDeal {
 		buffer.put((byte) 0);
 		buffer.put((byte) 0);
 		// 设置buffer
-		msg.toBytes(buffer);
+		try {
+			msg.toBytes(buffer);
+		} catch (IOException e) {
+			Logger.log.warn("在发送信息的时候，转化bytes时出现异常！", e);
+			return false;
+		}
 		// 获取数据大小
 		int size = buffer.position() - 2 - at;
 		buffer.array()[at] = (byte) (size & 0xff);
@@ -141,15 +162,15 @@ public class RecvDealMessage implements IRecvDeal {
 		try {
 			msg = msgClass.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
-			throw new RuntimeException("无法实例化的消息：" + msgClass.getName());
+			throw new RuntimeException("无法实例化的消息：" + msgClass.getName() + "，注意是否有无参的构造函数！");
 		}
 		// 恢复
 		msg.fromBytes(buffer);
 		// 执行
 		this.execute(msg, con);
 	}
-	
-	protected void execute(IMessage msg,Connection con){
+
+	protected void execute(IMessage msg, Connection con) {
 		msg.execute(con);
 	}
 

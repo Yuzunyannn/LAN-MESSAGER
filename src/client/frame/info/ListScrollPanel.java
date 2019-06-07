@@ -1,9 +1,7 @@
 package client.frame.info;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;

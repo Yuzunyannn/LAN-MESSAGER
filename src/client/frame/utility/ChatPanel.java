@@ -11,8 +11,11 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import client.event.EventSendInputWords;
+import client.event.EventsBridge;
 import client.frame.Theme;
 import client.word.Word;
+import user.UOnline;
 
 /** 聊天界面 */
 public class ChatPanel extends JPanel {
@@ -41,7 +44,7 @@ public class ChatPanel extends JPanel {
 
 			Component dialog = cons[0];
 			dialog.setLocation(0, 0);
-			dialog.setSize(width, height - inputRegionHeight);
+			dialog.setSize(width, height - inputRegionHeight - 1);
 		}
 
 		@Override
@@ -86,7 +89,7 @@ public class ChatPanel extends JPanel {
 			int mouseY = e.getY();
 			int targetY = cathPanel.getHeight() - cathPanel.inputRegionHeight;
 			// 检测Y是否处于拖动位置
-			if (mouseY == targetY || mouseY == targetY - 1) {
+			if (mouseY == targetY || mouseY == targetY + 1) {
 				if (cursor != cathPanel.cursorResize)
 					cathPanel.setCursor(cathPanel.cursorResize);
 			} else {
@@ -119,6 +122,7 @@ public class ChatPanel extends JPanel {
 			// 重新排版
 			cathPanel.doLayout();
 			inputPanel.doLayout();
+			chatDialogPanel.doLayout();
 		}
 	};
 	/** 对话面板 */
@@ -143,9 +147,9 @@ public class ChatPanel extends JPanel {
 
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
-		for (Word w : words) {
+		for (Word w : words)
 			chatDialogPanel.addBubble(true, w.toString());
-		}
+		EventsBridge.fontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
 	}
 
 }

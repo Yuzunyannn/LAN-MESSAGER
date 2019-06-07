@@ -16,7 +16,7 @@ public class EventBusTask implements IEventBus {
 	
 	
 	@Override
-	public void register(Object obj) {
+	synchronized public void register(Object obj) {
 		this.bus.register(obj);
 	}
 

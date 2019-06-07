@@ -1,5 +1,7 @@
 package user;
 
+import network.IMessage;
+
 public class User {
 	/** 用户的唯一表示名称 */
 	public final String userName;
@@ -29,5 +31,15 @@ public class User {
 		if (!(obj instanceof User))
 			return false;
 		return userName.equals(((User) obj).userName);
+	}
+
+	/** 发送消息 */
+	public boolean sendMesage(IMessage msg) {
+		return false;
+	}
+
+	/** 是否在线 */
+	public boolean isOnline() {
+		return true;
 	}
 }

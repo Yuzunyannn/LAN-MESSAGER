@@ -22,7 +22,9 @@ public class ServerProxy extends Proxy {
 		super.init();
 		Thread.currentThread().setName("Server");
 		Logger.log.impart("正在初始化服务端...");
+		//初始化UOnline
 		Core.setUOnline(new UOnlineServer());
+		// 注册网络事件
 		Network.eventHandle.register(ULogin.class);
 	}
 

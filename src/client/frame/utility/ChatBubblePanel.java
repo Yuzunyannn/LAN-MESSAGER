@@ -1,6 +1,7 @@
 package client.frame.utility;
 
 import java.awt.FlowLayout;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -9,6 +10,7 @@ import javax.swing.JPanel;
 import client.frame.Theme;
 
 public class ChatBubblePanel extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private JButton userIcon;
 	private JLabel userName;
 	private JLabel userDialog;

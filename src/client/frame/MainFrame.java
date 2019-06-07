@@ -75,8 +75,6 @@ public class MainFrame extends JFrame {
 		this.setMinimumSize(layout.minimumLayoutSize(this));
 		// 设置窗体大小和位置
 		this.fixed();
-		// 展示窗体
-		this.setVisible(true);
 	}
 
 	/** 初始化窗体大小和位置 */
