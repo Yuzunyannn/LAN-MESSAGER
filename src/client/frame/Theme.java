@@ -22,5 +22,5 @@ public class Theme {
 	/** 联系人名字体 冬青黑体 粗 14号 */
 	public static Font FONT2 = new Font("冬青黑体", Font.BOLD, 24);
 	/** 搜索框字体 冬青黑体 细 8号 */
-	public static Font FONT3 = new Font("冬青黑体", Font.PLAIN, 8);
+	public static Font FONT3 = new Font("冬青黑体", Font.PLAIN, 12);
 }

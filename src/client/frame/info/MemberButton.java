@@ -1,5 +1,6 @@
 package client.frame.info;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -13,7 +14,7 @@ public class MemberButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	public final static int MEMBERBUTTON_HEIGHT = 70;
 	private String memberName = "小明";
-
+	private int count;
 	public MemberButton(String name) {
 		memberName = name;
 		JLabel member = new JLabel(name);
