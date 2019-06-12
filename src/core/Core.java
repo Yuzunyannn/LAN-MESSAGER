@@ -96,7 +96,7 @@ public class Core implements Runnable {
 		core.addTask(run);
 	}
 
-	/** 添加一个全局的同步任务*/
+	/** 添加一个全局的同步任务 */
 	public synchronized static void task(Runnable run, int msDelay) {
 		if (run == null) {
 			Logger.log.warn("添加计时同步任务的时候run出现null");

@@ -41,7 +41,7 @@ public class ClientProxy extends Proxy {
 		if (UOnline.getInstance() == null)
 			Core.setUOnline(new UOnlineClient());
 		// 注册事件
-		EventsBridge.fontendEventHandle.register(this);
+		EventsBridge.frontendEventHandle.register(this);
 	}
 
 	@Override
@@ -55,6 +55,8 @@ public class ClientProxy extends Proxy {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
+				if (!logFrame.isEnable())
+					return;
 				try {
 					if (toServer == null) {
 						toServer = new Connection(Core.SERVER_IP, Core.SERVER_PORT);

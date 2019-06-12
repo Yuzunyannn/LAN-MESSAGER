@@ -149,7 +149,7 @@ public class ChatPanel extends JPanel {
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words)
 			chatDialogPanel.addBubble(true, w.toString());
-		EventsBridge.fontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
+		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
 	}
 
 }

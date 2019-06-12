@@ -100,4 +100,8 @@ public class LoginFrame extends JFrame {
 		loginButton.setEnabled(enable);
 
 	}
+	
+	public boolean isEnable() {
+		return loginButton.isEnabled();
+	}
 }

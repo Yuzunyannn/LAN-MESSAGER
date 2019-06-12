@@ -10,7 +10,7 @@ import user.message.MessageLogin;
 
 public class ULogin extends RecvDealMessage {
 
-	/** 校验成功的连接分配等待登录的处理 */
+	/** 校验成功后，设置处理模式 */
 	@SubscribeEvent
 	public static void toWaitLogin(EventValidationSuccess event) {
 		if (event.isClient())
@@ -29,7 +29,7 @@ public class ULogin extends RecvDealMessage {
 	}
 
 	static public boolean login(String username, String password) {
-		if(username.equals("guest")){
+		if (username.equals("guest")) {
 			return true;
 		}
 		return false;
