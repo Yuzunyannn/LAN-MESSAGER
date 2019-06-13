@@ -1,4 +1,4 @@
-package group;
+package story;
 
 import java.util.ArrayList;
 import java.util.Collections;

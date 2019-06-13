@@ -40,7 +40,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		this.addBubble(false, "fffffffff", "lyl");
 		this.addBubble(true, "lllllllll", "ssj");
 		this.addBubble(false, "iiiiiiiiiiiiiiii", "lyl");
-		//JScrollBar scrollBar = this.getVerticalScrollBar();
+		// JScrollBar scrollBar = this.getVerticalScrollBar();
 		// 数据添加可能是在调用setValue之后发生，所以此处引入runnable
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -59,22 +59,22 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 			public void run() {
 				scrollBar.setValue(scrollBar.getMaximum());
 			}
-		},50);
-		//scrollBar.setValue(scrollBar.getMaximum());
+		}, 50);
+		// scrollBar.setValue(scrollBar.getMaximum());
 	}
-	
+
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		Component[] com = this.getComponents();
-		ChatBubblePanel bubble = (ChatBubblePanel)com[0];
+		ChatBubblePanel bubble = (ChatBubblePanel) com[0];
 		int top = this.scrollBar.getValue() - this.getHeight();
-		int bottom  = this.scrollBar.getValue();
+		int bottom = this.scrollBar.getValue();
 		int firstCom = (top / (bubble.getHeight())) - 1;
 		int lastCom = (bottom / (bubble.getHeight())) - 1;
 		Integer comNum = 0;
-		for(int i = firstCom; i<lastCom; i++){
-			nbt.setTag(comNum.toString(), (ChatBubblePanel)com[i]);
+		for (int i = firstCom; i < lastCom; i++) {
+			nbt.setTag(comNum.toString(), (ChatBubblePanel) com[i]);
 		}
 		return nbt;
 	}

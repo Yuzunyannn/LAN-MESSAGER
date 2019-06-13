@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import client.frame.MainFrame;
 import client.frame.Theme;
 import core.Core;
-import group.ITickable;
 import log.Logger;
 import nbt.NBTTagCompound;
+import story.ITickable;
 
 /** 界面右边的区域 聊天区域 操作区域 */
 public class UtilityPanel extends JPanel implements ITickable {
@@ -84,6 +84,16 @@ public class UtilityPanel extends JPanel implements ITickable {
 				}
 			}
 		}
+		
+		//临时调试
+		if (tick % 100 == 0) {
+			if (panelInfo.equals("Ussj"))
+				toChat("lly");
+			else {
+				toChat("ssj");
+				System.out.println("fff");
+			}
+		}
 		return ITickable.SUCCESS;
 	}
 
@@ -97,11 +107,13 @@ public class UtilityPanel extends JPanel implements ITickable {
 			info = panels.get(newInfo);
 		} else {
 			info = new PanelInfo("U", username, new ChatPanel());
+			panels.put(info.info, info);
 		}
 		if (!info.canUse()) {
 			info.reborn();
 		}
 
+		//临时调试
 		if (panels.containsKey(panelInfo)) {
 			PanelInfo oldInfo = panels.get(panelInfo);
 			oldInfo.release();
@@ -110,6 +122,9 @@ public class UtilityPanel extends JPanel implements ITickable {
 		panelInfo = newInfo;
 		currPanel = info.panel;
 		info.tick = this.tick;
+		UtilityPanel.this.remove(0);
+		UtilityPanel.this.add(currPanel);
+		UtilityPanel.this.revalidate();
 	}
 
 	// 记录驻于内存的面板
