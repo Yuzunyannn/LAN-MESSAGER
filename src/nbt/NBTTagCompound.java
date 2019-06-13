@@ -146,7 +146,7 @@ public class NBTTagCompound extends NBTBase {
 	}
 
 	/** 设置tag */
-	public void setTag(String key, INBTSerializable<NBTBase> value) {
+	public <T extends NBTBase> void setTag(String key, INBTSerializable<T> value) {
 		this.tagMap.put(key, value.serializeNBT());
 	}
 

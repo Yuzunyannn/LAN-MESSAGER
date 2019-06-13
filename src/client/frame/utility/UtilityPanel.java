@@ -56,7 +56,7 @@ public class UtilityPanel extends JPanel {
 		//默认面板
 		blankPanel.setBackground(Theme.COLOR4);
 		// 当前面板
-		currPanel = blankPanel;
+		currPanel = new ChatPanel();
 		currPanel.setLocation(0, 0);
 		this.add(currPanel);
 	}

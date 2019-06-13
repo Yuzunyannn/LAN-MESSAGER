@@ -20,7 +20,8 @@ import nbt.NBTTagCompound;
 import nbt.NBTTagString;
 import user.UOnline;
 
-/** 聊天界面 */
+
+
 public class ChatPanel extends JPanel implements INBTSerializable<NBTTagCompound> {
 	private static final long serialVersionUID = 1L;
 
@@ -151,14 +152,15 @@ public class ChatPanel extends JPanel implements INBTSerializable<NBTTagCompound
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words)
-			chatDialogPanel.addBubble(true, w.toString());
-		chatDialogPanel.scrollBar.setValue(chatDialogPanel.scrollBar.getMaximum());
+			chatDialogPanel.addBubble(true, w.toString(), "ssj");
+		//chatDialogPanel.serializeNBT();
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
 	}
 
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
+		
 		return nbt;
 	}
 
