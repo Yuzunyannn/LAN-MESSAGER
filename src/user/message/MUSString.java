@@ -1,6 +1,7 @@
 package user.message;
 
 import client.event.EventsBridge;
+import client.user.UserClient;
 import log.Logger;
 import nbt.NBTTagCompound;
 import user.User;

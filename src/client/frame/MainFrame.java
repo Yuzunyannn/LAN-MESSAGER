@@ -4,11 +4,14 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import client.event.EventsBridge;
 import client.frame.info.InfoPanel;
 import client.frame.utility.UtilityPanel;
+import user.User;
 
 public class MainFrame extends JFrame {
 
@@ -75,6 +78,7 @@ public class MainFrame extends JFrame {
 		this.setMinimumSize(layout.minimumLayoutSize(this));
 		// 设置窗体大小和位置
 		this.fixed();
+		EventsBridge.frontendEventHandle.register(infoPanel);
 	}
 
 	/** 初始化窗体大小和位置 */
@@ -92,6 +96,11 @@ public class MainFrame extends JFrame {
 	/** 还原 */
 	public void normal() {
 		this.setExtendedState(JFrame.NORMAL);
+	}
+	/** 设置用户列表*/
+	public void setUserList(ArrayList<User> ul) 
+	{
+		infoPanel.setUserList(ul);
 	}
 
 }

@@ -1,15 +1,19 @@
 package client.frame.info;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import client.event.EventsBridge;
 import client.frame.Theme;
+import event.SubscribeEvent;
+import user.User;
 
 /** 界面左边的区域 用户区域 */
 public class InfoPanel extends JPanel {
-
+	private static final int PS=10;
 	private static final long serialVersionUID = 1L;
 	private ListScrollPanel memberField;
 	private SearchPanel searchField;
@@ -23,15 +27,22 @@ public class InfoPanel extends JPanel {
 		this.add(userField);
 		this.add(searchField);
 		this.add(memberField);
-		String[] members=new String[]{"1","2","3"};
+//		String[] members=new String[]{"1","2","3"};
 //		String[] members=new String[]{"1","2","3","4","5","6","1","1","1","1","1","1","1"};
-		this.addMembers(members);
+//		this.addMembers(members);
 //		memberField.setTop("3");
 
 		userField.setPreferredSize(new Dimension(0,80));
 		searchField.setPreferredSize(new Dimension(0,50));
-		
 
+	}
+	@SubscribeEvent
+	public void onULChange(client.event.EventULChange e) {
+		memberField.deleteAllMember();
+		for(User u:e.ul)
+		{
+			addMember(u.userName);
+		}
 	}
 	/*暂时作为测试*/
 	public void addMembers(String[] members) {
@@ -55,5 +66,13 @@ public class InfoPanel extends JPanel {
 	
 	public void setMemberTop(String member) {
 		memberField.setTop(member);
+	}
+	public void setUserList(ArrayList<User> ul) {
+		// TODO Auto-generated method stub
+		//需要修改
+		for(int i=0;i<ul.size();i++)
+		{
+			this.addMember(ul.get(i).userName);
+		}
 	}
 }

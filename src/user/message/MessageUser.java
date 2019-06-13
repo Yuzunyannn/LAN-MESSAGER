@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import log.Logger;
 import nbt.NBTStream;
 import nbt.NBTTagCompound;
+import nbt.NBTTagInt;
 import network.Connection;
 import network.IMessage;
 import user.UOnline;
@@ -50,6 +51,7 @@ abstract public class MessageUser implements IMessage {
 		} else {
 			this.executeClient(user, nbt);
 		}
+		
 	}
 
 	abstract void executeClient(User from, NBTTagCompound nbt);

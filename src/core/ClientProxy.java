@@ -3,6 +3,7 @@ package core;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import client.event.EventsBridge;
 import client.frame.LoginFrame;
@@ -16,6 +17,8 @@ import network.Network;
 import network.RecvDealValidation;
 import network.Side;
 import user.UOnline;
+import user.User;
+import user.message.MUGULRequest;
 import user.message.MessageLogin;
 
 public class ClientProxy extends Proxy {
@@ -94,6 +97,9 @@ public class ClientProxy extends Proxy {
 				return;
 			}
 			Logger.log.impart(e.username + "登录成功！");
+			//登录成功
+			User u=new User(e.username);
+			UserClient.sendToServer(new MUGULRequest(u));
 			logFrame.setVisible(false);
 			frame.setVisible(true);
 		} else {
