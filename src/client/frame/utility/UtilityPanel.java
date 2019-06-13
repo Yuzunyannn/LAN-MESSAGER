@@ -42,20 +42,23 @@ public class UtilityPanel extends JPanel {
 
 		}
 	};
-	/** 聊天面板 */
-	private ChatPanel chatPanel = new ChatPanel();
-
-
+	/** 当前面板 */
+	private JPanel currPanel;
+	/**空面板*/
+	private JPanel blankPanel = new JPanel();
+	/***/
+	
 	public UtilityPanel() {
 		// 设置默认背景颜色
 		this.setBackground(Theme.COLOR0);
 		// 更换布局
 		this.setLayout(layout);
-		// 添加默认聊天（临时！）
-		chatPanel.setLocation(0, 0);
-		this.add(chatPanel);
-		
-
+		//默认面板
+		blankPanel.setBackground(Theme.COLOR4);
+		// 当前面板
+		currPanel = blankPanel;
+		currPanel.setLocation(0, 0);
+		this.add(currPanel);
 	}
 
 }

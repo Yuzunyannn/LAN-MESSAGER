@@ -15,10 +15,13 @@ import client.event.EventSendInputWords;
 import client.event.EventsBridge;
 import client.frame.Theme;
 import client.word.Word;
+import nbt.INBTSerializable;
+import nbt.NBTTagCompound;
+import nbt.NBTTagString;
 import user.UOnline;
 
 /** 聊天界面 */
-public class ChatPanel extends JPanel {
+public class ChatPanel extends JPanel implements INBTSerializable<NBTTagCompound> {
 	private static final long serialVersionUID = 1L;
 
 	/** 输入区域的大小 */
@@ -150,6 +153,16 @@ public class ChatPanel extends JPanel {
 		for (Word w : words)
 			chatDialogPanel.addBubble(true, w.toString());
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
+	}
+
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		return nbt;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
 	}
 
 }

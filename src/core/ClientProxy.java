@@ -53,8 +53,8 @@ public class ClientProxy extends Proxy {
 		frame = new MainFrame();
 		logFrame.setLoginListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				super.mouseClicked(e);
+			public void mousePressed(MouseEvent e) {
+				super.mousePressed(e);
 				if (!logFrame.isEnable())
 					return;
 				try {

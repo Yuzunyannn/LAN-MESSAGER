@@ -1,10 +1,12 @@
 package core;
 
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import group.ITickable;
 import log.Logger;
 import network.Side;
 import user.UOnline;
@@ -16,17 +18,40 @@ public class Core implements Runnable {
 
 	static final Proxy proxy = new DebugProxy(Side.SERVER);
 	static final Core core = new Core();
+
+	// 所有运行的任务队列
 	private LinkedList<Runnable> tasks = new LinkedList<Runnable>();
+	// 所有运行的tick队列
+	private LinkedList<ITickable> tickTasks = new LinkedList<ITickable>();
+	// 负责计实的计时器
 	private Timer timer = new Timer();
 
+	// 主函数
 	public static void main(String[] args) {
 		proxy.init();
 		proxy.launch();
 		core.run();
 	}
 
+	private class TickTask extends TimerTask {
+		@Override
+		public void run() {
+			Iterator<ITickable> itr = tickTasks.iterator();
+			while (itr.hasNext()) {
+				ITickable tick = itr.next();
+				int flags = tick.update();
+				if (flags == ITickable.END) {
+					synchronized (tickTasks) {
+						itr.remove();
+					}
+				}
+			}
+		}
+	}
+
 	@Override
 	public void run() {
+		timer.schedule(new TickTask(), 1000, 50);
 		while (true) {
 			this.coreWait();
 			while (true) {
