@@ -163,14 +163,14 @@ public class ChatPanel extends JPanelUtility {
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setTag("chat", chatDialogPanel);
+		//nbt.setTag("chat", chatDialogPanel);
 		nbt.setTag("input", inputPanel);
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
-		chatDialogPanel.deserializeNBT((NBTTagCompound) nbt.getTag("chat"));
+		//chatDialogPanel.deserializeNBT((NBTTagCompound) nbt.getTag("chat"));
 		inputPanel.deserializeNBT((NBTTagList) nbt.getTag("input"));
 	}
 

@@ -84,8 +84,6 @@ public class LoginFrame extends JFrame {
 		this.setMinimumSize(layout.minimumLayoutSize(this));
 		// 设置窗体大小和位置
 		this.pack();
-		// 展示窗体
-		this.setVisible(true);
 	}
 
 	public void setLoginListener(MouseListener listener) {

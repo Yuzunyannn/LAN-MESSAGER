@@ -84,16 +84,6 @@ public class UtilityPanel extends JPanel implements ITickable {
 				}
 			}
 		}
-		
-		//临时调试
-		if (tick % 100 == 0) {
-			if (panelInfo.equals("Ussj"))
-				toChat("lly");
-			else {
-				toChat("ssj");
-				System.out.println("fff");
-			}
-		}
 		return ITickable.SUCCESS;
 	}
 

@@ -1,6 +1,5 @@
 package client.frame.info;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
@@ -9,12 +8,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.Theme;
-import event.SubscribeEvent;
 import user.User;
-import client.event.EventRecv.EventRecvString;
-import client.event.EventShow;
 
 public class MemberButton extends JButton {
 	private static final long serialVersionUID = 1L;
@@ -40,7 +37,7 @@ public class MemberButton extends JButton {
 		this.setContentAreaFilled(false);
 		MouseAdapter mouse = new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
 				EventsBridge.frontendEventHandle.post(new EventShow(user));
 				// count=0;
@@ -48,7 +45,7 @@ public class MemberButton extends JButton {
 				 * 消息计数测试用 EventsBridge.frontendEventHandle.post(new EventRecvString(new
 				 * User(memberName), ""));
 				 */
-				System.out.println("name" + memberName + "count" + count);
+				// System.out.println("name" + memberName + "count" + count);
 			}
 		};
 		this.addMouseListener(mouse);
