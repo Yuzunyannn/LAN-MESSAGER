@@ -2,7 +2,7 @@ package user;
 
 import network.IMessage;
 
-public class User {
+abstract public class User {
 	/** 用户的唯一表示名称 */
 	public final String userName;
 

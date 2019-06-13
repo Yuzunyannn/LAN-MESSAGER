@@ -52,7 +52,6 @@ public class ClientProxy extends Proxy {
 		EventsBridge.frontendEventHandle.register(this);
 
 		EventsBridge.frontendEventHandle.register(ListScrollPanel.class);
-		
 
 		EventsBridge.frontendEventHandle.register(UtilityPanel.class);
 
@@ -108,9 +107,8 @@ public class ClientProxy extends Proxy {
 				return;
 			}
 			Logger.log.impart(e.username + "登录成功！");
-			//登录成功
-			User u=new User(e.username);
-			UserClient.sendToServer(new MUGULRequest(u));
+			// 登录成功
+			UserClient.sendToServer(new MUGULRequest(UOnline.getInstance().getUser(e.username)));
 			logFrame.setVisible(false);
 			frame.setVisible(true);
 		} else {

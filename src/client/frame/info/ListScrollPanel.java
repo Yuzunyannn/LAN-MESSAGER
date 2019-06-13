@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
-
 import client.event.EventRecv.EventRecvString;
 
 import client.event.EventsBridge;
@@ -24,6 +23,7 @@ public class ListScrollPanel extends JScrollPane {
 	private int height = 0;
 	private static JPanel p;
 	private static Component[] content;
+
 	public ListScrollPanel() {
 		super();
 		p = new JPanel();
@@ -31,7 +31,7 @@ public class ListScrollPanel extends JScrollPane {
 		p.setPreferredSize(new Dimension(width, getHeight()));
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		p.setBackground(Theme.COLOR0);
-		content=p.getComponents();
+		content = p.getComponents();
 		this.add(p);
 		this.setViewportView(p);
 		// 设置垂直滚动条的显示: 一直显示
@@ -44,43 +44,46 @@ public class ListScrollPanel extends JScrollPane {
 		bar.setBackground(Theme.COLOR1);
 
 	}
-	/*在加入User类后需要修改*/
+
+	/* 在加入User类后需要修改 */
 	public void setTop(String name) {
 		int temp;
-		temp=this.getMember(name);
+		temp = this.getMember(name);
 		Component tempbutton;
-		tempbutton=p.getComponent(temp);
-		
-		Component[]  re;
-		re=p.getComponents();
-		for(int i=temp;i>0;i--) {
-			re[i]=re[i-1];
+		tempbutton = p.getComponent(temp);
+
+		Component[] re;
+		re = p.getComponents();
+		for (int i = temp; i > 0; i--) {
+			re[i] = re[i - 1];
 		}
-		re[0]=tempbutton;
+		re[0] = tempbutton;
 		p.removeAll();
-		content=re;
-		for(Component i:re) {
-		p.add(i);}
-		
-	
+		content = re;
+		for (Component i : re) {
+			p.add(i);
+		}
+
 //		
-		for(Component i:p.getComponents())
-			 System.out.println(((MemberButton)i).getMemberName());
-		
+		for (Component i : p.getComponents())
+			System.out.println(((MemberButton) i).getMemberName());
+
 	}
+
 	public int getMember(String name) {
 		MemberButton temp;
-		for(int i=0;i<p.getComponentCount();i++) {
-			temp=(MemberButton) p.getComponent(i);
-		 if(temp.getMemberName().equals(name)) {
+		for (int i = 0; i < p.getComponentCount(); i++) {
+			temp = (MemberButton) p.getComponent(i);
+			if (temp.getMemberName().equals(name)) {
 //			 System.out.println(i);
-			 return i;
-			 
-		 }
-		 }
+				return i;
+
+			}
+		}
 		return -1;
-		
+
 	}
+
 	public int getPHeight() {
 		return height;
 	}
@@ -91,53 +94,55 @@ public class ListScrollPanel extends JScrollPane {
 
 	public void addNewMember(String name) {
 		p.add(new MemberButton(name));
-		
-		content=p.getComponents();
+
+		content = p.getComponents();
 		height += MemberButton.MEMBERBUTTON_HEIGHT;
 		int width = super.getWidth();
 		standardHeight(super.getPreferredSize());
-		/*测试信息*/
+		/* 测试信息 */
 //		System.out.println("scroll"+super.getPreferredSize().height);
 //		System.out.println("height"+this.height);
 		p.setPreferredSize(new Dimension(width, height));
 	}
+
 	public void deductMember(String name) {
-		for(int i=p.getComponentCount();i>0;i--) {
-			MemberButton temp=(MemberButton) p.getComponent(i);
-			if(temp.getText().equals(name)) {
+		for (int i = p.getComponentCount(); i > 0; i--) {
+			MemberButton temp = (MemberButton) p.getComponent(i);
+			if (temp.getText().equals(name)) {
 				p.remove(i);
-				height-=MemberButton.MEMBERBUTTON_HEIGHT;
-				
-			}
-			else 
-				Logger.log.error(name+"查无此人");
+				height -= MemberButton.MEMBERBUTTON_HEIGHT;
+
+			} else
+				Logger.log.error(name + "查无此人");
 			int width = super.getWidth();
-			
-			content=p.getComponents();
+
+			content = p.getComponents();
 			standardHeight(super.getPreferredSize());
-			
+
 			p.setPreferredSize(new Dimension(width, height));
-			}
+		}
 	}
-	public void deleteAllMember() 
-	{
+
+	public void deleteAllMember() {
 		p.removeAll();
 	}
+
 	public void standardHeight(Dimension d) {
-		if(p.getComponentCount()<(int) (d.height/MemberButton.MEMBERBUTTON_HEIGHT))
-			this.height=d.height+10;
-		/*测试信息*/
+		if (p.getComponentCount() < (int) (d.height / MemberButton.MEMBERBUTTON_HEIGHT))
+			this.height = d.height + 10;
+		/* 测试信息 */
 //		System.out.println("count"+p.getComponentCount());
 	}
-	
+
 	@SubscribeEvent
 	public static void onCountMsg(EventRecvString e) {
 		p.removeAll();
-		for(int i=0;i<content.length;i++)
-		if(((MemberButton)content[i]).getMemberName().equals(e.from.getUserName())) 
-			((MemberButton)content[i]).count=((MemberButton)content[i]).count+1;
-			
-		for(Component i:content) {
-			p.add(i);}
+		for (int i = 0; i < content.length; i++)
+			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName()))
+				((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
+
+		for (Component i : content) {
+			p.add(i);
+		}
 	}
 }

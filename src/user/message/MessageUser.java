@@ -28,6 +28,10 @@ abstract public class MessageUser implements IMessage {
 		this.nbt.setString("user", username);
 	}
 
+	public NBTTagCompound getNBT() {
+		return nbt;
+	}
+	
 	@Override
 	final public void fromBytes(ByteBuffer buf) throws IOException {
 		nbt = NBTStream.read(buf);
