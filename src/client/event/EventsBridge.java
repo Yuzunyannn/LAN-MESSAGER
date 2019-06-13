@@ -1,5 +1,7 @@
 package client.event;
 
+import java.util.ArrayList;
+
 import client.user.UserClient;
 import event.EventBusTask;
 import event.IEventBus;
@@ -24,5 +26,9 @@ public class EventsBridge {
 	/** [前台] 发送字符串给其他用户 */
 	public static void sendString(String str, String toUser) {
 		UserClient.sendToServer(new MUSString(toUser, str));
+	}
+	/** [后台]当受到用户列表 */
+	public static void recvUserList(ArrayList<User>ul) {
+		EventsBridge.frontendEventHandle.post(new EventULChange(ul));
 	}
 }

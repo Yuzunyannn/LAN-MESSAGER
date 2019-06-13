@@ -11,17 +11,19 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import client.event.EventRecv;
+import client.event.EventRecv.EventRecvString;
 import client.event.EventSendInputWords;
 import client.event.EventsBridge;
 import client.frame.Theme;
 import client.word.Word;
+
+import event.SubscribeEvent;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
 import nbt.NBTTagList;
 import nbt.NBTTagString;
 import user.UOnline;
-
-
 
 public class ChatPanel extends JPanelUtility {
 	private static final long serialVersionUID = 1L;
@@ -156,15 +158,14 @@ public class ChatPanel extends JPanelUtility {
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words)
 			chatDialogPanel.addBubble(true, w.toString(), "ssj");
-		//chatDialogPanel.serializeNBT();
+		// chatDialogPanel.serializeNBT();
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
 	}
 
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		
-	 nbt.setTag("chat", chatDialogPanel);
+		//nbt.setTag("chat", chatDialogPanel);
 		nbt.setTag("input", inputPanel);
 		return nbt;
 	}

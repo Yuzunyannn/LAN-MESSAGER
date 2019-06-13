@@ -9,9 +9,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import group.ITickable;
 import log.Logger;
 import network.Side;
+import story.ITickable;
 import user.UOnline;
 
 public class Core implements Runnable {

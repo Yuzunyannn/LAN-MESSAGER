@@ -1,4 +1,4 @@
-package group;
+package story;
 
 public interface ITickable {
 
