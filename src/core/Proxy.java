@@ -8,6 +8,7 @@ import log.Logger;
 import log.NeedLog;
 import network.RecvDealMessage;
 import platform.Platform;
+import user.message.MUGULRequest;
 import user.message.MUSString;
 import user.message.MessageLogin;
 import util.ClassHelper;
@@ -60,5 +61,6 @@ public class Proxy {
 	private static void registerAllMesage() {
 		RecvDealMessage.registerMessage("login_msh", MessageLogin.class);
 		RecvDealMessage.registerMessage("us_str", MUSString.class);
+		RecvDealMessage.registerMessage("ul_change", MUGULRequest.class);
 	}
 }
