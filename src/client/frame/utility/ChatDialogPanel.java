@@ -65,7 +65,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		}
 		nbt.setInteger("Count", comNum);
 		nbt.setInteger("ScrollValue", this.getVerticalScrollBar().getValue());
-		System.out.println(this.getVerticalScrollBar().getValue());
+		//System.out.println(this.getVerticalScrollBar().getValue());
 		return nbt;
 	}
 
@@ -73,7 +73,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 	public void deserializeNBT(NBTTagCompound nbt) {
 		int count = nbt.getInteger("Count");
 		if (count == 0) {
-			System.out.println("组件数量为0");
+			//System.out.println("组件数量为0");
 			return;
 		}
 		Component[] com = this.panel.getComponents();

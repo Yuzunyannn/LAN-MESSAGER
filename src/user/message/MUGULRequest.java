@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import client.event.EventsBridge;
 import client.user.UserClient;
 import core.Core;
+import log.Logger;
 import nbt.NBTBase;
 import nbt.NBTTagCompound;
 import nbt.NBTTagList;
@@ -13,7 +14,7 @@ import server.response.Response;
 import user.User;
 
 public class MUGULRequest extends MessageUser {
-//用户请求好友列表
+	// 用户请求好友列表
 	public MUGULRequest() {
 	}
 
@@ -23,7 +24,6 @@ public class MUGULRequest extends MessageUser {
 
 	@Override
 	void executeClient(User from, NBTTagCompound nbt) {
-		System.out.println(nbt.getTag("userlist"));
 		if (nbt.getTag("userlist").getId() == NBTBase.TAG_LIST) {
 			NBTTagList list = (NBTTagList) nbt.getTag("userlist");
 			if (list.getTagType() == NBTBase.TAG_STRING) {
@@ -33,20 +33,16 @@ public class MUGULRequest extends MessageUser {
 					ul.add(new UserClient(s.get()));
 				}
 				EventsBridge.recvUserList(ul);
-			} else {
-				// 报错
-				;
-			}
-		} else {
-			// 报错
-			;
-		}
+			} else
+				Logger.log.warn("获取好友列表的list不是字符串型的list！");
+		} else
+			Logger.log.warn("获取好友列表的类型不对！");
+
 	}
 
 	@Override
 	void executeServer(User from, User to, NBTTagCompound nbt) {
-		// 测试getuserlist()
-		Core.task(new Response(from));	
+		Core.task(new Response(from));
 	}
 
 }
