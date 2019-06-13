@@ -28,6 +28,7 @@ public class ULogin extends RecvDealMessage {
 		super.execute(msg, con);
 	}
 
+	/** 处理登陆 */
 	static public boolean login(String username, String password) {
 		if (username.equals("guest")) {
 			return true;
