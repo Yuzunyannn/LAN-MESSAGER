@@ -12,7 +12,7 @@ import client.frame.Theme;
 public class UserPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private final static int USERPANEL_WIDTH = 275;
-	private String name = "Tatssu";
+	private String name = "Tatsuu";
 	private SearchPanel sp;
 	private UserImage img;
 

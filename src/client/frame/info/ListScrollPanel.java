@@ -9,7 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
+
 import client.event.EventRecv.EventRecvString;
+
+import client.event.EventsBridge;
+
 import client.frame.Theme;
 import event.SubscribeEvent;
 import log.Logger;
@@ -38,7 +42,6 @@ public class ListScrollPanel extends JScrollPane {
 		this.setVerticalScrollBar(bar);
 		this.setBorder(null);
 		bar.setBackground(Theme.COLOR1);
-		
 
 	}
 	/*在加入User类后需要修改*/
@@ -115,6 +118,10 @@ public class ListScrollPanel extends JScrollPane {
 			
 			p.setPreferredSize(new Dimension(width, height));
 			}
+	}
+	public void deleteAllMember() 
+	{
+		p.removeAll();
 	}
 	public void standardHeight(Dimension d) {
 		if(p.getComponentCount()<(int) (d.height/MemberButton.MEMBERBUTTON_HEIGHT))
