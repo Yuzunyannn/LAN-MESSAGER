@@ -31,10 +31,15 @@ import client.frame.Theme;
 import client.word.Word;
 import client.word.WordFile;
 import client.word.WordString;
+import log.Logger;
+import nbt.INBTSerializable;
+import nbt.NBTBase;
+import nbt.NBTTagList;
+import nbt.NBTTagString;
 import util.FileHelper;
 
 /** 文本输入框的类 */
-public class ChatTextEditPane extends JTextPane {
+public class ChatTextEditPane extends JTextPane implements INBTSerializable<NBTTagList> {
 	private static final long serialVersionUID = 1L;
 	private final ChatInputPanel parent;
 
@@ -230,5 +235,40 @@ public class ChatTextEditPane extends JTextPane {
 			icon.paintIcon(c, g, x, y);
 		}
 
+	}
+
+	@Override
+	public NBTTagList serializeNBT() {
+		NBTTagList list = new NBTTagList();
+		try {
+			List<Word> words = this.getValue();
+			for (Word word : words) {
+				if (word instanceof WordString) {
+					list.appendTag(new NBTTagString("S" + word.getValue()));
+				} else if (word instanceof WordFile) {
+					list.appendTag(new NBTTagString("F" + word.getValue()));
+				} else {
+					Logger.log.warn("输入框序列化时候，出现未知的word类");
+				}
+			}
+		} catch (BadLocationException e) {
+			Logger.log.warn("输入框出现异常：", e);
+		}
+		return list;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagList list) {
+		this.clear();
+		for (NBTBase nbt : list) {
+			String str = nbt.toString();
+			boolean isString = str.charAt(0) == 'S';
+			str = str.substring(1);
+			if (isString) {
+				this.insert(str);
+			} else {
+				this.dragFile(new File(str));
+			}
+		}
 	}
 }

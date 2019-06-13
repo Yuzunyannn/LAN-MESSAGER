@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import group.ITickable;
 import log.Logger;
@@ -25,6 +28,8 @@ public class Core implements Runnable {
 	private LinkedList<ITickable> tickTasks = new LinkedList<ITickable>();
 	// 负责计实的计时器
 	private Timer timer = new Timer();
+	// 负责精准循环tick的计时器
+	private ScheduledExecutorService scheduExec = Executors.newSingleThreadScheduledExecutor();
 
 	// 主函数
 	public static void main(String[] args) {
@@ -39,11 +44,18 @@ public class Core implements Runnable {
 			Iterator<ITickable> itr = tickTasks.iterator();
 			while (itr.hasNext()) {
 				ITickable tick = itr.next();
-				int flags = tick.update();
-				if (flags == ITickable.END) {
-					synchronized (tickTasks) {
-						itr.remove();
+				try {
+					int flags = tick.update();
+					if (flags == ITickable.END) {
+						synchronized (tickTasks) {
+							itr.remove();
+						}
 					}
+				} catch (Exception e) {
+					Logger.log.warn("tick运行中，出现异常！", e);
+				} catch (Throwable t) {
+					Logger.log.warn("tick运行中，出现错误！", t);
+					Core.shutdownWithError();
 				}
 			}
 		}
@@ -51,7 +63,7 @@ public class Core implements Runnable {
 
 	@Override
 	public void run() {
-		timer.schedule(new TickTask(), 1000, 50);
+		scheduExec.scheduleAtFixedRate(new TickTask(), 0, 50, TimeUnit.MILLISECONDS);
 		while (true) {
 			this.coreWait();
 			while (true) {
@@ -83,7 +95,7 @@ public class Core implements Runnable {
 	}
 
 	/** 添加一个同步任务 */
-	private void addTask(Runnable run) {
+	public void addTask(Runnable run) {
 		synchronized (tasks) {
 			tasks.addFirst(run);
 		}
@@ -91,7 +103,7 @@ public class Core implements Runnable {
 	}
 
 	/** 添加一个计时器任务 */
-	private void addTask(Runnable run, int ms) {
+	public void addTask(Runnable run, int ms) {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -112,8 +124,15 @@ public class Core implements Runnable {
 		return run;
 	}
 
+	/** 添加一个tick任务 */
+	public void addtask(ITickable run) {
+		synchronized (tickTasks) {
+			tickTasks.add(run);
+		}
+	}
+
 	/** 添加一个全局的同步任务 */
-	public synchronized static void task(Runnable run) {
+	public static void task(Runnable run) {
 		if (run == null) {
 			Logger.log.warn("添加同步任务的时候run出现null");
 			return;
@@ -128,6 +147,11 @@ public class Core implements Runnable {
 			return;
 		}
 		core.addTask(run, msDelay);
+	}
+
+	/** 添加一个tick任务 */
+	public static void task(ITickable run) {
+		core.addtask(run);
 	}
 
 	/** 因为错误导致程序关闭时候 */
