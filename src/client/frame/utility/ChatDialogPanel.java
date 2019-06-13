@@ -7,10 +7,13 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import core.Core;
+
 public class ChatDialogPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 	private ChatBubblePanel chatBubble;
 	private static JPanel panel = new JPanel();
+	public JScrollBar scrollBar = this.getVerticalScrollBar();
 
 	public ChatDialogPanel() {
 		super(panel);
@@ -33,7 +36,7 @@ public class ChatDialogPanel extends JScrollPane {
 		this.addBubble(false, "fffffffff");
 		this.addBubble(true, "lllllllll");
 		this.addBubble(false, "iiiiiiiiiiiiiiii");
-		JScrollBar scrollBar = this.getVerticalScrollBar();
+		//JScrollBar scrollBar = this.getVerticalScrollBar();
 		// 数据添加可能是在调用setValue之后发生，所以此处引入runnable
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -48,7 +51,10 @@ public class ChatDialogPanel extends JScrollPane {
 		panel.setSize(panel.getWidth(), panel.getHeight() + 20);
 		chatBubble = new ChatBubblePanel(isMySelf, info);
 		panel.add(chatBubble);
-		// System.out.println(this.verticalScrollBar.getMaximum());
-
+		Core.task(new Runnable() {
+			public void run() {
+				scrollBar.setValue(scrollBar.getMaximum());
+			}
+		},10);
 	}
 }

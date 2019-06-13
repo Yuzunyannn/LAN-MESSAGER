@@ -152,6 +152,7 @@ public class ChatPanel extends JPanel implements INBTSerializable<NBTTagCompound
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words)
 			chatDialogPanel.addBubble(true, w.toString());
+		chatDialogPanel.scrollBar.setValue(chatDialogPanel.scrollBar.getMaximum());
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
 	}
 
