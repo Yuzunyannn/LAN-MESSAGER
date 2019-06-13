@@ -2,21 +2,24 @@ package client.frame.info;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
+import client.event.EventRecv.EventRecvString;
 import client.frame.Theme;
+import event.SubscribeEvent;
 import log.Logger;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 	/** 添加列表中的成员数量时可能需要改变 */
 	private int height = 0;
-	private JPanel p;
-
+	private static JPanel p;
+	private static Component[] content;
 	public ListScrollPanel() {
 		super();
 		p = new JPanel();
@@ -24,6 +27,7 @@ public class ListScrollPanel extends JScrollPane {
 		p.setPreferredSize(new Dimension(width, getHeight()));
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		p.setBackground(Theme.COLOR0);
+		content=p.getComponents();
 		this.add(p);
 		this.setViewportView(p);
 		// 设置垂直滚动条的显示: 一直显示
@@ -51,8 +55,9 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		re[0]=tempbutton;
 		p.removeAll();
-		for(Component i:re)
-		p.add(i);
+		content=re;
+		for(Component i:re) {
+		p.add(i);}
 		
 	
 //		
@@ -82,8 +87,9 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	public void addNewMember(String name) {
-
 		p.add(new MemberButton(name));
+		
+		content=p.getComponents();
 		height += MemberButton.MEMBERBUTTON_HEIGHT;
 		int width = super.getWidth();
 		standardHeight(super.getPreferredSize());
@@ -103,6 +109,8 @@ public class ListScrollPanel extends JScrollPane {
 			else 
 				Logger.log.error(name+"查无此人");
 			int width = super.getWidth();
+			
+			content=p.getComponents();
 			standardHeight(super.getPreferredSize());
 			
 			p.setPreferredSize(new Dimension(width, height));
@@ -114,5 +122,15 @@ public class ListScrollPanel extends JScrollPane {
 		/*测试信息*/
 //		System.out.println("count"+p.getComponentCount());
 	}
-
+	
+	@SubscribeEvent
+	public static void onCountMsg(EventRecvString e) {
+		p.removeAll();
+		for(int i=0;i<content.length;i++)
+		if(((MemberButton)content[i]).getMemberName().equals(e.from.getUserName())) 
+			((MemberButton)content[i]).count=((MemberButton)content[i]).count+1;
+			
+		for(Component i:content) {
+			p.add(i);}
+	}
 }

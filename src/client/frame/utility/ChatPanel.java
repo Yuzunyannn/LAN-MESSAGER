@@ -11,10 +11,13 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import client.event.EventRecv;
+import client.event.EventRecv.EventRecvString;
 import client.event.EventSendInputWords;
 import client.event.EventsBridge;
 import client.frame.Theme;
 import client.word.Word;
+import event.SubscribeEvent;
 import user.UOnline;
 
 /** 聊天界面 */
@@ -151,5 +154,5 @@ public class ChatPanel extends JPanel {
 			chatDialogPanel.addBubble(true, w.toString());
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
 	}
-
+	
 }
