@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -36,6 +37,41 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		this.type = type;
 		this.userID = isMySelf;
 		this.userName = localName;
+		initalUI(info);
+	}
+	
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("isMyself", this.userID);
+		nbt.setInteger("Type", this.type.ordinal());
+		nbt.setString("UserIcon", this.userIcon);
+		nbt.setString("Username", this.userName);
+		nbt.setString("Word", this.userDialog);
+		nbt.setString("File", this.userFile);
+		nbt.setString("Extension", this.userExtension);
+		nbt.setString("Time", this.userTime);
+		return nbt;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+		if (nbt == null) {
+			System.out.println("NBT为空！");
+			return;
+		}
+		this.type = Type.values()[nbt.getInteger("Type")];
+		this.userID = nbt.getBoolean("isMyself");
+		this.userIcon = nbt.getString("UserIcon");
+		this.userName = nbt.getString("Username");
+		this.userDialog = nbt.getString("Word");
+		this.userFile = nbt.getString("File");
+		this.userExtension = nbt.getString("Extension");
+		this.userTime = nbt.getString("Time");
+		this.reConstructComponents();
+	}
+	
+	public void initalUI(String info ) {
 		switch (this.type) {
 		case WORD:
 			this.userDialog = info;
@@ -58,32 +94,6 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		this.setVisible(true);
 	}
 	
-	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setBoolean("isMyself", this.userID);
-		nbt.setInteger("Type", this.type.ordinal());
-		nbt.setString("UserIcon", this.userIcon);
-		nbt.setString("Username", this.userName);
-		nbt.setString("Word", this.userDialog);
-		nbt.setString("File", this.userFile);
-		nbt.setString("Extension", this.userExtension);
-		nbt.setString("Time", this.userTime);
-		return nbt;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
-		this.type = Type.values()[nbt.getInteger("Type")];
-		this.userID = nbt.getBoolean("isMyself");
-		this.userIcon = nbt.getString("UserIcon");
-		this.userName = nbt.getString("Username");
-		this.userDialog = nbt.getString("Word");
-		this.userFile = nbt.getString("File");
-		this.userExtension = nbt.getString("Extension");
-		this.userTime = nbt.getString("Time");
-	}
-	
 	/** 设置用户图标 */
 	private void setIcon(String userName) {
 		imageIcon = new ImageIcon("src/img/1.png");
@@ -93,15 +103,15 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		if (this.userID) {
 			this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			displayedName.setText(":" + userName);
-			this.add(dialog);
-			this.add(displayedName);
-			this.add(Icon);
+				this.add(dialog);
+				this.add(displayedName);
+				this.add(Icon);
 		}else {
 			this.setLayout(new FlowLayout(FlowLayout.LEFT));
 			displayedName.setText(userName + ":");	
-			this.add(Icon);
-			this.add(displayedName);
-			this.add(dialog);
+				this.add(Icon);
+				this.add(displayedName);
+				this.add(dialog);
 		}
 		dialog.setFont(Theme.FONT1);
 		displayedName.setFont(Theme.FONT1);
@@ -109,14 +119,11 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	
 	/** 重构组件 */
 	public void reConstructComponents() {
-		this.dialog = new JButton(this.userDialog);
-		this.displayedName = new JLabel();
-		this.setIcon(this.userName);
-		if (this.userID) {
-			displayedName.setText(":" + userName);
-		}else {
-			displayedName.setText(userName + ":");	
-		}
+		int length = this.getComponentCount();
+		this.remove(length-1);
+		this.remove(length-2);
+		this.remove(length-3);
+		initalUI(this.userDialog);
 	}
 
 }
