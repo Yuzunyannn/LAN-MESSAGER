@@ -158,8 +158,11 @@ public class ChatPanel extends JPanelUtility {
 
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
-		for (Word w : words)
+		for (Word w : words) {
 			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername());
+			EventsBridge.sendString(w.toString(), chatTo.getUserName());
+		}
+		
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
 	}
 
