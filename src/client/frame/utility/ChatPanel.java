@@ -132,6 +132,10 @@ public class ChatPanel extends JPanelUtility {
 	private ChatDialogPanel chatDialogPanel = new ChatDialogPanel();
 	private ChatInputPanel inputPanel = new ChatInputPanel();
 
+	public ChatPanel() {
+		this("");
+	}
+
 	public ChatPanel(String chatToUsername) {
 		// 默认颜色
 		this.setBackground(Theme.COLOR0);
@@ -169,6 +173,7 @@ public class ChatPanel extends JPanelUtility {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setTag("chat", chatDialogPanel);
 		nbt.setTag("input", inputPanel);
+		nbt.setString("user", chatTo.getUserName());
 		return nbt;
 	}
 
@@ -176,6 +181,7 @@ public class ChatPanel extends JPanelUtility {
 	public void deserializeNBT(NBTTagCompound nbt) {
 		chatDialogPanel.deserializeNBT((NBTTagCompound) nbt.getTag("chat"));
 		inputPanel.deserializeNBT((NBTTagList) nbt.getTag("input"));
+		chatTo = UOnline.getInstance().getUser(nbt.getString("user"));
 	}
 
 }

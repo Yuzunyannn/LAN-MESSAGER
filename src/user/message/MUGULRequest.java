@@ -58,7 +58,7 @@ public MUGULRequest(User user,NBTTagCompound nbt)
 	void executeServer(User from, User to, NBTTagCompound nbt) {
 		// TODO Auto-generated method stub
 		//测试getuserlist()
-		String[] s= new String[]{"hh","ll","ssj"};
+		String[] s= new String[]{"ssj","ycy","myk","lyl"};
 		
 		NBTTagList list=new NBTTagList();
 		Logger.log.impart("服务器成功响应");
