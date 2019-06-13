@@ -27,14 +27,8 @@ public class InfoPanel extends JPanel {
 		this.add(userField);
 		this.add(searchField);
 		this.add(memberField);
-//		String[] members=new String[]{"1","2","3"};
-//		String[] members=new String[]{"1","2","3","4","5","6","1","1","1","1","1","1","1"};
-//		this.addMembers(members);
-//		memberField.setTop("3");
-
 		userField.setPreferredSize(new Dimension(0,80));
 		searchField.setPreferredSize(new Dimension(0,50));
-
 	}
 	@SubscribeEvent
 	public void onULChange(client.event.EventULChange e) {
