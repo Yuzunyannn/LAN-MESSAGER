@@ -140,6 +140,8 @@ public class ChatPanel extends JPanelUtility {
 		// 设置默认布局
 		this.setLayout(layout);
 		// 添加输入和对话面板
+		//NBTTagCompound nbt = chatDialogPanel.serializeNBT();
+		//chatDialogPanel.deserializeNBT(nbt);
 		this.add(chatDialogPanel);
 		this.add(inputPanel);
 		// 添加鼠标监听者
@@ -169,7 +171,7 @@ public class ChatPanel extends JPanelUtility {
 
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
-		 chatDialogPanel.deserializeNBT((NBTTagCompound) nbt.getTag("chat"));
+		chatDialogPanel.deserializeNBT((NBTTagCompound) nbt.getTag("chat"));
 		inputPanel.deserializeNBT((NBTTagList) nbt.getTag("input"));
 	}
 

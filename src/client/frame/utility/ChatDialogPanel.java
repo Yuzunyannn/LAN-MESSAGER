@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 
 import core.Core;
 import nbt.INBTSerializable;
+import nbt.NBTBase;
 import nbt.NBTTagCompound;
 
 public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBTTagCompound> {
@@ -66,21 +67,42 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		Component[] com = this.getComponents();
-		ChatBubblePanel bubble = (ChatBubblePanel)com[0];
+		Component[] com = this.panel.getComponents();
+		ChatBubblePanel bubble = new ChatBubblePanel(true, "", "", Type.NULL);
 		int top = this.scrollBar.getValue() - this.getHeight();
 		int bottom  = this.scrollBar.getValue();
-		int firstCom = (top / (bubble.getHeight())) - 1;
-		int lastCom = (bottom / (bubble.getHeight())) - 1;
+		int firstCom = 0;
+		int lastCom = 0;
+		int count = 0;
 		Integer comNum = 0;
-		for(int i = firstCom; i<lastCom; i++){
-			nbt.setTag(comNum.toString(), (ChatBubblePanel)com[i]);
+		boolean found = false;
+		for (int j = 0; j < com.length; j++) {
+			if (com[j] instanceof ChatBubblePanel) {
+				if ( !found ) {
+					bubble = (ChatBubblePanel) com[j];
+					firstCom = (top / (bubble.getHeight())) - 1;
+					lastCom = (bottom / (bubble.getHeight())) - 1;
+				}
+				if ( count >= firstCom && count <= lastCom ) {
+					nbt.setTag(comNum.toString(), (ChatBubblePanel)com[j]);
+					comNum++;
+				}
+				count++;
+			}
 		}
+		nbt.setInteger("Count", lastCom - firstCom + 1);
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
+		int count = nbt.getInteger("Count");
+		for (Integer i = 0; i < count; i++) {
+			NBTTagCompound upperNBT = (NBTTagCompound) nbt.getTag(i.toString());
+			ChatBubblePanel bubble = new ChatBubblePanel(true, "", "", Type.NULL);
+			bubble.deserializeNBT(upperNBT);
+			this.panel.add(bubble);
+		}
 	}
 
 }

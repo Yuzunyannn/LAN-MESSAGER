@@ -53,6 +53,8 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		this.dialog = new JButton(this.userDialog);
 		this.displayedName = new JLabel();
 		this.setIcon(this.userName);
+		this.dialog.setBorderPainted(false);
+		this.Icon.setBorderPainted(false);
 		this.setVisible(true);
 	}
 	
