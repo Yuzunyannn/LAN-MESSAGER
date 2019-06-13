@@ -17,12 +17,13 @@ import client.frame.Theme;
 import client.word.Word;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
+import nbt.NBTTagList;
 import nbt.NBTTagString;
 import user.UOnline;
 
 
 
-public class ChatPanel extends JPanel implements INBTSerializable<NBTTagCompound> {
+public class ChatPanel extends JPanelUtility {
 	private static final long serialVersionUID = 1L;
 
 	/** 输入区域的大小 */
@@ -161,11 +162,15 @@ public class ChatPanel extends JPanel implements INBTSerializable<NBTTagCompound
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		
+	 nbt.setTag("chat", chatDialogPanel);
+		nbt.setTag("input", inputPanel);
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
+		 chatDialogPanel.deserializeNBT((NBTTagCompound) nbt.getTag("chat"));
+		inputPanel.deserializeNBT((NBTTagList) nbt.getTag("input"));
 	}
 
 }

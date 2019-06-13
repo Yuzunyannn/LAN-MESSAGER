@@ -24,8 +24,10 @@ import javax.swing.text.BadLocationException;
 
 import client.frame.Theme;
 import client.word.Word;
+import nbt.INBTSerializable;
+import nbt.NBTTagList;
 
-public class ChatInputPanel extends JPanel {
+public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagList> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -164,6 +166,16 @@ public class ChatInputPanel extends JPanel {
 		} catch (BadLocationException e1) {
 			log.Logger.log.warn("读取消息输入框内容出现异常：", e1);
 		}
+	}
+
+	@Override
+	public NBTTagList serializeNBT() {
+		return textEdit.serializeNBT();
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagList nbt) {
+		textEdit.deserializeNBT(nbt);
 	}
 
 }

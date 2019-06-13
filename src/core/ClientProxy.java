@@ -7,6 +7,7 @@ import java.io.IOException;
 import client.event.EventsBridge;
 import client.frame.LoginFrame;
 import client.frame.MainFrame;
+import client.frame.utility.UtilityPanel;
 import client.user.UOnlineClient;
 import client.user.UserClient;
 import event.SubscribeEvent;
@@ -42,6 +43,7 @@ public class ClientProxy extends Proxy {
 			Core.setUOnline(new UOnlineClient());
 		// 注册事件
 		EventsBridge.frontendEventHandle.register(this);
+		EventsBridge.frontendEventHandle.register(UtilityPanel.class);
 	}
 
 	@Override
