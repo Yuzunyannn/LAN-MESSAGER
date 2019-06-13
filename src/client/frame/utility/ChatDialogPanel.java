@@ -1,5 +1,6 @@
 package client.frame.utility;
 
+import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
@@ -7,10 +8,16 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-public class ChatDialogPanel extends JScrollPane {
+import core.Core;
+import nbt.INBTSerializable;
+import nbt.NBTTagCompound;
+
+public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBTTagCompound> {
 	private static final long serialVersionUID = 1L;
 	private ChatBubblePanel chatBubble;
 	private static JPanel panel = new JPanel();
+	public JScrollBar scrollBar = this.getVerticalScrollBar();
+	private String user = "";
 
 	public ChatDialogPanel() {
 		super(panel);
@@ -19,21 +26,21 @@ public class ChatDialogPanel extends JScrollPane {
 		this.setVisible(true);
 
 		// 测试区域
-		this.addBubble(true, "hhhhhhhh");
-		this.addBubble(false, "yyyyyyy");
-		this.addBubble(false, "yyyyyyy");
-		this.addBubble(true, "zzzzzz");
-		this.addBubble(false, "fffffffff");
-		this.addBubble(true, "lllllllll");
-		this.addBubble(false, "iiiiiiiiiiiiiiii");
-		this.addBubble(true, "hhhhhhhh");
-		this.addBubble(false, "yyyyyyy");
-		this.addBubble(false, "yyyyyyy");
-		this.addBubble(true, "zzzzzz");
-		this.addBubble(false, "fffffffff");
-		this.addBubble(true, "lllllllll");
-		this.addBubble(false, "iiiiiiiiiiiiiiii");
-		JScrollBar scrollBar = this.getVerticalScrollBar();
+		this.addBubble(true, "hhhhhhhh", "ssj");
+		this.addBubble(false, "yyyyyyy", "lyl");
+		this.addBubble(false, "yyyyyyy", "lyl");
+		this.addBubble(true, "zzzzzz", "ssj");
+		this.addBubble(false, "fffffffff", "lyl");
+		this.addBubble(true, "lllllllll", "ssj");
+		this.addBubble(false, "iiiiiiiiiiiiiiii", "lyl");
+		this.addBubble(true, "hhhhhhhh", "ssj");
+		this.addBubble(false, "yyyyyyy", "lyl");
+		this.addBubble(false, "yyyyyyy", "lyl");
+		this.addBubble(true, "zzzzzz", "ssj");
+		this.addBubble(false, "fffffffff", "lyl");
+		this.addBubble(true, "lllllllll", "ssj");
+		this.addBubble(false, "iiiiiiiiiiiiiiii", "lyl");
+		//JScrollBar scrollBar = this.getVerticalScrollBar();
 		// 数据添加可能是在调用setValue之后发生，所以此处引入runnable
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -43,12 +50,37 @@ public class ChatDialogPanel extends JScrollPane {
 	}
 
 	/** 添加一个对话气泡 */
-	public void addBubble(boolean isMySelf, String info) {
+	public void addBubble(boolean isMySelf, String info, String name) {
 		// TODO Auto-generated method stub
 		panel.setSize(panel.getWidth(), panel.getHeight() + 20);
-		chatBubble = new ChatBubblePanel(isMySelf, info);
+		chatBubble = new ChatBubblePanel(isMySelf, info, name, Type.WORD);
 		panel.add(chatBubble);
-		// System.out.println(this.verticalScrollBar.getMaximum());
-
+		Core.task(new Runnable() {
+			public void run() {
+				scrollBar.setValue(scrollBar.getMaximum());
+			}
+		},50);
+		//scrollBar.setValue(scrollBar.getMaximum());
 	}
+	
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		Component[] com = this.getComponents();
+		ChatBubblePanel bubble = (ChatBubblePanel)com[0];
+		int top = this.scrollBar.getValue() - this.getHeight();
+		int bottom  = this.scrollBar.getValue();
+		int firstCom = (top / (bubble.getHeight())) - 1;
+		int lastCom = (bottom / (bubble.getHeight())) - 1;
+		Integer comNum = 0;
+		for(int i = firstCom; i<lastCom; i++){
+			nbt.setTag(comNum.toString(), (ChatBubblePanel)com[i]);
+		}
+		return nbt;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+	}
+
 }

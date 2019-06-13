@@ -17,11 +17,17 @@ import client.event.EventSendInputWords;
 import client.event.EventsBridge;
 import client.frame.Theme;
 import client.word.Word;
+
 import event.SubscribeEvent;
+import nbt.INBTSerializable;
+import nbt.NBTTagCompound;
+import nbt.NBTTagList;
+import nbt.NBTTagString;
 import user.UOnline;
 
-/** 聊天界面 */
-public class ChatPanel extends JPanel {
+
+
+public class ChatPanel extends JPanelUtility {
 	private static final long serialVersionUID = 1L;
 
 	/** 输入区域的大小 */
@@ -151,8 +157,24 @@ public class ChatPanel extends JPanel {
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words)
-			chatDialogPanel.addBubble(true, w.toString());
+			chatDialogPanel.addBubble(true, w.toString(), "ssj");
+		//chatDialogPanel.serializeNBT();
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
 	}
-	
+
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		
+	 nbt.setTag("chat", chatDialogPanel);
+		nbt.setTag("input", inputPanel);
+		return nbt;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+		 chatDialogPanel.deserializeNBT((NBTTagCompound) nbt.getTag("chat"));
+		inputPanel.deserializeNBT((NBTTagList) nbt.getTag("input"));
+	}
+
 }
