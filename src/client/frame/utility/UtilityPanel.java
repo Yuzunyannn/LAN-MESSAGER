@@ -11,10 +11,12 @@ import javax.swing.JPanel;
 
 import client.frame.MainFrame;
 import client.frame.Theme;
+import client.word.WordString;
 import core.Core;
-import group.ITickable;
 import log.Logger;
 import nbt.NBTTagCompound;
+import story.ITickable;
+import user.User;
 
 /** 界面右边的区域 聊天区域 操作区域 */
 public class UtilityPanel extends JPanel implements ITickable {
@@ -87,21 +89,38 @@ public class UtilityPanel extends JPanel implements ITickable {
 		return ITickable.SUCCESS;
 	}
 
-	// 切换聊天界面
-	public void toChat(String username) {
+	/** 获取聊天PaneLInfo */
+	private PanelInfo getChatPanelInfo(String username) {
 		String newInfo = "U" + username;
-		if (newInfo.equals(panelInfo))
-			return;
 		PanelInfo info;
 		if (panels.containsKey(newInfo)) {
 			info = panels.get(newInfo);
 		} else {
-			info = new PanelInfo("U", username, new ChatPanel());
+			info = new PanelInfo("U", username, new ChatPanel(username));
+			panels.put(info.info, info);
 		}
+		return info;
+	}
+
+	/** 接受到消息 */
+	public void recvString(User from, String str) {
+		PanelInfo info = this.getChatPanelInfo(from.getUserName());
 		if (!info.canUse()) {
 			info.reborn();
 		}
+		((ChatPanel) info.panel).onRecvMsg(new WordString(str));
+	}
 
+	/** 切换聊天界面 */
+	public void toChat(String username) {
+		String newInfo = "U" + username;
+		if (newInfo.equals(panelInfo))
+			return;
+		PanelInfo info = this.getChatPanelInfo(username);
+		if (!info.canUse()) {
+			info.reborn();
+		}
+		// 临时调试
 		if (panels.containsKey(panelInfo)) {
 			PanelInfo oldInfo = panels.get(panelInfo);
 			oldInfo.release();
@@ -110,6 +129,9 @@ public class UtilityPanel extends JPanel implements ITickable {
 		panelInfo = newInfo;
 		currPanel = info.panel;
 		info.tick = this.tick;
+		UtilityPanel.this.remove(0);
+		UtilityPanel.this.add(currPanel);
+		UtilityPanel.this.revalidate();
 	}
 
 	// 记录驻于内存的面板

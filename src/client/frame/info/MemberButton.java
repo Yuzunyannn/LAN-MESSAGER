@@ -38,7 +38,7 @@ public class MemberButton extends JButton {
 		this.setContentAreaFilled(false);
 		MouseAdapter mouse = new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
 				EventsBridge.frontendEventHandle.post(new EventShow(user));
 				// count=0;
@@ -46,7 +46,7 @@ public class MemberButton extends JButton {
 				 * 消息计数测试用 EventsBridge.frontendEventHandle.post(new EventRecvString(new
 				 * User(memberName), ""));
 				 */
-				System.out.println("name" + memberName + "count" + count);
+				// System.out.println("name" + memberName + "count" + count);
 			}
 		};
 		this.addMouseListener(mouse);

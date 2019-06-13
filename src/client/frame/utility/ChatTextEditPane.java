@@ -134,6 +134,7 @@ public class ChatTextEditPane extends JTextPane implements INBTSerializable<NBTT
 		Document docs = this.getDocument();
 		try {
 			docs.insertString(docs.getLength(), str, null);
+			this.setCaretPosition(docs.getLength());
 		} catch (BadLocationException e) {
 			log.Logger.log.warn("插入文字出现异常", e);
 		}

@@ -6,41 +6,30 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
 import core.Core;
 import nbt.INBTSerializable;
+import nbt.NBTBase;
 import nbt.NBTTagCompound;
 
 public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBTTagCompound> {
 	private static final long serialVersionUID = 1L;
 	private ChatBubblePanel chatBubble;
-	private static JPanel panel = new JPanel();
+	private JPanel panel;
 	public JScrollBar scrollBar = this.getVerticalScrollBar();
 	private String user = "";
 
 	public ChatDialogPanel() {
-		super(panel);
+		super(new JPanel());
+		panel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
 		panel.setLayout(new GridLayout(0, 1));
 		panel.setVisible(true);
 		this.setVisible(true);
 
 		// 测试区域
-		this.addBubble(true, "hhhhhhhh", "ssj");
-		this.addBubble(false, "yyyyyyy", "lyl");
-		this.addBubble(false, "yyyyyyy", "lyl");
-		this.addBubble(true, "zzzzzz", "ssj");
-		this.addBubble(false, "fffffffff", "lyl");
-		this.addBubble(true, "lllllllll", "ssj");
-		this.addBubble(false, "iiiiiiiiiiiiiiii", "lyl");
-		this.addBubble(true, "hhhhhhhh", "ssj");
-		this.addBubble(false, "yyyyyyy", "lyl");
-		this.addBubble(false, "yyyyyyy", "lyl");
-		this.addBubble(true, "zzzzzz", "ssj");
-		this.addBubble(false, "fffffffff", "lyl");
-		this.addBubble(true, "lllllllll", "ssj");
-		this.addBubble(false, "iiiiiiiiiiiiiiii", "lyl");
-		//JScrollBar scrollBar = this.getVerticalScrollBar();
+
 		// 数据添加可能是在调用setValue之后发生，所以此处引入runnable
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -59,28 +48,53 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 			public void run() {
 				scrollBar.setValue(scrollBar.getMaximum());
 			}
-		},50);
-		//scrollBar.setValue(scrollBar.getMaximum());
+		}, 50);
 	}
-	
+
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		Component[] com = this.getComponents();
-		ChatBubblePanel bubble = (ChatBubblePanel)com[0];
-		int top = this.scrollBar.getValue() - this.getHeight();
-		int bottom  = this.scrollBar.getValue();
-		int firstCom = (top / (bubble.getHeight())) - 1;
-		int lastCom = (bottom / (bubble.getHeight())) - 1;
+		Component[] com = this.panel.getComponents();
 		Integer comNum = 0;
-		for(int i = firstCom; i<lastCom; i++){
-			nbt.setTag(comNum.toString(), (ChatBubblePanel)com[i]);
+		for (int j = 0; j < com.length; j++) {
+			if (com[j] instanceof ChatBubblePanel) {
+				NBTTagCompound tmpNBT = ((ChatBubblePanel)com[j]).serializeNBT();
+				nbt.setTag(comNum.toString(), tmpNBT);
+				comNum++;
+			}
 		}
+		nbt.setInteger("Count", comNum);
+		nbt.setInteger("ScrollValue", this.getVerticalScrollBar().getValue());
+		System.out.println(this.getVerticalScrollBar().getValue());
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
+		int count = nbt.getInteger("Count");
+		if (count == 0) {
+			System.out.println("组件数量为0");
+			return;
+		}
+		Component[] com = this.panel.getComponents();
+		int length = com.length;
+		for(int i=length-1;i>=0;i--) {
+			if (com[i] instanceof ChatBubblePanel) {
+				this.panel.remove(i);
+			}
+		}
+		for (Integer i = 0; i < count; i++) {
+			NBTTagCompound upperNBT = (NBTTagCompound) nbt.getTag(i.toString());
+			ChatBubblePanel bubble = new ChatBubblePanel(true, "", "", Type.NULL);
+			bubble.deserializeNBT(upperNBT);
+			this.panel.add(bubble);
+		}
+		Core.task(new Runnable() {
+			public void run() {
+				scrollBar.setValue(nbt.getInteger("ScrollValue"));
+			}
+		}, 20);
+		this.revalidate();
 	}
 
 }

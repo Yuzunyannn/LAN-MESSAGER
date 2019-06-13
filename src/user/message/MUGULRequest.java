@@ -46,7 +46,7 @@ public class MUGULRequest extends MessageUser {
 	@Override
 	void executeServer(User from, User to, NBTTagCompound nbt) {
 		// 测试getuserlist()
-		Core.task(new Response(from));
+		Core.task(new Response(from));	
 	}
 
 }

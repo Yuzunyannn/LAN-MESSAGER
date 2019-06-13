@@ -2,17 +2,32 @@ package server.user;
 
 import event.EventBusSynchronized;
 import event.IEventBus;
+import event.SubscribeEvent;
 import log.Logger;
 import network.Connection;
 import network.Network;
 import network.RecvDealMessage;
 import network.Side;
+import network.event.EventConnectionEnd;
 import user.UOnline;
 import user.User;
 import user.message.MessageLogin;
 
 public class UOnlineServer extends UOnline {
-	public static IEventBus eventHandle = new EventBusSynchronized();
+	public final static IEventBus eventHandle = new EventBusSynchronized();
+
+	/** 用户掉线后，发送下线消息 */
+	@SubscribeEvent
+	public void onDisconnection(EventConnectionEnd e) {
+		UserServer user = (UserServer) this.getUser(e.con.getName());
+		UOnlineServer.eventHandle.post(new server.user.event.EventLogoutOnline(user));
+	}
+
+	/** 处理logout */
+	@SubscribeEvent
+	public void onLogout(server.user.event.EventLogoutOnline e) {
+		this.userOffline(e.user.getUserName());
+	}
 
 	/** 登录一个用户 */
 	@Override
