@@ -65,6 +65,7 @@ public class ClientProxy extends Proxy {
 				super.mousePressed(e);
 				if (!logFrame.isEnable())
 					return;
+				logFrame.setLoginButtonEnable(false);
 				try {
 					if (toServer == null) {
 						toServer = new Connection(Core.SERVER_IP, Core.SERVER_PORT);
@@ -81,8 +82,7 @@ public class ClientProxy extends Proxy {
 						return;
 					}
 					sendUsername = username;
-					UserClient.sendToServer(new MessageLogin(username, "132", Side.CLIENT));
-					logFrame.setLoginButtonEnable(false);
+					UserClient.sendToServer(new MessageLogin(username, logFrame.getPassword(), Side.CLIENT));
 				} catch (IOException e1) {
 					Logger.log.warn("连接服务器出现异常！", e1);
 				}
@@ -105,6 +105,7 @@ public class ClientProxy extends Proxy {
 			// 登录成功
 			User u = new User(e.username);
 			UserClient.sendToServer(new MUGULRequest(u));
+			UserClient.toServer.setName(e.username);
 			logFrame.setVisible(false);
 			frame.setVisible(true);
 		} else {

@@ -9,21 +9,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.JPanel;
-
-import client.event.EventRecv;
-import client.event.EventRecv.EventRecvString;
 import client.event.EventSendInputWords;
 import client.event.EventsBridge;
 import client.frame.Theme;
+import client.user.UserClient;
 import client.word.Word;
-
-import event.SubscribeEvent;
-import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
 import nbt.NBTTagList;
-import nbt.NBTTagString;
 import user.UOnline;
+import user.User;
 
 public class ChatPanel extends JPanelUtility {
 	private static final long serialVersionUID = 1L;
@@ -132,18 +126,20 @@ public class ChatPanel extends JPanelUtility {
 			chatDialogPanel.doLayout();
 		}
 	};
+	/** 用户 */
+	private User chatTo;
 	/** 对话面板 */
 	private ChatDialogPanel chatDialogPanel = new ChatDialogPanel();
 	private ChatInputPanel inputPanel = new ChatInputPanel();
 
-	public ChatPanel() {
+	public ChatPanel(String chatToUsername) {
 		// 默认颜色
 		this.setBackground(Theme.COLOR0);
 		// 设置默认布局
 		this.setLayout(layout);
 		// 添加输入和对话面板
-		//NBTTagCompound nbt = chatDialogPanel.serializeNBT();
-		//chatDialogPanel.deserializeNBT(nbt);
+		// NBTTagCompound nbt = chatDialogPanel.serializeNBT();
+		// chatDialogPanel.deserializeNBT(nbt);
 		this.add(chatDialogPanel);
 		this.add(inputPanel);
 		// 添加鼠标监听者
@@ -152,20 +148,26 @@ public class ChatPanel extends JPanelUtility {
 		// 建立指针
 		this.cursorResize = new Cursor(Cursor.N_RESIZE_CURSOR);
 		this.cursorNormal = this.getCursor();
+		// 获取user
+		chatTo = UOnline.getInstance().getUser(chatToUsername);
 	}
 
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words)
-			chatDialogPanel.addBubble(true, w.toString(), "ssj");
-		// chatDialogPanel.serializeNBT();
-		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, UOnline.getInstance().getUser("guest")));
+			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername());
+		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
+	}
+
+	/** 当点击收到消息的时候调用 */
+	public void onRecvMsg(Word word) {
+		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName());
 	}
 
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		//nbt.setTag("chat", chatDialogPanel);
+		nbt.setTag("chat", chatDialogPanel);
 		nbt.setTag("input", inputPanel);
 		return nbt;
 	}

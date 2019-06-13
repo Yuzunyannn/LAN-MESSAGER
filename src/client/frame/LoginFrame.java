@@ -1,11 +1,13 @@
 package client.frame;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPasswordField;
@@ -58,6 +60,7 @@ public class LoginFrame extends JFrame {
 
 	JButton loginButton;
 	JTextField userNameText;
+	JPasswordField password;
 
 	public LoginFrame() {
 		// 设置标题
@@ -71,7 +74,7 @@ public class LoginFrame extends JFrame {
 		userNameText = new JTextField("guest");
 		this.add(userNameText);
 		// 密码框
-		JPasswordField password = new JPasswordField();
+		password = new JPasswordField();
 		this.add(password);
 		// 登录按钮
 		loginButton = new JButton("登录");
@@ -94,11 +97,14 @@ public class LoginFrame extends JFrame {
 		return userNameText.getText();
 	}
 
+	public String getPassword() {
+		return new String(password.getPassword());
+	}
+
 	public void setLoginButtonEnable(boolean enable) {
 		loginButton.setEnabled(enable);
-
 	}
-	
+
 	public boolean isEnable() {
 		return loginButton.isEnabled();
 	}

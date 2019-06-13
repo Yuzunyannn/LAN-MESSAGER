@@ -8,6 +8,7 @@ import network.Side;
 import server.database.Database;
 import server.user.ULogin;
 import server.user.UOnlineServer;
+import user.UOnline;
 
 public class ServerProxy extends Proxy {
 
@@ -22,10 +23,12 @@ public class ServerProxy extends Proxy {
 		super.init();
 		Thread.currentThread().setName("Server");
 		Logger.log.impart("正在初始化服务端...");
-		//初始化UOnline
+		// 初始化UOnline
 		Core.setUOnline(new UOnlineServer());
 		// 注册网络事件
 		Network.eventHandle.register(ULogin.class);
+		Network.eventHandle.register(UOnline.getInstance());
+		UOnlineServer.eventHandle.register(UOnline.getInstance());
 	}
 
 	@Override

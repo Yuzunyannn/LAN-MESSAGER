@@ -111,4 +111,9 @@ public class MainFrame extends JFrame {
 		utilityPanel.toChat(e.user.toString());
 	}
 
+	@SubscribeEvent
+	public void recvString(client.event.EventRecv.EventRecvString e) {
+		utilityPanel.recvString(e.from, e.str);
+	}
+
 }
