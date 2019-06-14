@@ -120,18 +120,13 @@ public class UtilityPanel extends JPanel implements ITickable {
 		if (!info.canUse()) {
 			info.reborn();
 		}
-		// 临时调试
-		if (panels.containsKey(panelInfo)) {
-			PanelInfo oldInfo = panels.get(panelInfo);
-			oldInfo.release();
-		}
-
 		panelInfo = newInfo;
 		currPanel = info.panel;
 		info.tick = this.tick;
 		UtilityPanel.this.remove(0);
 		UtilityPanel.this.add(currPanel);
 		UtilityPanel.this.revalidate();
+		UtilityPanel.this.repaint();
 	}
 
 	// 记录驻于内存的面板

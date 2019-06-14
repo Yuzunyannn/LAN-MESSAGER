@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import client.event.EventRecv.EventRecvString;
 import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
@@ -46,7 +47,8 @@ public class MemberButton extends JButton {
 				 * 消息计数测试用 EventsBridge.frontendEventHandle.post(new EventRecvString(new
 				 * User(memberName), ""));
 				 */
-				// System.out.println("name" + memberName + "count" + count);
+				 EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient(memberName), ""));
+				
 			}
 		};
 		this.addMouseListener(mouse);
