@@ -18,4 +18,12 @@ public class StreamHelper {
 		buf.get(datas);
 		return datas;
 	}
+
+	public static void writeString(ByteBuffer buf, String str) throws IOException {
+		StreamHelper.writeBytes(buf, str.getBytes("UTF-8"));
+	}
+
+	public static String readString(ByteBuffer buf) throws IOException {
+		return new String(StreamHelper.readBytes(buf), "UTF-8");
+	}
 }

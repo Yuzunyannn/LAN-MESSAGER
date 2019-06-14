@@ -1,5 +1,6 @@
 package client.frame.utility;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -7,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.List;
 
 import client.event.EventSendInputWords;
@@ -129,7 +131,7 @@ public class ChatPanel extends JPanelUtility {
 	/** 用户 */
 	private User chatTo;
 	/** 对话面板 */
-	private ChatDialogPanel chatDialogPanel = new ChatDialogPanel();
+	private ChatDialogPanel chatDialogPanel = new ChatDialogPanel(chatTo);
 	private ChatInputPanel inputPanel = new ChatInputPanel();
 
 	public ChatPanel() {
@@ -138,12 +140,10 @@ public class ChatPanel extends JPanelUtility {
 
 	public ChatPanel(String chatToUsername) {
 		// 默认颜色
-		this.setBackground(Theme.COLOR0);
+		this.setBackground(Theme.COLOR1);
 		// 设置默认布局
 		this.setLayout(layout);
 		// 添加输入和对话面板
-		// NBTTagCompound nbt = chatDialogPanel.serializeNBT();
-		// chatDialogPanel.deserializeNBT(nbt);
 		this.add(chatDialogPanel);
 		this.add(inputPanel);
 		// 添加鼠标监听者
@@ -159,16 +159,40 @@ public class ChatPanel extends JPanelUtility {
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words) {
-			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername());
+			Type type = checkType(w.id);
+			Date date = new Date();
+			chatDialogPanel.addBubble(true, "", "", Type.TIME, date.toString());
+			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString());
+			
 			EventsBridge.sendString(w.toString(), chatTo.getUserName());
 		}
 		
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
 	}
+	
+	/** 检查发送和接收的消息类型 */
+	public Type checkType(int id) {
+		Type type = Type.NULL;
+		switch (id) {
+		case Word.FILE:
+			type = Type.FILE;
+			break;
+		case Word.STRING:
+			type = Type.WORD;
+			break;
+		default:
+			break;
+		}
+		return type;
+	}
 
 	/** 当点击收到消息的时候调用 */
 	public void onRecvMsg(Word word) {
-		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName());
+		Type type = checkType(word.id);
+		Date date = new Date();
+		chatDialogPanel.addBubble(false, "", "", Type.TIME, date.toString());
+		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName(), type, date.toString());
+		
 	}
 
 	@Override
@@ -188,3 +212,4 @@ public class ChatPanel extends JPanelUtility {
 	}
 
 }
+

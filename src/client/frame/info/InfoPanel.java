@@ -34,7 +34,6 @@ public class InfoPanel extends JPanel {
 		state=EventIPC.FRIENDS;
 		userField.setPreferredSize(new Dimension(0, 80));
 		searchField.setPreferredSize(new Dimension(0, 50));
-		
 	}
 	public void initEvent(IEventBus bus) {
 		bus.register(this);

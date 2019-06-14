@@ -5,6 +5,7 @@ public class WordString extends Word {
 	private String str;
 
 	public WordString(String str) {
+		super(Word.STRING);
 		this.str = str;
 	}
 

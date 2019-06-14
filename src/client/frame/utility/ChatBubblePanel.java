@@ -1,23 +1,30 @@
 package client.frame.utility;
 
 import java.awt.Button;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
-
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.plaf.ButtonUI;
 
 import client.frame.Theme;
-import client.word.Word;
+import client.frame.ui.RoundedRecBorder;
+import client.user.UserClient;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
 
 /** 对话气泡 */
 public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCompound> {
 	private static final long serialVersionUID = 1L;
+	private final int USERICONSIZE = 40;
 	private boolean userID;
 	private String userIcon;
 	private String userName;
@@ -28,16 +35,45 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	private Type type = Type.NULL;
 	private ImageIcon imageIcon;
 	private JButton Icon;
-	private JButton dialog;
+	//private JButton dialog;
+	private Bubble dialog; 
 	private JLabel displayedName;
 	
 	/** 构造函数，生成一个对话气泡，显示信息的参数待定！*/
-	public ChatBubblePanel(boolean isMySelf, String info, String localName, Type type) {
+	public ChatBubblePanel(boolean isMySelf, String info, String localName, Type type, String time) {
 		// TODO Auto-generated constructor stub
-		this.type = type;
-		this.userID = isMySelf;
-		this.userName = localName;
-		initalUI(info);
+		if (type == Type.LINE) {
+			JLabel lineLabel = new JLabel("--------以下为全部消息--------");
+			lineLabel.setVisible(true);
+			this.setLayout(new FlowLayout(FlowLayout.CENTER));
+			this.add(lineLabel);
+			this.setVisible(true);
+		} else if (type == Type.TIME) {
+			JLabel lineLabel = new JLabel("--------"+time+"--------");
+			lineLabel.setVisible(true);
+			this.setLayout(new FlowLayout(FlowLayout.CENTER));
+			this.add(lineLabel);
+			this.setVisible(true);
+		} else {
+			this.userTime = time;
+			this.type = type;
+			this.userID = isMySelf;
+			if (this.userID) {
+				this.userName = UserClient.getClientUsername();
+			} else {
+				this.userName = localName;
+			}
+			initalUI(info);
+			if (type == Type.NULL) {
+				this.setVisible(false);
+			} else {
+				this.setVisible(true);
+			}
+		}
+		this.setBackground(Theme.COLOR0);
+		this.setOpaque(false);
+		this.setSize(this.getWidth(), 80);
+		
 	}
 	
 	@Override
@@ -75,29 +111,31 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		switch (this.type) {
 		case WORD:
 			this.userDialog = info;
+			this.dialog = new Bubble(info, Type.WORD);
 			break;
 		case PICTURE:
 			break;
 		case EXTENSION:
 			break;
 		case FILE:
+			this.dialog = new FileBubble(info);
 			break;
 		default:
+			this.dialog = new Bubble("", Type.WORD);
 			break;
 		}
-		
-		this.dialog = new JButton(this.userDialog);
 		this.displayedName = new JLabel();
 		this.setIcon(this.userName);
-		this.dialog.setBorderPainted(false);
-		this.Icon.setBorderPainted(false);
-		this.setVisible(true);
+		RoundedRecBorder border = new RoundedRecBorder(Theme.COLOR0, 1, 10);
+		this.Icon.setBorder(border);
+		this.Icon.setBorderPainted(true);
+		
 	}
 	
 	/** 设置用户图标 */
 	private void setIcon(String userName) {
 		imageIcon = new ImageIcon("src/img/1.png");
-		imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));
+		imageIcon.setImage(imageIcon.getImage().getScaledInstance(USERICONSIZE, USERICONSIZE, USERICONSIZE));
 		Icon = new JButton();
 		Icon.setIcon(imageIcon);
 		if (this.userID) {
@@ -125,10 +163,15 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		this.remove(length-3);
 		initalUI(this.userDialog);
 	}
+	
+	/** 获取时间 */
+	public String getTime() {
+		return userTime;
+	}
 
 }
 
 /** 对话气泡类型 */
 enum Type {
-	WORD, FILE, PICTURE, EXTENSION, NULL
+	WORD, FILE, PICTURE, EXTENSION, NULL, LINE, TIME
 }

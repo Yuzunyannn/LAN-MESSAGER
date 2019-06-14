@@ -123,5 +123,6 @@ public class MainFrame extends JFrame {
 	public void recvString(client.event.EventRecv.EventRecvString e) {
 		utilityPanel.recvString(e.from, e.str);
 	}
-
+ 
+	
 }
