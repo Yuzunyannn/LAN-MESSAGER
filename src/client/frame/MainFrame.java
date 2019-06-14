@@ -12,6 +12,7 @@ import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.info.InfoPanel;
 import client.frame.utility.UtilityPanel;
+import event.IEventBus;
 import event.SubscribeEvent;
 import user.User;
 
@@ -80,9 +81,16 @@ public class MainFrame extends JFrame {
 		this.setMinimumSize(layout.minimumLayoutSize(this));
 		// 设置窗体大小和位置
 		this.fixed();
-		EventsBridge.frontendEventHandle.register(infoPanel);
 	}
 
+	public void initEvent(IEventBus bus) {
+		bus.register(this);
+		infoPanel.initEvent(bus);
+	}
+	public InfoPanel getInfoPanel() 
+	{
+		return infoPanel;
+	}
 	/** 初始化窗体大小和位置 */
 	public void fixed() {
 		this.pack();
