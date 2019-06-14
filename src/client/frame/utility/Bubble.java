@@ -1,38 +1,30 @@
 package client.frame.utility;
 
-import java.awt.Color;
 import java.awt.FontMetrics;
-
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.sun.prism.Texture;
-
-import client.frame.Theme;
-import client.frame.ui.RoundedRecBorder;
-
 public class Bubble extends JPanel {
 	
-	private RButton words;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JLabel words;
+	private RButton rbutton;
 	public Bubble(String words) {
-//		//this.words.setText(words);
-//		this.words.setSize(300, 0);
-//		this.JlabelSetText(this.words, words);
-//		RoundedRecBorder border = new RoundedRecBorder(Theme.COLOR3, 10, 20);
-//		this.words.setBorder(border);
-//		this.words.setOpaque(true);
-//		this.words.setBackground(Theme.COLOR0);
-//		this.words.setVisible(true);
-//		//this.setBackground(Theme.COLOR0);
-		this.words = new RButton(words);
-		this.words.setBackground(Theme.COLOR0);
-		this.add(this.words);
+		this.words = new JLabel(words);
+		this.words.setSize(300, 100);
+		this.JlabelSetText(this.words, words);
+		System.out.println(this.words.getText());
+		this.rbutton = new RButton(this.words.getText());
+		//this.add(this.words);
+		this.add(rbutton);
 		this.setOpaque(false);
 		this.setVisible(true);
-		
 	}
 	
+	/** 文字换行 */
 	public void JlabelSetText(JLabel jLabel, String longString) {
         StringBuilder builder = new StringBuilder("<html>");
         char[] chars = longString.toCharArray();
@@ -55,6 +47,7 @@ public class Bubble extends JPanel {
         builder.append(chars, start, longString.length()-start);
         builder.append("</html>");
         jLabel.setText(builder.toString());
+        //Button.setText(builder.toString());
     }
 
 }

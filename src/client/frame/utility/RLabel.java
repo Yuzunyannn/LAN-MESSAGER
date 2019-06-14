@@ -1,33 +1,17 @@
 package client.frame.utility;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
-
-import javax.swing.JButton;
-
-import com.sun.prism.paint.Paint;
-
 import client.frame.Theme;
 
-public class RButton extends JButton {
-    private static final long serialVersionUID = 39082560987930759L;
-
-    public RButton(String name) {
+public class RLabel extends javax.swing.JLabel {
+	public RLabel(String name) {
         this.setText(name);
         this.setFont(Theme.FONT1);
         this.setBackground(Theme.COLOR0);
-        this.setBorderPainted(false);
-        this.setFocusPainted(false);
-        setContentAreaFilled(false);
     }
 
     @Override
@@ -47,4 +31,3 @@ public class RButton extends JButton {
         super.paintComponent(g);
     }
 }
-
