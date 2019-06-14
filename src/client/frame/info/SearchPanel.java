@@ -17,6 +17,8 @@ import client.event.EventSearch;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
+import event.Event;
+import event.SubscribeEvent;
 
 public class SearchPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -100,4 +102,5 @@ class DefaultFocusListener implements FocusListener {
 		}
 
 	}
+	
 }

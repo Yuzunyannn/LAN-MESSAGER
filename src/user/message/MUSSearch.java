@@ -29,7 +29,7 @@ public class MUSSearch extends MessageUser {
 		USearch search=new USearch();
 		User str=search.searchName(((NBTTagCompound)nbt.getTag("search")).getString("searchName"));
 		if (to.isOnline()) {
-			to.sendMesage(new MUSString(from,str.toString()));
+			to.sendMesage(new MUSString(from,str.userName));
 		} else {
 			Logger.log.impart("请求用户掉线，请求失效");
 		}

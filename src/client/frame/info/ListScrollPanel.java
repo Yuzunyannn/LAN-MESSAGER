@@ -11,10 +11,11 @@ import javax.swing.JScrollPane;
 
 
 import client.event.EventRecv.EventRecvString;
-
+import client.event.EventSearchRequest;
 import client.event.EventsBridge;
 
 import client.frame.Theme;
+import event.Event;
 import event.SubscribeEvent;
 import log.Logger;
 
@@ -134,10 +135,14 @@ public class ListScrollPanel extends JScrollPane {
 	public static void onCountMsg(EventRecvString e) {
 		p.removeAll();
 		for(int i=0;i<content.length;i++)
-		if(((MemberButton)content[i]).getMemberName().equals(e.from.getUserName())) 
+		if(((MemberButton)content[i]).getMemberName().equals(e.from.getUserName())) {
 			((MemberButton)content[i]).count=((MemberButton)content[i]).count+1;
-			
+		}
 		for(Component i:content) {
 			p.add(i);}
+		
+	}
+	@SubscribeEvent
+	public static void onSearchRequest(EventSearchRequest e) {
 	}
 }
