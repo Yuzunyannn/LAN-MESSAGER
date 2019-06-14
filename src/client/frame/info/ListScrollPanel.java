@@ -2,6 +2,8 @@ package client.frame.info;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -12,11 +14,14 @@ import javax.swing.JScrollPane;
 import client.event.EventRecv.EventRecvString;
 
 import client.event.EventSearchRequest;
-
+import client.event.EventShow;
+import client.event.EventsBridge;
 import client.frame.Theme;
+import client.user.UserClient;
 import event.Event;
 import event.SubscribeEvent;
 import log.Logger;
+import user.User;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
@@ -28,12 +33,14 @@ public class ListScrollPanel extends JScrollPane {
 	public ListScrollPanel() {
 		super();
 		p = new JPanel();
+		Component temp=this;
 		int width = super.getWidth();
 		p.setPreferredSize(new Dimension(width, getHeight()));
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		p.setBackground(Theme.COLOR0);
 		content = p.getComponents();
 		this.add(p);
+		
 		this.setViewportView(p);
 		// 设置垂直滚动条的显示: 一直显示
 		this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -47,36 +54,35 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	/* 在加入User类后需要修改 */
-	public void setTop(String name) {
+	public static void setTop(String name) {
 		int temp;
-		temp = this.getMember(name);
+		temp = getMember(name);
+		if (temp == -1)
+			return;
 		Component tempbutton;
-		tempbutton = p.getComponent(temp);
+		tempbutton = content[temp];
 
-		Component[] re;
-		re = p.getComponents();
 		for (int i = temp; i > 0; i--) {
-			re[i] = re[i - 1];
+			content[i] = content[i - 1];
 		}
-		re[0] = tempbutton;
+		content[0] = tempbutton;
+		Component[] re = content;
 		p.removeAll();
 		content = re;
-		for (Component i : re) {
+		for (Component i : content) {
 			p.add(i);
 		}
-
-//		
-		for (Component i : p.getComponents())
-			System.out.println(((MemberButton) i).getMemberName());
+		// for (Component i : p.getComponents())
+		// System.out.println(((MemberButton) i).getMemberName());
 
 	}
 
-	public int getMember(String name) {
+	public static int getMember(String name) {
 		MemberButton temp;
-		for (int i = 0; i < p.getComponentCount(); i++) {
-			temp = (MemberButton) p.getComponent(i);
+		for (int i = 0; i < content.length; i++) {
+			temp = (MemberButton) content[i];
 			if (temp.getMemberName().equals(name)) {
-//			 System.out.println(i);
+				// System.out.println(i);
 				return i;
 
 			}
@@ -101,8 +107,8 @@ public class ListScrollPanel extends JScrollPane {
 		int width = super.getWidth();
 		standardHeight(super.getPreferredSize());
 		/* 测试信息 */
-//		System.out.println("scroll"+super.getPreferredSize().height);
-//		System.out.println("height"+this.height);
+		// System.out.println("scroll"+super.getPreferredSize().height);
+		// System.out.println("height"+this.height);
 		p.setPreferredSize(new Dimension(width, height));
 	}
 
@@ -132,21 +138,28 @@ public class ListScrollPanel extends JScrollPane {
 		if (p.getComponentCount() < (int) (d.height / MemberButton.MEMBERBUTTON_HEIGHT))
 			this.height = d.height + 10;
 		/* 测试信息 */
-//		System.out.println("count"+p.getComponentCount());
+		// System.out.println("count"+p.getComponentCount());
 	}
-
 	@SubscribeEvent
 	public static void onCountMsg(EventRecvString e) {
 		p.removeAll();
 
-		for(int i=0;i<content.length;i++)
-		if(((MemberButton)content[i]).getMemberName().equals(e.from.getUserName())) {
-			((MemberButton)content[i]).count=((MemberButton)content[i]).count+1;
+		for (int i = 0; i < content.length; i++)
+			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
+				((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
+					System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
+							+ ((MemberButton) content[i]).count);
+					setTop(((MemberButton) content[i]).getMemberName());
+					
+				// break;
+			}
+
+		for (Component i : content) {
+			p.add(i);
 		}
-		for(Component i:content) {
-			p.add(i);}
-		
+
 	}
+
 	@SubscribeEvent
 	public static void onSearchRequest(EventSearchRequest e) {
 
