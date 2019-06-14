@@ -13,8 +13,12 @@ public class Theme {
 	public static Color COLOR2 = new Color(0xaed6f1);
 	/** 主题的第三种颜色 蓝紫色*/
 	public static Color COLOR3 = new Color(0x4876FF);
-	/**	用户栏的颜色 		淡蓝紫色*/
+	/**	用户栏的颜色 	  淡蓝紫色*/
 	public static Color COLOR4 = new Color(0x7cbcf5);
+	/**	聊天背景的颜色 */
+	public static Color COLOR5 = new Color(0xe9d8d8);
+	/**	黑色 */
+	public static Color COLOR6 = new Color(0x000000);
 	/** 用户名字体 冬青黑体 粗 30号*/
 	public static Font FONT0 = new Font("冬青黑体", Font.BOLD, 30);
 	/** 对话字体 冬青黑体 细 14号 */
