@@ -25,8 +25,8 @@ public class Bubble extends JPanel {
 	public MouseAdapter mouse = new MouseAdapter() {
 		@Override
 		public void mouseClicked(java.awt.event.MouseEvent e) {
-			FileDownload dowload = new FileDownload();
 			System.out.println("clicked");
+			ProgressFrame progress = new ProgressFrame(100);
 		};
 	};
 	public Bubble(String words, Type type) {
