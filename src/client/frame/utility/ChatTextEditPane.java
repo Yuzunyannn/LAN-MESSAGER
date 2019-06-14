@@ -45,7 +45,7 @@ public class ChatTextEditPane extends JTextPane implements INBTSerializable<NBTT
 
 	public ChatTextEditPane(ChatInputPanel parent) {
 		this.parent = parent;
-		this.setBackground(Theme.COLOR1);
+		this.setBackground(Theme.COLOR0);
 		this.setFont(new Font(null, 0, 20));
 		// 重新创建EditorKit
 		ViewFactory oldFactory = this.getEditorKit().getViewFactory();

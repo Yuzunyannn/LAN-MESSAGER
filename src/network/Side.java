@@ -9,4 +9,8 @@ public enum Side {
 	public boolean isServer() {
 		return this == SERVER;
 	}
+
+	public String mark() {
+		return this.isServer() ? "S" : "C";
+	}
 }

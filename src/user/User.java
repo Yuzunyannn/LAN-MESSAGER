@@ -3,6 +3,10 @@ package user;
 import network.IMessage;
 
 abstract public class User {
+
+	public static final User EMPTY = new User("") {
+	};
+
 	/** 用户的唯一表示名称 */
 	public final String userName;
 

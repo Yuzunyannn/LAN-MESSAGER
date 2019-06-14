@@ -14,7 +14,7 @@ import network.Side;
 import story.ITickable;
 import user.UOnline;
 
-public class Core implements Runnable {
+public class Core {
 
 	static final String SERVER_IP = "127.0.0.1";
 	static final int SERVER_PORT = 35275;
@@ -35,12 +35,18 @@ public class Core implements Runnable {
 	public static void main(String[] args) {
 		proxy.init();
 		proxy.launch();
-		core.run();
+		// 启动核心
+		core.lunch();
+	}
+
+	private void lunch() {
+		scheduExec.scheduleAtFixedRate(new TickTask(), 0, 50, TimeUnit.MILLISECONDS);
 	}
 
 	private class TickTask extends TimerTask {
 		@Override
 		public void run() {
+			// tick更新部份
 			Iterator<ITickable> itr = tickTasks.iterator();
 			while (itr.hasNext()) {
 				ITickable tick = itr.next();
@@ -58,39 +64,13 @@ public class Core implements Runnable {
 					Core.shutdownWithError();
 				}
 			}
-		}
-	}
-
-	@Override
-	public void run() {
-		scheduExec.scheduleAtFixedRate(new TickTask(), 0, 50, TimeUnit.MILLISECONDS);
-		while (true) {
-			this.coreWait();
+			// 同步任务更新部份
 			while (true) {
-				Runnable run = this.getTask();
+				Runnable run = Core.this.getTask();
 				if (run == null)
 					break;
 				run.run();
 			}
-		}
-	}
-
-	/** 挂起核心同步线程 */
-	private void coreWait() {
-		synchronized (this) {
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				Logger.log.error("同步线程挂起的的时候出现异常！", e);
-				Core.shutdownWithError();
-			}
-		}
-	}
-
-	/** 唤醒核心同步线程 */
-	private void coreNotify() {
-		synchronized (this) {
-			this.notify();
 		}
 	}
 
@@ -99,7 +79,6 @@ public class Core implements Runnable {
 		synchronized (tasks) {
 			tasks.addFirst(run);
 		}
-		this.coreNotify();
 	}
 
 	/** 添加一个计时器任务 */

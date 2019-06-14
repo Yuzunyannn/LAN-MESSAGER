@@ -50,7 +50,6 @@ public class ClientProxy extends Proxy {
 		frame.initEvent(EventsBridge.frontendEventHandle);
 		EventsBridge.frontendEventHandle.register(this);
 		EventsBridge.frontendEventHandle.register(UtilityPanel.class);
-
 	}
 
 	@Override

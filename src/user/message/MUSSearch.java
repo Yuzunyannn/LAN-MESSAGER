@@ -17,13 +17,13 @@ public class MUSSearch extends MessageUser {
 	}
 
 	@Override
-	void executeClient(User from, NBTTagCompound nbt) {
+	protected void executeClient(User from, NBTTagCompound nbt) {
 		EventsBridge.recvString(from, nbt.getString("search"));
 		
 	}
 
 	@Override
-	void executeServer(User from, User to, NBTTagCompound nbt) {
+	protected void executeServer(User from, User to, NBTTagCompound nbt) {
 		if(!from.equals(to))
 			Logger.log.error("请求回应的对象错误");
 		USearch search=new USearch();

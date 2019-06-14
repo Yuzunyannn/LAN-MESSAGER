@@ -95,7 +95,7 @@ class UButtonMouse extends MouseAdapter {
 		popmenu = new JPopupMenu();
 		item = new JMenuItem[4];
 		String[] str = { "删除好友", "删除聊天", "置顶聊天", "取消置顶" };
-		Border border = BorderFactory.createLineBorder(Theme.COLOR5);
+		Border border = BorderFactory.createLineBorder(Theme.COLOR7);
 		MenuItemMonitor menuItemMonitor = new MenuItemMonitor();
 		for (int i = 0; i < item.length; i++) {
 			item[i] = new JMenuItem(str[i]);
