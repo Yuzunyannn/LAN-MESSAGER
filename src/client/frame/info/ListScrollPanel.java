@@ -19,6 +19,7 @@ import client.event.EventsBridge;
 import client.frame.Theme;
 import client.user.UserClient;
 import event.Event;
+import event.IEventBus;
 import event.SubscribeEvent;
 import log.Logger;
 import user.User;
@@ -27,8 +28,8 @@ public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 	/** 添加列表中的成员数量时可能需要改变 */
 	private int height = 0;
-	private static JPanel p;
-	private static Component[] content;
+	private  JPanel p;
+	private  Component[] content;
 
 	public ListScrollPanel() {
 		super();
@@ -55,7 +56,7 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	/* 在加入User类后需要修改 */
-	public static void setTop(String name) {
+	public  void setTop(String name) {
 		int temp;
 		temp = getMember(name);
 		if (temp == -1)
@@ -78,7 +79,7 @@ public class ListScrollPanel extends JScrollPane {
 
 	}
 
-	public static int getMember(String name) {
+	public  int getMember(String name) {
 		MemberButton temp;
 		for (int i = 0; i < content.length; i++) {
 			temp = (MemberButton) content[i];
@@ -142,7 +143,7 @@ public class ListScrollPanel extends JScrollPane {
 		// System.out.println("count"+p.getComponentCount());
 	}
 	@SubscribeEvent
-	public static void onCountMsg(EventRecvString e) {
+	public  void onCountMsg(EventRecvString e) {
 		p.removeAll();
 
 		for (int i = 0; i < content.length; i++)
@@ -158,11 +159,12 @@ public class ListScrollPanel extends JScrollPane {
 		for (Component i : content) {
 			p.add(i);
 		}
-
+		this.revalidate();
+		
 	}
 
 	@SubscribeEvent
-	public static void onSearchRequest(EventSearchRequest e) {
+	public  void onSearchRequest(EventSearchRequest e) {
 
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName()))
@@ -172,5 +174,10 @@ public class ListScrollPanel extends JScrollPane {
 			p.add(i);
 		}
 
+	}
+
+	public   void initEvent(IEventBus bus) {
+		bus.register(this);
+		
 	}
 }

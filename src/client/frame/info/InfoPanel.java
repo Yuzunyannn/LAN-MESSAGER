@@ -10,6 +10,7 @@ import client.event.EventIPC;
 import client.event.EventRecv.EventRecvString;
 import client.event.EventsBridge;
 import client.frame.Theme;
+import event.IEventBus;
 import event.SubscribeEvent;
 import user.User;
 
@@ -33,7 +34,12 @@ public class InfoPanel extends JPanel {
 		state=EventIPC.FRIENDS;
 		userField.setPreferredSize(new Dimension(0, 80));
 		searchField.setPreferredSize(new Dimension(0, 50));
-
+		
+	}
+	public void initEvent(IEventBus bus) {
+		bus.register(this);
+		memberField.initEvent(bus);
+		searchField.initEvent(bus);
 	}
 //响应事件函数
 	@SubscribeEvent
