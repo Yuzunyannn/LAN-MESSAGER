@@ -8,6 +8,12 @@ import log.Logger;
 import log.NeedLog;
 import network.RecvDealMessage;
 import platform.Platform;
+import story.StoryDebug;
+import story.message.MSBegin;
+import story.message.MSEnd;
+import story.message.MSMemberIn;
+import story.message.MSNbtSend;
+import story.message.MUStoryDebug;
 import user.message.MUGULRequest;
 import user.message.MUSString;
 import user.message.MessageLogin;
@@ -52,6 +58,8 @@ public class Proxy {
 		}
 		// 注册消息
 		Proxy.registerAllMesage();
+		// Story注册
+		Proxy.registerAllStory();
 	}
 
 	/** 启动 */
@@ -62,5 +70,15 @@ public class Proxy {
 		RecvDealMessage.registerMessage("login_msh", MessageLogin.class);
 		RecvDealMessage.registerMessage("us_str", MUSString.class);
 		RecvDealMessage.registerMessage("ul_change", MUGULRequest.class);
+		RecvDealMessage.registerMessage("msbegin", MSBegin.class);
+		RecvDealMessage.registerMessage("msend", MSEnd.class);
+		RecvDealMessage.registerMessage("msmem", MSMemberIn.class);
+		RecvDealMessage.registerMessage("msnbtsend", MSNbtSend.class);
+		
+		RecvDealMessage.registerMessage("debug", MUStoryDebug.class);
+	}
+
+	private static void registerAllStory() {
+		StoryDebug.registerStory("debug", StoryDebug.class);
 	}
 }

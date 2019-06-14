@@ -138,7 +138,7 @@ public class ChatPanel extends JPanelUtility {
 
 	public ChatPanel(String chatToUsername) {
 		// 默认颜色
-		this.setBackground(Theme.COLOR0);
+		this.setBackground(Theme.COLOR1);
 		// 设置默认布局
 		this.setLayout(layout);
 		// 添加输入和对话面板

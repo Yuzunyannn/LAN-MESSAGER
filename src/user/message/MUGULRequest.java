@@ -23,7 +23,7 @@ public class MUGULRequest extends MessageUser {
 	}
 
 	@Override
-	void executeClient(User from, NBTTagCompound nbt) {
+	protected void executeClient(User from, NBTTagCompound nbt) {
 		if (nbt.getTag("userlist").getId() == NBTBase.TAG_LIST) {
 			NBTTagList list = (NBTTagList) nbt.getTag("userlist");
 			if (list.getTagType() == NBTBase.TAG_STRING) {
@@ -41,7 +41,7 @@ public class MUGULRequest extends MessageUser {
 	}
 
 	@Override
-	void executeServer(User from, User to, NBTTagCompound nbt) {
+	protected void executeServer(User from, User to, NBTTagCompound nbt) {
 		Core.task(new Response(from));
 	}
 

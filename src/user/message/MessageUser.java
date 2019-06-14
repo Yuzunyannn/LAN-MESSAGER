@@ -3,10 +3,8 @@ package user.message;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import log.Logger;
 import nbt.NBTStream;
 import nbt.NBTTagCompound;
-import nbt.NBTTagInt;
 import network.Connection;
 import network.IMessage;
 import user.UOnline;
@@ -31,7 +29,7 @@ abstract public class MessageUser implements IMessage {
 	public NBTTagCompound getNBT() {
 		return nbt;
 	}
-	
+
 	@Override
 	final public void fromBytes(ByteBuffer buf) throws IOException {
 		nbt = NBTStream.read(buf);
@@ -45,21 +43,22 @@ abstract public class MessageUser implements IMessage {
 	@Override
 	final public void execute(Connection con) {
 		String username = nbt.getString("user");
-		if (username.isEmpty()) {
-			Logger.log.warn("接收到的user信息中找不到User");
-			return;
-		}
-		User user = UOnline.getInstance().getUser(username);
+		User user;
+		if (username.isEmpty())
+			user = User.EMPTY;
+		else
+			user = UOnline.getInstance().getUser(username);
+
 		if (con.isServer()) {
 			this.executeServer(UOnline.getInstance().getUser(con.getName()), user, nbt);
 		} else {
 			this.executeClient(user, nbt);
 		}
-		
+
 	}
 
-	abstract void executeClient(User from, NBTTagCompound nbt);
+	protected abstract void executeClient(User from, NBTTagCompound nbt);
 
-	abstract void executeServer(User from, User to, NBTTagCompound nbt);
+	protected abstract void executeServer(User from, User to, NBTTagCompound nbt);
 
 }

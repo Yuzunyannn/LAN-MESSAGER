@@ -31,7 +31,6 @@ public class InfoPanel extends JPanel {
 		this.add(memberField);
 		userField.setPreferredSize(new Dimension(0, 80));
 		searchField.setPreferredSize(new Dimension(0, 50));
-
 	}
 
 	@SubscribeEvent

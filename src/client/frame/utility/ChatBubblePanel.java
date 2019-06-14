@@ -33,10 +33,10 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	
 	/** 构造函数，生成一个对话气泡，显示信息的参数待定！*/
 	public ChatBubblePanel(boolean isMySelf, String info, String localName, Type type) {
-		// TODO Auto-generated constructor stub
 		this.type = type;
 		this.userID = isMySelf;
 		this.userName = localName;
+		this.setBackground(Theme.COLOR1);
 		initalUI(info);
 	}
 	
