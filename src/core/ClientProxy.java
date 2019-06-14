@@ -47,10 +47,9 @@ public class ClientProxy extends Proxy {
 		logFrame = new LoginFrame();
 		frame = new MainFrame();
 		// 注册事件
+		frame.initEvent(EventsBridge.frontendEventHandle);
 		EventsBridge.frontendEventHandle.register(this);
-		EventsBridge.frontendEventHandle.register(ListScrollPanel.class);
 		EventsBridge.frontendEventHandle.register(UtilityPanel.class);
-		EventsBridge.frontendEventHandle.register(frame);
 
 	}
 

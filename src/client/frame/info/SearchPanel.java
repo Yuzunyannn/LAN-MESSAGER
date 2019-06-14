@@ -21,6 +21,7 @@ import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
 import event.Event;
+import event.IEventBus;
 import event.SubscribeEvent;
 
 public class SearchPanel extends JPanel {
@@ -118,6 +119,10 @@ public class SearchPanel extends JPanel {
 		set.setSize(20, 20);
 		set.setLocation(220, 8);
 
+	}
+
+	public void initEvent(IEventBus bus) {
+		bus.register(this);
 	}
 
 }

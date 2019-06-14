@@ -47,7 +47,7 @@ public class MemberButton extends JButton {
 				 * 消息计数测试用 EventsBridge.frontendEventHandle.post(new EventRecvString(new
 				 * User(memberName), ""));
 				 */
-				 EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient(memberName), ""));
+				 EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient(memberName), "test"));
 				
 			}
 		};
