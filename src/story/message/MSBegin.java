@@ -1,6 +1,7 @@
 package story.message;
 
 import core.Core;
+import nbt.NBTBase;
 import nbt.NBTTagCompound;
 import network.Side;
 import story.Story;
@@ -10,12 +11,14 @@ import user.User;
 public class MSBegin extends MessageStory {
 
 	public MSBegin() {
-		
+
 	}
-	
-	public MSBegin(String storyInstanceId, String storyId) {
+
+	public MSBegin(String storyInstanceId, String storyId, NBTTagCompound nbt) {
 		this.nbt.setString("inst", storyInstanceId);
 		this.nbt.setString("sid", storyId);
+		if (nbt != null)
+			this.nbt.setTag("upd", nbt);
 	}
 
 	@Override
@@ -25,7 +28,8 @@ public class MSBegin extends MessageStory {
 
 	@Override
 	public void run() {
-		Story.newStory(nbt.getString("inst"), nbt.getString("sid"), Side.CLIENT);
+		NBTTagCompound serverNbt = nbt.hasKey("upd", NBTBase.TAG_COMPOUND) ? nbt.getCompoundTag("upd") : null;
+		Story.newStory(nbt.getString("inst"), nbt.getString("sid"), serverNbt, Side.CLIENT);
 	}
 
 }

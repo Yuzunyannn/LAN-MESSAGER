@@ -39,14 +39,23 @@ public class RecvDealMessage implements IRecvDeal {
 
 	/** 读并检查 */
 	private void readAndCheck(InputStream input, byte[] bytes) throws IOException {
-		int length = input.read(bytes);
-		if (length == -1)
-			throw new EOFException("socket已关闭!");
+		int length = 0;
+		int realAt = 0;
+		while (realAt < bytes.length) {
+			if (realAt == 0) {
+				length = input.read(bytes);
+			} else {
+				byte[] tmp = new byte[bytes.length - realAt];
+				length = input.read(tmp);
+				this.check(length);
+				System.arraycopy(tmp, 0, bytes, realAt, length);
+			}
+			realAt += length;
+			this.check(length);
+		}
 	}
 
-	/** 读并检查 */
-	private void readAndCheck(InputStream input, byte[] bytes, int size) throws IOException {
-		int length = input.read(bytes, 0, size);
+	private void check(int length) throws IOException {
 		if (length == -1)
 			throw new EOFException("socket已关闭!");
 	}
@@ -63,8 +72,7 @@ public class RecvDealMessage implements IRecvDeal {
 	/**
 	 * 注册一个信息
 	 * 
-	 * @param msgClass
-	 *            确保有无参的构造函数
+	 * @param msgClass 确保有无参的构造函数
 	 */
 	public static void registerMessage(Integer msgId, Class<? extends IMessage> msgClass) {
 		if (msgId == null)
@@ -145,7 +153,10 @@ public class RecvDealMessage implements IRecvDeal {
 		this.readAndCheck(input, bytes);
 		int msgId = Cast.toInt(bytes);
 		// 内容长度
-		this.readAndCheck(input, bytes, 2);
+		bytes[0] = (byte) input.read();
+		bytes[1] = (byte) input.read();
+		this.check(bytes[0]);
+		this.check(bytes[1]);
 		int size = bytes[0] | bytes[1] << 8;
 		// 创建buff
 		ByteBuffer buffer = ByteBuffer.allocate(size);

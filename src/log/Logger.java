@@ -104,11 +104,6 @@ public class Logger {
 		this.print(str);
 	}
 
-	/** 输出一条正常信息 */
-	public void impart(String format, Object... objs) {
-		this.print(format, objs);
-	}
-
 	/** 输出一组toString */
 	public void impart(Object... objs) {
 		String str = "";
