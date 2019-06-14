@@ -30,7 +30,7 @@ public class ListScrollPanel extends JScrollPane {
 	private int height = 0;
 	private  JPanel p;
 	private  Component[] content;
-
+	private int fixed=0;
 	public ListScrollPanel() {
 		super();
 		p = new JPanel();
@@ -64,10 +64,10 @@ public class ListScrollPanel extends JScrollPane {
 		Component tempbutton;
 		tempbutton = content[temp];
 
-		for (int i = temp; i > 0; i--) {
+		for (int i = temp; i > fixed; i--) {
 			content[i] = content[i - 1];
 		}
-		content[0] = tempbutton;
+		content[fixed] = tempbutton;
 		Component[] re = content;
 		p.removeAll();
 		content = re;
@@ -162,7 +162,7 @@ public class ListScrollPanel extends JScrollPane {
 		this.revalidate();
 		
 	}
-
+/**事件处理*/
 	@SubscribeEvent
 	public  void onSearchRequest(EventSearchRequest e) {
 
@@ -176,6 +176,7 @@ public class ListScrollPanel extends JScrollPane {
 
 	}
 
+	
 	public   void initEvent(IEventBus bus) {
 		bus.register(this);
 		
