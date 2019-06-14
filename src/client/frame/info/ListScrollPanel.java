@@ -36,6 +36,7 @@ public class ListScrollPanel extends JScrollPane {
 		this.setViewportView(p);
 		// 设置垂直滚动条的显示: 一直显示
 		this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		// 样式
 		JScrollBar bar = new JScrollBar();
 		bar.setUI(new client.frame.ui.ScrollBarUI());

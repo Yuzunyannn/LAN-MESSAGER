@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import client.event.EventIPC;
 import client.event.EventRecv.EventRecvString;
 import client.event.EventsBridge;
 import client.frame.Theme;
@@ -19,7 +20,7 @@ public class InfoPanel extends JPanel {
 	private ListScrollPanel memberField;
 	private SearchPanel searchField;
 	private UserPanel userField;
-
+	private int state;
 	public InfoPanel() {
 		this.setBackground(Theme.COLOR2);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -29,11 +30,18 @@ public class InfoPanel extends JPanel {
 		this.add(userField);
 		this.add(searchField);
 		this.add(memberField);
+		state=EventIPC.FRIENDS;
 		userField.setPreferredSize(new Dimension(0, 80));
 		searchField.setPreferredSize(new Dimension(0, 50));
 
 	}
-
+//响应事件函数
+	@SubscribeEvent
+	public void onStateChange(client.event.EventIPC e) 
+	{
+		System.out.println("infoPanel的状态发生了变化，从状态"+state+"变为状态"+e.state);
+		state=e.state;
+	}
 	@SubscribeEvent
 	public void onULChange(client.event.EventULChange e) {
 		memberField.deleteAllMember();
