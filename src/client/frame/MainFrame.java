@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.info.InfoPanel;
 import client.frame.utility.UtilityPanel;
+import event.SubscribeEvent;
 import user.User;
 
 public class MainFrame extends JFrame {
@@ -97,10 +99,21 @@ public class MainFrame extends JFrame {
 	public void normal() {
 		this.setExtendedState(JFrame.NORMAL);
 	}
-	/** 设置用户列表*/
-	public void setUserList(ArrayList<User> ul) 
-	{
+
+	/** 设置用户列表 */
+	public void setUserList(ArrayList<User> ul) {
 		infoPanel.setUserList(ul);
+	}
+
+	// 处理切换事件
+	@SubscribeEvent
+	public void changeChat(EventShow e) {
+		utilityPanel.toChat(e.user.toString());
+	}
+
+	@SubscribeEvent
+	public void recvString(client.event.EventRecv.EventRecvString e) {
+		utilityPanel.recvString(e.from, e.str);
 	}
 
 }

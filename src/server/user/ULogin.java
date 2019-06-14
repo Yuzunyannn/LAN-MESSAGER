@@ -32,6 +32,14 @@ public class ULogin extends RecvDealMessage {
 	static public boolean login(String username, String password) {
 		if (username.equals("guest")) {
 			return true;
+		} else if (username.equals("ssj") && password.equals("123")) {
+			return true;
+		} else if (username.equals("ycy") && password.equals("tatsuu")) {
+			return true;
+		} else if (username.equals("lyl") && password.equals("666")) {
+			return true;
+		} else if (username.equals("myk") && password.equals("yyy")) {
+			return true;
 		}
 		return false;
 	}

@@ -32,7 +32,6 @@ public class SearchPanel extends JPanel {
 				EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
 
 		}
-
 		@Override
 		public void keyReleased(KeyEvent e) {
 			// TODO 自动生成的方法存根
