@@ -69,7 +69,15 @@ public class Core {
 				Runnable run = Core.this.getTask();
 				if (run == null)
 					break;
-				run.run();
+				try {
+					run.run();
+				} catch (Exception e) {
+					Logger.log.warn("同步任务运行中，出现异常！", e);
+				} catch (Throwable t) {
+					Logger.log.warn("同步任务运行中，出现错误！", t);
+					Core.shutdownWithError();
+				}
+
 			}
 		}
 	}

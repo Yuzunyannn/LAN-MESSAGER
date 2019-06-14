@@ -16,6 +16,8 @@ public class UserServer extends User {
 
 	@Override
 	synchronized public boolean sendMesage(IMessage msg) {
+		if (this.con == null)
+			return false;
 		return RecvDealMessage.send(this.con, msg);
 	}
 

@@ -27,9 +27,9 @@ import javax.swing.text.BadLocationException;
 import client.frame.Theme;
 import client.user.UserClient;
 import client.word.Word;
+import debug.MUStoryDebug;
 import nbt.INBTSerializable;
 import nbt.NBTTagList;
-import story.message.MUStoryDebug;
 
 public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagList> {
 

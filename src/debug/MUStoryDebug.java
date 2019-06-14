@@ -1,9 +1,10 @@
-package story.message;
+package debug;
 
 import core.Core;
 import nbt.NBTTagCompound;
 import network.Side;
 import story.Story;
+import story.StoryFileSender;
 import user.User;
 import user.message.MessageUser;
 
@@ -23,7 +24,9 @@ public class MUStoryDebug extends MessageUser implements Runnable {
 
 	@Override
 	public void run() {
-		Story.newStory("debug", "dd", Side.SERVER, from);
+		StoryFileSender story = (StoryFileSender) Story.newStory("fileSender", Story.giveStoryId(), null, Side.SERVER);
+		StoryFileSender.initStory(story, this.from, 0);
+		story.addMember(from);
 	}
 
 }

@@ -18,12 +18,12 @@ public class MSNbtSend extends MessageUser {
 
 	@Override
 	protected void executeClient(User from, NBTTagCompound nbt) {
-		Story.pushRev(nbt.getString("sid"), nbt, User.EMPTY, Side.CLIENT);
+		Story.pushRev(nbt.getString("sid"), nbt.getCompoundTag("nbt"), User.EMPTY, Side.CLIENT);
 	}
 
 	@Override
 	protected void executeServer(User from, User to, NBTTagCompound nbt) {
-		Story.pushRev(nbt.getString("sid"), nbt, from, Side.SERVER);
+		Story.pushRev(nbt.getString("sid"), nbt.getCompoundTag("nbt"), from, Side.SERVER);
 	}
 
 }

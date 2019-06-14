@@ -4,16 +4,17 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import debug.MUStoryDebug;
 import log.Logger;
 import log.NeedLog;
 import network.RecvDealMessage;
 import platform.Platform;
-import story.StoryDebug;
+import story.Story;
+import story.StoryFileSender;
 import story.message.MSBegin;
 import story.message.MSEnd;
 import story.message.MSMemberIn;
 import story.message.MSNbtSend;
-import story.message.MUStoryDebug;
 import user.message.MUGULRequest;
 import user.message.MUSString;
 import user.message.MessageLogin;
@@ -74,11 +75,11 @@ public class Proxy {
 		RecvDealMessage.registerMessage("msend", MSEnd.class);
 		RecvDealMessage.registerMessage("msmem", MSMemberIn.class);
 		RecvDealMessage.registerMessage("msnbtsend", MSNbtSend.class);
-		
+
 		RecvDealMessage.registerMessage("debug", MUStoryDebug.class);
 	}
 
 	private static void registerAllStory() {
-		StoryDebug.registerStory("debug", StoryDebug.class);
+		Story.registerStory("fileSender", StoryFileSender.class);
 	}
 }

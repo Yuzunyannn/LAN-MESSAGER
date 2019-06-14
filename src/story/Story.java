@@ -1,8 +1,10 @@
 package story;
 
 import java.util.AbstractMap;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +20,6 @@ import story.message.MSBegin;
 import story.message.MSEnd;
 import story.message.MSMemberIn;
 import story.message.MSNbtSend;
-import user.UOnline;
 import user.User;
 
 /** 描述一组人进行的任务，比如多人发送文件，多人进行小游戏等 */
@@ -37,6 +38,15 @@ public class Story implements ITickable {
 		if (storyMap.containsKey(storyInstanceId))
 			throw new RuntimeException("重复的注册：" + storyInstanceId);
 		storyMap.put(storyInstanceId, storyClass);
+	}
+
+	static private long nextId = 0;
+
+	/** 随机获取一个没有的id */
+	public static String giveStoryId() {
+		Calendar cal = Calendar.getInstance();
+		String id = nextId++ + "" + cal.get(Calendar.YEAR);
+		return id;
 	}
 
 	/** 程序中所有story */
@@ -70,14 +80,14 @@ public class Story implements ITickable {
 	}
 
 	/** 创建一个story */
-	static public void newStory(String storyInstanceId, String storyId, Side side, User... users) {
+	static public Story newStory(String storyInstanceId, String storyId, NBTTagCompound nbt, Side side) {
 		if (storyInstanceId == null || storyInstanceId.isEmpty()) {
 			Logger.log.warn("传入的实例化id，为空！");
-			return;
+			return null;
 		}
 		if (Story.getStory(storyId, side) != null) {
 			Logger.log.warn("sortyId：" + storyId + "，已经存在");
-			return;
+			return null;
 		}
 		Class<? extends Story> cls = storyMap.get(storyInstanceId);
 		Story story = null;
@@ -85,14 +95,16 @@ public class Story implements ITickable {
 			story = cls.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
 			Logger.log.warn("传入的实例化id，实例化错误，是否有无参的构造函数呢？", e);
-			return;
+			return null;
 		}
 		story.side = side;
 		story.instId = storyInstanceId;
 		story.id = storyId;
-		story.addMember(users);
 		Story.addStory(story);
+		if (nbt != null)
+			story.updateFromServerPacket(nbt);
 		Core.task(new StoryRun(story));
+		return story;
 	}
 
 	private static class StoryRun implements Runnable {
@@ -104,30 +116,10 @@ public class Story implements ITickable {
 
 		@Override
 		public void run() {
-			Core.task(this.story);
 			this.story.onCreate();
+			Core.task(this.story);
 		}
 
-	}
-
-	/** 创建一个story */
-	static public void newStory(String storyInstanceId, String storyId, Side side, String... users) {
-		User[] us = new User[users.length];
-		int i = 0;
-		// 这里之所以没有全用UOnline.getInstance().getUser是因为在debug中，UOnline只有一个Server的
-		for (String str : users) {
-			if (side == Side.SERVER)
-				us[i] = UOnline.getInstance().getUser(str);
-			else
-				us[i] = new UserClient(str);
-			i++;
-		}
-		Story.newStory(storyInstanceId, storyId, side, us);
-	}
-
-	/** 创建一个story */
-	static public void newStory(String storyInstanceId, String storyId, Side side) {
-		Story.newStory(storyInstanceId, storyId, side, new User[0]);
 	}
 
 	/** 结束一个story */
@@ -143,6 +135,7 @@ public class Story implements ITickable {
 		Story story = Story.getStory(storyId, side);
 		if (story == null) {
 			Logger.log.warn("storyId:" + storyId + "的story不存在");
+			return;
 		}
 		synchronized (story.revs) {
 			story.revs.addFirst(new AbstractMap.SimpleEntry<>(user, nbt));
@@ -160,7 +153,7 @@ public class Story implements ITickable {
 	/** story是否结束 */
 	private boolean isEnd = false;
 	/** 所接受的消息数据 */
-	private LinkedList<Entry<User, NBTTagCompound>> revs = new LinkedList<Entry<User, NBTTagCompound>>();
+	private final LinkedList<Entry<User, NBTTagCompound>> revs = new LinkedList<Entry<User, NBTTagCompound>>();
 
 	@Override
 	final public int update() {
@@ -220,6 +213,7 @@ public class Story implements ITickable {
 		return false;
 	}
 
+	/** 添加用户 */
 	public void addMember(User... users) {
 		if (users == null || users.length == 0)
 			return;
@@ -227,7 +221,9 @@ public class Story implements ITickable {
 			for (User u : users) {
 				if (this.hasMember(u))
 					continue;
-				this.users.add(u);
+				if (this.onMemberJoin(u)) {
+					this.users.add(u);
+				}
 			}
 			return;
 		}
@@ -240,16 +236,32 @@ public class Story implements ITickable {
 		for (User u : users) {
 			if (this.hasMember(u))
 				continue;
-			this.users.add(u);
-			newUser.add(u);
+			if (this.onMemberJoin(u)) {
+				this.users.add(u);
+				newUser.add(u);
+			}
 		}
 		// 给原始user发送新添加的用户
 		for (User u : originUser)
 			u.sendMesage(new MSMemberIn(this.getId(), users));
 		// 给新添加的用户发送更新
 		for (User u : newUser) {
-			u.sendMesage(new MSBegin(this.getInstanceId(), this.getId()));
+			u.sendMesage(new MSBegin(this.getInstanceId(), this.getId(), this.packetToClientUpdate()));
 			u.sendMesage(new MSMemberIn(this.getId(), this.users));
+		}
+	}
+
+	/** 移除用户 */
+	public void removeMember(User user) {
+		Iterator<User> itr = users.iterator();
+		while (itr.hasNext()) {
+			User u = itr.next();
+			if (u.equals(user)) {
+				this.onMemberLeave(u);
+				itr.remove();
+				u.sendMesage(new MSEnd(this.getId()));
+				return;
+			}
 		}
 	}
 
@@ -263,6 +275,40 @@ public class Story implements ITickable {
 		} else {
 			UserClient.sendToServer(new MSNbtSend(this.getId(), nbt));
 		}
+	}
+
+	/** 对指定用户发送一个数据 */
+	public void sendData(NBTTagCompound nbt, User user) {
+		if (nbt == null || user == null)
+			return;
+		if (this.isServer()) {
+			user.sendMesage(new MSNbtSend(this.getId(), nbt));
+		}
+	}
+
+	/** 给客户端首次创建story的时候，发送的数据 */
+	public NBTTagCompound packetToClientUpdate() {
+		return null;
+	}
+
+	/** 收到更新内容开始恢复 */
+	public void updateFromServerPacket(NBTTagCompound nbt) {
+
+	}
+
+	/**
+	 * 当有新用户加入，
+	 * 
+	 * @return 返回false，拒绝加入
+	 */
+	protected boolean onMemberJoin(User user) {
+		return true;
+	}
+
+	/**
+	 * 当有新用户离开
+	 */
+	protected void onMemberLeave(User user) {
 	}
 
 	/**

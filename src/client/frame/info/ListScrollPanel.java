@@ -34,14 +34,14 @@ public class ListScrollPanel extends JScrollPane {
 	public ListScrollPanel() {
 		super();
 		p = new JPanel();
-		Component temp=this;
+		Component temp = this;
 		int width = super.getWidth();
 		p.setPreferredSize(new Dimension(width, getHeight()));
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		p.setBackground(Theme.COLOR0);
 		content = p.getComponents();
 		this.add(p);
-		
+
 		this.setViewportView(p);
 		// 设置垂直滚动条的显示: 一直显示
 		this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -56,7 +56,7 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	/* 在加入User类后需要修改 */
-	public  void setTop(String name) {
+	public void setTop(String name) {
 		int temp;
 		temp = getMember(name);
 		if (temp == -1)
@@ -79,7 +79,7 @@ public class ListScrollPanel extends JScrollPane {
 
 	}
 
-	public  int getMember(String name) {
+	public int getMember(String name) {
 		MemberButton temp;
 		for (int i = 0; i < content.length; i++) {
 			temp = (MemberButton) content[i];
@@ -142,17 +142,18 @@ public class ListScrollPanel extends JScrollPane {
 		/* 测试信息 */
 		// System.out.println("count"+p.getComponentCount());
 	}
+
 	@SubscribeEvent
-	public  void onCountMsg(EventRecvString e) {
+	public void onCountMsg(EventRecvString e) {
 		p.removeAll();
 
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
 				((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
-					System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
-							+ ((MemberButton) content[i]).count);
-					setTop(((MemberButton) content[i]).getMemberName());
-					
+				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
+						+ ((MemberButton) content[i]).count);
+				setTop(((MemberButton) content[i]).getMemberName());
+
 				// break;
 			}
 
@@ -160,25 +161,24 @@ public class ListScrollPanel extends JScrollPane {
 			p.add(i);
 		}
 		this.revalidate();
-		
+
 	}
 /**事件处理*/
 	@SubscribeEvent
-	public  void onSearchRequest(EventSearchRequest e) {
+	public void onSearchRequest(EventSearchRequest e) {
 
 		for (int i = 0; i < content.length; i++)
-			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName()))
-				((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
+			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
+				((MemberButton) content[i]).RecvMessage();
+			}
 
 		for (Component i : content) {
 			p.add(i);
 		}
 
 	}
-
 	
 	public   void initEvent(IEventBus bus) {
 		bus.register(this);
-		
 	}
 }
