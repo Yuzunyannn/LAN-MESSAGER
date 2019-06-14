@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.List;
 
 import client.event.EventSendInputWords;
@@ -130,7 +131,7 @@ public class ChatPanel extends JPanelUtility {
 	/** 用户 */
 	private User chatTo;
 	/** 对话面板 */
-	private ChatDialogPanel chatDialogPanel = new ChatDialogPanel();
+	private ChatDialogPanel chatDialogPanel = new ChatDialogPanel(chatTo);
 	private ChatInputPanel inputPanel = new ChatInputPanel();
 
 	public ChatPanel() {
@@ -159,7 +160,10 @@ public class ChatPanel extends JPanelUtility {
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words) {
 			Type type = checkType(w.id);
-			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type);
+			Date date = new Date();
+			chatDialogPanel.addBubble(true, "", "", Type.TIME, date.toString());
+			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString());
+			
 			EventsBridge.sendString(w.toString(), chatTo.getUserName());
 		}
 		
@@ -185,7 +189,10 @@ public class ChatPanel extends JPanelUtility {
 	/** 当点击收到消息的时候调用 */
 	public void onRecvMsg(Word word) {
 		Type type = checkType(word.id);
-		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName(), type);
+		Date date = new Date();
+		chatDialogPanel.addBubble(false, "", "", Type.TIME, date.toString());
+		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName(), type, date.toString());
+		
 	}
 
 	@Override
