@@ -1,6 +1,5 @@
 package client.frame.utility;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 
@@ -13,50 +12,56 @@ import javax.swing.SwingUtilities;
 import client.frame.Theme;
 import core.Core;
 import nbt.INBTSerializable;
-import nbt.NBTBase;
 import nbt.NBTTagCompound;
+import user.User;
 
 public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBTTagCompound> {
 	private static final long serialVersionUID = 1L;
 	private ChatBubblePanel chatBubble;
 	private JPanel panel;
+	private User chatToUser;
 	public JScrollBar scrollBar = this.getVerticalScrollBar();
-	private String user = "";
-
-	public ChatDialogPanel() {
+	
+	public ChatDialogPanel(User chatToUser) {
 		super(new JPanel());
+		this.chatToUser = chatToUser;
 		panel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
 		panel.setLayout(new GridLayout(0, 1));
 		//panel.setLayout(null);
 		panel.setVisible(true);
+		
+		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
 		this.setVisible(true);
 		//开始区域
-		panel.add(new ChatBubblePanel(true, "", "", Type.NULL));
-		panel.add(new ChatBubblePanel(true, "", "", Type.NULL));
-		panel.add(new ChatBubblePanel(true, "", "", Type.NULL));
-		panel.add(new ChatBubblePanel(true, "", "", Type.NULL));
-		panel.add(new ChatBubblePanel(true, "", "", Type.NULL));
-		panel.add(new ChatBubblePanel(true, "", "", Type.NULL));
-		panel.add(new ChatBubblePanel(true, "", "", Type.NULL));
-		panel.add(new ChatBubblePanel(true, "", "", Type.NULL));
-		panel.add(new ChatBubblePanel(true, "", "", Type.LINE));
+		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
+		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
+		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
+		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
+		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
+		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
+		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
+		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
+		panel.add(new ChatBubblePanel(true, "", "", Type.LINE, ""));
 		// 数据添加可能是在调用setValue之后发生，所以此处引入runnable
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				scrollBar.setValue(scrollBar.getMaximum());
 			}
 		});
+		this.panel.setOpaque(true);
+		this.panel.setBackground(Theme.COLOR1);
+		
 	}
 
 	/** 添加一个对话气泡 */
-	public void addBubble(boolean isMySelf, String info, String name, Type type) {
+	public void addBubble(boolean isMySelf, String info, String name, Type type, String time) {
 		// TODO Auto-generated method stub
 		if (type == Type.NULL) {
 			System.out.println("添加气泡失败！类型为NULL");
 			return;
 		}
 		//panel.setSize(panel.getWidth(), panel.getHeight() + 20);
-		chatBubble = new ChatBubblePanel(isMySelf, info, name, type);
+		chatBubble = new ChatBubblePanel(isMySelf, info, name, type, time);
 		panel.setSize(panel.getWidth(), panel.getHeight() + chatBubble.getHeight());
 		panel.add(chatBubble);
 		Core.task(new Runnable() {
@@ -100,7 +105,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		}
 		for (Integer i = 0; i < count; i++) {
 			NBTTagCompound upperNBT = (NBTTagCompound) nbt.getTag(i.toString());
-			ChatBubblePanel bubble = new ChatBubblePanel(true, "", "", Type.NULL);
+			ChatBubblePanel bubble = new ChatBubblePanel(true, "", "", Type.NULL, "");
 			bubble.deserializeNBT(upperNBT);
 			this.panel.add(bubble);
 		}

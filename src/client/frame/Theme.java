@@ -19,6 +19,8 @@ public class Theme {
 	public static Color COLOR5 = new Color(0xe9d8d8);
 	/**	黑色 */
 	public static Color COLOR6 = new Color(0x000000);
+	/** 绿宝石色 */
+	public static Color COLOR7 = new Color(0xafeeee);
 	/** 用户名字体 冬青黑体 粗 30号*/
 	public static Font FONT0 = new Font("冬青黑体", Font.BOLD, 30);
 	/** 对话字体 冬青黑体 细 14号 */

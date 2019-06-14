@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,10 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.plaf.ButtonUI;
 
 import client.frame.Theme;
-import client.frame.ui.NormalButtonUI;
 import client.frame.ui.RoundedRecBorder;
-import client.word.Word;
-import javafx.scene.layout.Border;
+import client.user.UserClient;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
 
@@ -41,7 +40,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	private JLabel displayedName;
 	
 	/** 构造函数，生成一个对话气泡，显示信息的参数待定！*/
-	public ChatBubblePanel(boolean isMySelf, String info, String localName, Type type) {
+	public ChatBubblePanel(boolean isMySelf, String info, String localName, Type type, String time) {
 		// TODO Auto-generated constructor stub
 		if (type == Type.LINE) {
 			JLabel lineLabel = new JLabel("--------以下为全部消息--------");
@@ -49,15 +48,32 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 			this.setLayout(new FlowLayout(FlowLayout.CENTER));
 			this.add(lineLabel);
 			this.setVisible(true);
+		} else if (type == Type.TIME) {
+			JLabel lineLabel = new JLabel("--------"+time+"--------");
+			lineLabel.setVisible(true);
+			this.setLayout(new FlowLayout(FlowLayout.CENTER));
+			this.add(lineLabel);
+			this.setVisible(true);
 		} else {
+			this.userTime = time;
 			this.type = type;
 			this.userID = isMySelf;
-			this.userName = localName;
+			if (this.userID) {
+				this.userName = UserClient.getClientUsername();
+			} else {
+				this.userName = localName;
+			}
 			initalUI(info);
 			if (type == Type.NULL) {
 				this.setVisible(false);
+			} else {
+				this.setVisible(true);
 			}
 		}
+		this.setBackground(Theme.COLOR0);
+		this.setOpaque(false);
+		this.setSize(this.getWidth(), 80);
+		
 	}
 	
 	@Override
@@ -95,7 +111,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		switch (this.type) {
 		case WORD:
 			this.userDialog = info;
-			this.dialog = new Bubble(info);
+			this.dialog = new Bubble(info, Type.WORD);
 			break;
 		case PICTURE:
 			break;
@@ -105,7 +121,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 			this.dialog = new FileBubble(info);
 			break;
 		default:
-			this.dialog = new Bubble("");
+			this.dialog = new Bubble("", Type.WORD);
 			break;
 		}
 		this.displayedName = new JLabel();
@@ -113,10 +129,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		RoundedRecBorder border = new RoundedRecBorder(Theme.COLOR0, 1, 10);
 		this.Icon.setBorder(border);
 		this.Icon.setBorderPainted(true);
-		this.setBackground(Theme.COLOR0);
-		this.setOpaque(false);
-		this.setSize(this.getWidth(), 80);
-		this.setVisible(true);
+		
 	}
 	
 	/** 设置用户图标 */
@@ -150,10 +163,15 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		this.remove(length-3);
 		initalUI(this.userDialog);
 	}
+	
+	/** 获取时间 */
+	public String getTime() {
+		return userTime;
+	}
 
 }
 
 /** 对话气泡类型 */
 enum Type {
-	WORD, FILE, PICTURE, EXTENSION, NULL, LINE
+	WORD, FILE, PICTURE, EXTENSION, NULL, LINE, TIME
 }
