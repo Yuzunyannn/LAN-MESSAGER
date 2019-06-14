@@ -80,9 +80,11 @@ public class MainFrame extends JFrame {
 		this.setMinimumSize(layout.minimumLayoutSize(this));
 		// 设置窗体大小和位置
 		this.fixed();
-		EventsBridge.frontendEventHandle.register(infoPanel);
 	}
-
+	public InfoPanel getInfoPanel() 
+	{
+		return infoPanel;
+	}
 	/** 初始化窗体大小和位置 */
 	public void fixed() {
 		this.pack();

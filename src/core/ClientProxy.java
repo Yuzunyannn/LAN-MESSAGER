@@ -51,7 +51,7 @@ public class ClientProxy extends Proxy {
 		EventsBridge.frontendEventHandle.register(ListScrollPanel.class);
 		EventsBridge.frontendEventHandle.register(UtilityPanel.class);
 		EventsBridge.frontendEventHandle.register(frame);
-
+		EventsBridge.frontendEventHandle.register(frame.getInfoPanel());
 	}
 
 	@Override
