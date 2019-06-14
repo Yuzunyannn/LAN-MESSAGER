@@ -87,7 +87,10 @@ public class MainFrame extends JFrame {
 		bus.register(this);
 		infoPanel.initEvent(bus);
 	}
-
+	public InfoPanel getInfoPanel() 
+	{
+		return infoPanel;
+	}
 	/** 初始化窗体大小和位置 */
 	public void fixed() {
 		this.pack();
@@ -120,5 +123,6 @@ public class MainFrame extends JFrame {
 	public void recvString(client.event.EventRecv.EventRecvString e) {
 		utilityPanel.recvString(e.from, e.str);
 	}
-
+ 
+	
 }

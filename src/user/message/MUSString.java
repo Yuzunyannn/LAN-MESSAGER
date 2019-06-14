@@ -23,12 +23,12 @@ public class MUSString extends MessageUser {
 	}
 
 	@Override
-	void executeClient(User from, NBTTagCompound nbt) {
+	protected void executeClient(User from, NBTTagCompound nbt) {
 		EventsBridge.recvString(from, nbt.getString("str"));
 	}
 
 	@Override
-	void executeServer(User from, User to, NBTTagCompound nbt) {
+	protected void executeServer(User from, User to, NBTTagCompound nbt) {
 		if (to.isOnline()) {
 			to.sendMesage(new MUSString(from, nbt.getString("str")));
 		} else {

@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
+import client.frame.Theme;
 import core.Core;
 import nbt.INBTSerializable;
 import nbt.NBTBase;
@@ -72,14 +73,14 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		Integer comNum = 0;
 		for (int j = 0; j < com.length; j++) {
 			if (com[j] instanceof ChatBubblePanel) {
-				NBTTagCompound tmpNBT = ((ChatBubblePanel)com[j]).serializeNBT();
+				NBTTagCompound tmpNBT = ((ChatBubblePanel) com[j]).serializeNBT();
 				nbt.setTag(comNum.toString(), tmpNBT);
 				comNum++;
 			}
 		}
 		nbt.setInteger("Count", comNum);
 		nbt.setInteger("ScrollValue", this.getVerticalScrollBar().getValue());
-		//System.out.println(this.getVerticalScrollBar().getValue());
+		// System.out.println(this.getVerticalScrollBar().getValue());
 		return nbt;
 	}
 
@@ -87,12 +88,12 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 	public void deserializeNBT(NBTTagCompound nbt) {
 		int count = nbt.getInteger("Count");
 		if (count == 0) {
-			//System.out.println("组件数量为0");
+			// System.out.println("组件数量为0");
 			return;
 		}
 		Component[] com = this.panel.getComponents();
 		int length = com.length;
-		for(int i=length-1;i>=0;i--) {
+		for (int i = length - 1; i >= 0; i--) {
 			if (com[i] instanceof ChatBubblePanel) {
 				this.panel.remove(i);
 			}

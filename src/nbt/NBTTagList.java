@@ -159,6 +159,16 @@ public class NBTTagList extends NBTBase implements java.lang.Iterable<NBTBase> {
 		return this.tagList.remove(index);
 	}
 
+	/** 添加数字 */
+	public void appendTag(int i) {
+		this.appendTag(new NBTTagInt(i));
+	}
+
+	/** 添加字符串 */
+	public void appendTag(String str) {
+		this.appendTag(new NBTTagString(str));
+	}
+
 	/** 获取指定位置的compuound */
 	public NBTTagCompound getCompoundTagAt(int idx) {
 		NBTBase nbtbase = this.get(idx);
