@@ -178,10 +178,13 @@ public class ListScrollPanel extends JScrollPane {
 		for (Component i : content) {
 			p.add(i);
 		}
-		this.revalidate();
+		this.refresh();
 
 	}
-
+public  void  refresh() {
+	this.revalidate();
+	this.repaint();
+}
 	/** 事件处理 */
 	@SubscribeEvent
 	public void onSearchRequest(EventSearchRequest e) {
@@ -202,7 +205,7 @@ public class ListScrollPanel extends JScrollPane {
 			addNewMember(e.username);
 		else if (e.type.equals(EventFriendOperation.DELETEFRIEND))
 			deductMember(e.username);
-		this.revalidate();
+		this.refresh();
 	}
 
 	@SubscribeEvent
@@ -213,7 +216,7 @@ public class ListScrollPanel extends JScrollPane {
 			deductMember(e.username);
 		else if (e.type.equals(EventChatOperation.CANELFIXEDCHAT))
 			canelFixed();
-		this.revalidate();
+		this.refresh();
 	}
 
 	public void initEvent(IEventBus bus) {

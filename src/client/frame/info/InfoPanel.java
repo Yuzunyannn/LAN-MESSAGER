@@ -41,7 +41,11 @@ public class InfoPanel extends JPanel {
 		memberField.initEvent(bus);
 		searchField.initEvent(bus);
 	}
-
+	
+	public void refresh() {
+		this.revalidate();
+		this.repaint();
+	}
 	// 响应事件函数
 	@SubscribeEvent
 	public void onStateChange(client.event.EventIPC e) {
@@ -58,6 +62,8 @@ public class InfoPanel extends JPanel {
 			else if ((info.flags & EventULChange.REMOVE) != 0)
 				removeMember(info.user.userName);
 		}
+		this.refresh();
+		
 	}
 
 	/* 暂时作为测试 */
