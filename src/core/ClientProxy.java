@@ -7,11 +7,10 @@ import java.io.IOException;
 import client.event.EventsBridge;
 import client.frame.LoginFrame;
 import client.frame.MainFrame;
-import client.frame.info.ListScrollPanel;
-import client.frame.utility.UtilityPanel;
 import client.user.UOnlineClient;
 import client.user.UserClient;
 import event.SubscribeEvent;
+import file.FileSenderManager;
 import log.Logger;
 import network.Connection;
 import network.Network;
@@ -49,7 +48,7 @@ public class ClientProxy extends Proxy {
 		// 注册事件
 		frame.initEvent(EventsBridge.frontendEventHandle);
 		EventsBridge.frontendEventHandle.register(this);
-		EventsBridge.frontendEventHandle.register(UtilityPanel.class);
+		FileSenderManager.eventHandle.register(EventsBridge.class);
 	}
 
 	@Override

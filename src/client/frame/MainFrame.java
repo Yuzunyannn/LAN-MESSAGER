@@ -84,8 +84,9 @@ public class MainFrame extends JFrame {
 	}
 
 	public void initEvent(IEventBus bus) {
-		bus.register(this);
 		infoPanel.initEvent(bus);
+		utilityPanel.initEvent(bus);
+		
 	}
 	public InfoPanel getInfoPanel() 
 	{
@@ -112,17 +113,5 @@ public class MainFrame extends JFrame {
 	public void setUserList(ArrayList<User> ul) {
 		infoPanel.setUserList(ul);
 	}
-
-	// 处理切换事件
-	@SubscribeEvent
-	public void changeChat(EventShow e) {
-		utilityPanel.toChat(e.user.toString());
-	}
-
-	@SubscribeEvent
-	public void recvString(client.event.EventRecv.EventRecvString e) {
-		utilityPanel.recvString(e.from, e.str);
-	}
- 
 	
 }

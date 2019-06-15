@@ -1,10 +1,10 @@
 package debug;
 
 import core.Core;
+import file.StoryFileSender;
 import nbt.NBTTagCompound;
 import network.Side;
 import story.Story;
-import story.StoryFileSender;
 import user.UOnline;
 import user.User;
 import user.message.MessageUser;

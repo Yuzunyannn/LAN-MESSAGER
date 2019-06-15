@@ -1,6 +1,5 @@
 package client.frame.utility;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -163,13 +162,10 @@ public class ChatPanel extends JPanelUtility {
 			Date date = new Date();
 			chatDialogPanel.addBubble(true, "", "", Type.TIME, date.toString());
 			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString());
-			
-			EventsBridge.sendString(w.toString(), chatTo.getUserName());
 		}
-		
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
 	}
-	
+
 	/** 检查发送和接收的消息类型 */
 	public Type checkType(int id) {
 		Type type = Type.NULL;
@@ -192,7 +188,7 @@ public class ChatPanel extends JPanelUtility {
 		Date date = new Date();
 		chatDialogPanel.addBubble(false, "", "", Type.TIME, date.toString());
 		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName(), type, date.toString());
-		
+
 	}
 
 	@Override
@@ -212,4 +208,3 @@ public class ChatPanel extends JPanelUtility {
 	}
 
 }
-

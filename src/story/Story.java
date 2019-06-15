@@ -26,7 +26,7 @@ import user.User;
 public class Story implements ITickable {
 
 	/** 注册的story */
-	public static Map<String, Class<? extends Story>> storyMap = Collections
+	private static Map<String, Class<? extends Story>> storyMap = Collections
 			.synchronizedMap(new TreeMap<String, Class<? extends Story>>());
 
 	/** 注册一个story */
@@ -160,7 +160,7 @@ public class Story implements ITickable {
 		if (this.isEnd) {
 			this.onEnd();
 			if (Story.removeStory(this.getId(), this.side) != this) {
-				Logger.log.warn("在移除story时候，出现移除内容于当前内容不相同的异常！！！");
+				Logger.log.warn(this + "在移除story时候，出现移除内容于当前内容不相同的异常！！！");
 			}
 			if (this.isServer()) {
 				// 告诉所有人，结束了！
@@ -183,8 +183,13 @@ public class Story implements ITickable {
 	}
 
 	/** 设置结束 */
-	public void setEnd() {
+	protected void setEnd() {
 		isEnd = true;
+	}
+
+	/** 是否结束 */
+	public boolean isEnd() {
+		return this.isEnd;
 	}
 
 	/** 获取story唯一编号 */
@@ -205,13 +210,9 @@ public class Story implements ITickable {
 		return side.isServer();
 	}
 
-	public String getSideString() {
-		return '[' + (this.isServer() ? "Server" : "Client") + ']';
-	}
-
 	@Override
 	public String toString() {
-		return this.getSideString() + "stroy(" + this.getId() + ")";
+		return '[' + (this.isServer() ? "Server" : "Client") + ']' + "[stroy(" + this.getId() + ")]";
 	}
 
 	public boolean hasMember(User user) {
@@ -224,6 +225,10 @@ public class Story implements ITickable {
 
 	/** 添加用户 */
 	public void addMember(User... users) {
+		if (this.isEnd) {
+			Logger.log.warn(this + "无法向结束后的story添加新成员");
+			return;
+		}
 		if (users == null || users.length == 0)
 			return;
 		if (this.isClient()) {

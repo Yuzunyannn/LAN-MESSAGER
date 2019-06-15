@@ -9,10 +9,15 @@ import java.util.TreeMap;
 
 import javax.swing.JPanel;
 
+import client.event.EventShow;
+import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
+import client.word.Word;
 import client.word.WordString;
 import core.Core;
+import event.IEventBus;
+import event.SubscribeEvent;
 import log.Logger;
 import nbt.NBTTagCompound;
 import story.ITickable;
@@ -72,6 +77,10 @@ public class UtilityPanel extends JPanel implements ITickable {
 		this.add(currPanel);
 		// 加入tick
 		Core.task(this);
+	}
+
+	public void initEvent(IEventBus bus) {
+		bus.register(this);
 	}
 
 	private long tick = 0;
@@ -183,4 +192,24 @@ public class UtilityPanel extends JPanel implements ITickable {
 
 	}
 
+	// 处理切换事件
+	@SubscribeEvent
+	public void changeChat(EventShow e) {
+		if (e.toolId.equals(JPanelUtility.TOOLID_CHATING)) {
+			this.toChat(e.user.toString());
+		}
+	}
+
+	@SubscribeEvent
+	public void recvString(client.event.EventRecv.EventRecvString e) {
+		this.recvString(e.from, e.str);
+	}
+
+	@SubscribeEvent
+	public void sendWords(client.event.EventSendInputWords e) {
+		for (Word w : e.words) {
+			EventsBridge.sendString(w.toString(), e.toUser);
+		}
+
+	}
 }

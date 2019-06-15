@@ -1,4 +1,4 @@
-package story;
+package file;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,14 +13,11 @@ import java.util.List;
 import client.user.UserClient;
 import log.Logger;
 import nbt.NBTTagCompound;
+import story.Story;
 import user.UOnline;
 import user.User;
 
 public class StoryFileSender extends Story {
-
-	static public File getFileWithKey(int key) {
-		return new File("libs/mysql-connector-java-8.0.13.jar");
-	}
 
 	static public final byte FLAG_FINISH = 0x20;
 	static public final byte FLAG_FAIL = 0x10;
@@ -46,6 +43,26 @@ public class StoryFileSender extends Story {
 	List<UserFileInfo> usersFileInfoList = new LinkedList<UserFileInfo>();
 	/** 成功接受的人数 */
 	int sons = 0;
+
+	/** 获取传输或接受的文件，文件命是临时名称 */
+	public File getFile() {
+		return this.want;
+	}
+
+	/** 获取真实文件命 */
+	public String getFileName() {
+		return this.fileName;
+	}
+
+	/** 获取发送者 */
+	public User getSender() {
+		return this.daddy;
+	}
+
+	/** 获取当前传输接受进度 */
+	public float getProgress() {
+		return (float) this.byteAt / this.fileSize;
+	}
 
 	private static class UserFileInfo {
 		public long byteAt = 0;
@@ -110,7 +127,7 @@ public class StoryFileSender extends Story {
 	protected void onCreate() {
 		if (this.isClient()) {
 			if (UserClient.getClientUser().equals(this.daddy)) {
-				this.want = StoryFileSender.getFileWithKey(this.daddysKey);
+				this.want = FileSenderManager.getFileWithKey(this.daddysKey);
 				try {
 					// 开发文件
 					fileIStream = new FileInputStream(this.want);
@@ -168,6 +185,7 @@ public class StoryFileSender extends Story {
 			this.fail();
 			return;
 		}
+		FileSenderManager.eventHandle.post(new EventFileRecv.Start(this));
 		Logger.log.impart(this, "准备接受用户：", this.daddy, "的文件:“", fileName, "”，临时文件名：“", tmpName, "”");
 	}
 
@@ -192,6 +210,7 @@ public class StoryFileSender extends Story {
 		fileSize = want.length();
 		fileName = want.getName();
 		this.sendData(this.getRecvHead());
+		FileSenderManager.eventHandle.post(new file.EventFileSend.Start(this));
 	}
 
 	// 发送者客户端完成
@@ -204,6 +223,7 @@ public class StoryFileSender extends Story {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setByte("flags", FLAG_FINISH);
 		this.sendData(nbt);
+		FileSenderManager.eventHandle.post(new file.EventFileSend.Finish(this));
 	}
 
 	// 服务端禁止发送
@@ -227,6 +247,7 @@ public class StoryFileSender extends Story {
 			Logger.log.warn("接受文件后，关闭输出流失败！", e);
 		}
 		fileOStream = null;
+		FileSenderManager.eventHandle.post(new EventFileRecv.Finish(this));
 	}
 
 	private void close() {
@@ -390,8 +411,6 @@ public class StoryFileSender extends Story {
 		return false;
 	}
 
-	int i = 0;
-
 	// 接受一次，接收方调用，这包括其他客户端，和服务端
 	private void recvTick(NBTTagCompound nbt) {
 		long byteAt = nbt.getLong("at");
@@ -410,8 +429,5 @@ public class StoryFileSender extends Story {
 			}
 		}
 		this.byteAt = byteAt + bytes.length;
-		i++;
-		if (i % 20 == 0)
-			System.out.println((float) byteAt / fileSize);
 	}
 }

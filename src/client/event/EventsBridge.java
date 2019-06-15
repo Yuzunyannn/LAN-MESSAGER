@@ -24,7 +24,7 @@ public class EventsBridge {
 	}
 
 	/** [前台] 发送字符串给其他用户 */
-	public static void sendString(String str, String toUser) {
+	public static void sendString(String str, User toUser) {
 		UserClient.sendToServer(new MUSString(toUser, str));
 	}
 
@@ -32,4 +32,25 @@ public class EventsBridge {
 	public static void recvUserList(ArrayList<User> ul) {
 		EventsBridge.frontendEventHandle.post(new EventULChange(ul, EventULChange.ADD));
 	}
+
+	// 转发事件
+	public static void retransmissionRecv(file.EventFileRecv.Start e) {
+		EventsBridge.frontendEventHandle.post(e);
+	}
+
+	// 转发事件
+	public static void retransmissionRecv(file.EventFileRecv.Finish e) {
+		EventsBridge.frontendEventHandle.post(e);
+	}
+
+	// 转发事件
+	public static void retransmissionSend(file.EventFileSend.Start e) {
+		EventsBridge.frontendEventHandle.post(e);
+	}
+
+	// 转发事件
+	public static void retransmissionRev(file.EventFileSend.Finish e) {
+		EventsBridge.frontendEventHandle.post(e);
+	}
+
 }

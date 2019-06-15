@@ -5,12 +5,12 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import debug.MUStoryDebug;
+import file.StoryFileSender;
 import log.Logger;
 import log.NeedLog;
 import network.RecvDealMessage;
 import platform.Platform;
 import story.Story;
-import story.StoryFileSender;
 import story.message.MSBegin;
 import story.message.MSEnd;
 import story.message.MSMemberIn;
