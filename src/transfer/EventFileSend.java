@@ -1,4 +1,4 @@
-package file;
+package transfer;
 
 /** 发送文件事件 */
 public class EventFileSend extends EventFile {

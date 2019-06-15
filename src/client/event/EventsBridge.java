@@ -1,10 +1,14 @@
 package client.event;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import client.user.UserClient;
 import event.EventBusTask;
 import event.IEventBus;
+import log.Logger;
+import transfer.FileSenderManager;
+import transfer.message.UMFileSendToUser;
 import user.User;
 import user.message.MUSString;
 
@@ -28,28 +32,38 @@ public class EventsBridge {
 		UserClient.sendToServer(new MUSString(toUser, str));
 	}
 
+	/** [前台] 发送文件给其他用户 */
+	public static void sendFile(File file, User toUser) {
+		int key = FileSenderManager.recordFile(file);
+		if (key == 0) {
+			Logger.log.warn("发送文件失败！");
+			return;
+		}
+		UserClient.sendToServer(new UMFileSendToUser(toUser, key, file.getName()));
+	}
+
 	/** [后台]当受到用户列表 */
 	public static void recvUserList(ArrayList<User> ul) {
 		EventsBridge.frontendEventHandle.post(new EventULChange(ul, EventULChange.ADD));
 	}
 
 	// 转发事件
-	public static void retransmissionRecv(file.EventFileRecv.Start e) {
+	public static void retransmissionRecv(transfer.EventFileRecv.Start e) {
 		EventsBridge.frontendEventHandle.post(e);
 	}
 
 	// 转发事件
-	public static void retransmissionRecv(file.EventFileRecv.Finish e) {
+	public static void retransmissionRecv(transfer.EventFileRecv.Finish e) {
 		EventsBridge.frontendEventHandle.post(e);
 	}
 
 	// 转发事件
-	public static void retransmissionSend(file.EventFileSend.Start e) {
+	public static void retransmissionSend(transfer.EventFileSend.Start e) {
 		EventsBridge.frontendEventHandle.post(e);
 	}
 
 	// 转发事件
-	public static void retransmissionRev(file.EventFileSend.Finish e) {
+	public static void retransmissionRev(transfer.EventFileSend.Finish e) {
 		EventsBridge.frontendEventHandle.post(e);
 	}
 

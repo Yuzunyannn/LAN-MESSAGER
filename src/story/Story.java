@@ -134,7 +134,7 @@ public class Story implements ITickable {
 	static public void pushRev(String storyId, NBTTagCompound nbt, User user, Side side) {
 		Story story = Story.getStory(storyId, side);
 		if (story == null) {
-			Logger.log.warn("storyId:" + storyId + "的story不存在");
+			Logger.log.warn("storyId:" + storyId + "的story不存在，无法进行包录入");
 			return;
 		}
 		synchronized (story.revs) {
@@ -170,9 +170,11 @@ public class Story implements ITickable {
 			}
 			return ITickable.END;
 		}
-		while (!revs.isEmpty()) {
+		while (true) {
 			Entry<User, NBTTagCompound> entry;
 			synchronized (revs) {
+				if (revs.isEmpty())
+					break;
 				entry = revs.getLast();
 				revs.removeLast();
 			}

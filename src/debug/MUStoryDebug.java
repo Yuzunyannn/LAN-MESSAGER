@@ -1,10 +1,13 @@
 package debug;
 
+import java.io.File;
+
 import core.Core;
-import file.StoryFileSender;
 import nbt.NBTTagCompound;
 import network.Side;
 import story.Story;
+import transfer.FileSenderManager;
+import transfer.StoryFileSender;
 import user.UOnline;
 import user.User;
 import user.message.MessageUser;
@@ -26,8 +29,9 @@ public class MUStoryDebug extends MessageUser implements Runnable {
 	@Override
 	public void run() {
 		StoryFileSender story = (StoryFileSender) Story.newStory("fileSender", Story.giveStoryId(), null, Side.SERVER);
-		StoryFileSender.initStory(story, this.from, 0);
-		story.addMember(from, UOnline.getInstance().getUser("ssj"));
+		StoryFileSender.initStory(story, this.from,
+				FileSenderManager.recordFile(new File("libs/mysql-connector-java-8.0.13.jar")));
+		story.addMember(UOnline.getInstance().getUser("ssj"));
 	}
 
 }

@@ -1,10 +1,11 @@
-package file;
+package transfer;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -68,11 +69,32 @@ public class StoryFileSender extends Story {
 		public long byteAt = 0;
 		public User user;
 		public FileInputStream fileIStream = null;
+
+		public void close() {
+			if (fileIStream == null)
+				return;
+			try {
+				fileIStream.close();
+			} catch (Exception e) {
+			}
+			fileIStream = null;
+		}
 	}
 
 	public static void initStory(StoryFileSender story, User sender, int key) {
 		story.daddy = sender;
 		story.daddysKey = key;
+		story.addMember(sender);
+	}
+
+	public static void initStory(StoryFileSender story, User sender, String realName, File file) {
+		story.daddy = sender;
+		story.daddysKey = 0;
+		story.flags = FLAG_FINISH;
+		story.want = file;
+		story.fileSize = file.length();
+		story.fileName = realName;
+		story.addMember(sender);
 	}
 
 	@Override
@@ -146,6 +168,7 @@ public class StoryFileSender extends Story {
 	@Override
 	protected void onEnd() {
 		this.close();
+		System.out.println(this + "已经结束");
 	}
 
 	// 初始化接收端临时文件存储
@@ -210,7 +233,7 @@ public class StoryFileSender extends Story {
 		fileSize = want.length();
 		fileName = want.getName();
 		this.sendData(this.getRecvHead());
-		FileSenderManager.eventHandle.post(new file.EventFileSend.Start(this));
+		FileSenderManager.eventHandle.post(new transfer.EventFileSend.Start(this));
 	}
 
 	// 发送者客户端完成
@@ -223,7 +246,7 @@ public class StoryFileSender extends Story {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setByte("flags", FLAG_FINISH);
 		this.sendData(nbt);
-		FileSenderManager.eventHandle.post(new file.EventFileSend.Finish(this));
+		FileSenderManager.eventHandle.post(new transfer.EventFileSend.Finish(this));
 	}
 
 	// 服务端禁止发送
@@ -297,6 +320,8 @@ public class StoryFileSender extends Story {
 	// 添加新成员
 	@Override
 	protected boolean onMemberJoin(User user) {
+		if (this.isClient())
+			return true;
 		if (user.equals(this.daddy))
 			return true;
 		UserFileInfo info = new UserFileInfo();
@@ -359,6 +384,7 @@ public class StoryFileSender extends Story {
 				boolean finish = this.sendTick(nbt, info);
 				if (finish) {
 					itr.remove();
+					info.close();
 					nbt = new NBTTagCompound();
 					nbt.setByte("flags", FLAG_FINISH);
 					this.sendData(nbt, info.user);
@@ -381,14 +407,16 @@ public class StoryFileSender extends Story {
 		int length = 0;
 		try {
 			length = fileIStream.read(bytes);
+			if (length == -1)
+				return true;
+			if (length < bytesPreSend)
+				bytes = Arrays.copyOf(bytes, length);
 			nbt.setByteArray("datas", bytes);
 			nbt.setLong("at", byteAt);
 		} catch (IOException e) {
 			Logger.log.warn("发数据的时候，读取文件流出现异常！", e);
 			this.fail();
 		}
-		if (length == -1)
-			return true;
 		byteAt += length;
 		return false;
 	}
@@ -399,14 +427,16 @@ public class StoryFileSender extends Story {
 		int length = 0;
 		try {
 			length = info.fileIStream.read(bytes);
+			if (length == -1)
+				return true;
+			if (length < bytesPreSend)
+				bytes = Arrays.copyOf(bytes, length);
 			nbt.setByteArray("datas", bytes);
 			nbt.setLong("at", info.byteAt);
 		} catch (IOException e) {
 			Logger.log.warn("发数据的时候，读取文件流出现异常！", e);
 			this.fail();
 		}
-		if (length == -1)
-			return true;
 		info.byteAt += length;
 		return false;
 	}

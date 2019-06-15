@@ -5,7 +5,6 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import debug.MUStoryDebug;
-import file.StoryFileSender;
 import log.Logger;
 import log.NeedLog;
 import network.RecvDealMessage;
@@ -15,6 +14,8 @@ import story.message.MSBegin;
 import story.message.MSEnd;
 import story.message.MSMemberIn;
 import story.message.MSNbtSend;
+import transfer.StoryFileSender;
+import transfer.message.UMFileSendToUser;
 import user.message.MUGULRequest;
 import user.message.MUSString;
 import user.message.MessageLogin;
@@ -74,7 +75,8 @@ public class Proxy {
 		RecvDealMessage.registerMessage("msbegin", MSBegin.class);
 		RecvDealMessage.registerMessage("msend", MSEnd.class);
 		RecvDealMessage.registerMessage("msmem", MSMemberIn.class);
-		RecvDealMessage.registerMessage("msnbtsend", MSNbtSend.class);
+		RecvDealMessage.registerMessage("msmsend", MSNbtSend.class);
+		RecvDealMessage.registerMessage("file_send", UMFileSendToUser.class);
 
 		RecvDealMessage.registerMessage("debug", MUStoryDebug.class);
 	}

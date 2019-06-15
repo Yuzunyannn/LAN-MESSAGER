@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
+import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
@@ -28,6 +29,7 @@ import client.frame.Theme;
 import client.user.UserClient;
 import client.word.Word;
 import debug.MUStoryDebug;
+import log.Logger;
 import nbt.INBTSerializable;
 import nbt.NBTTagList;
 
@@ -48,78 +50,71 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		/** 布局 */
 		@Override
 		public void layoutContainer(Container parent) {
-			Component[] cons = parent.getComponents();
-			Component text = cons[0];
-			Component send = cons[1];
-			Component quick = cons[2];
-			Component tools = cons[3];
-			int width = parent.getWidth();
-			int height = parent.getHeight();
+			Component[]cons=parent.getComponents();Component text=cons[0];Component send=cons[1];Component quick=cons[2];Component tools=cons[3];int width=parent.getWidth();int height=parent.getHeight();
 
-			text.setLocation(10, EDIT_MARGIN);
-			text.setSize(width - 20, height - EDIT_MARGIN * 2);
-			((JTextPane) ((JScrollPane) text).getViewport().getComponent(0)).updateUI();
+	text.setLocation(10,EDIT_MARGIN);text.setSize(width-20,height-EDIT_MARGIN*2);((JTextPane)((JScrollPane)text).getViewport().getComponent(0)).updateUI();
 
-			send.setLocation(width - 25 - send.getWidth(), height - EDIT_MARGIN + (int) (EDIT_MARGIN * 0.1f));
-			quick.setLocation(25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
-			tools.setLocation(25 + tools.getWidth() + 25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
-		}
+	send.setLocation(width-25-send.getWidth(),height-EDIT_MARGIN+(int)(EDIT_MARGIN*0.1f));quick.setLocation(25,(EDIT_MARGIN-EDIT_MARGIN/3*2)/2);tools.setLocation(25+tools.getWidth()+25,(EDIT_MARGIN-EDIT_MARGIN/3*2)/2);}
 
-		@Override
-		public Dimension minimumLayoutSize(Container arg0) {
-			return new Dimension(arg0.getWidth(), 64 * 2);
-		}
+	@Override public Dimension minimumLayoutSize(Container arg0){return new Dimension(arg0.getWidth(),64*2);}
 
-		@Override
-		public Dimension preferredLayoutSize(Container arg0) {
-			return new Dimension(arg0.getWidth(), 64 * 4);
-		}
+	@Override public Dimension preferredLayoutSize(Container arg0){return new Dimension(arg0.getWidth(),64*4);}
 
-		@Override
-		public void removeLayoutComponent(Component arg0) {
+	@Override public void removeLayoutComponent(Component arg0){
 
-		}
-	};
+	}};
 
 	/** 输入栏文件拖拽 */
-	private TransferHandler fileDrag = new TransferHandler() {
+	class TransferHandlerFile extends TransferHandler {
 		private static final long serialVersionUID = 1L;
+		TransferHandler handle;
+		public TransferHandlerFile(TransferHandler handle ){
+			this.handle = handle;
+		}
+		
+		@Override
+		public void exportToClipboard(JComponent comp, Clipboard clip, int action) {
+			this.handle.exportToClipboard(comp, clip, action);
+		}
 
 		/** 导入数据（拖入文件） */
 		@Override
-		public boolean importData(JComponent comp, Transferable t) {
+		public boolean importData(JComponent comp, Transferable data) {
 			try {
-				// 获取拖入的所有文件
-				Object obj = t.getTransferData(DataFlavor.javaFileListFlavor);
-				List<?> files = null;
-				if (obj instanceof List) {
-					files = (List<?>) obj;
-				} else
-					return false;
-				// 获取拖入的第一个文件
-				File file = (File) files.get(0);
-				boolean support = ChatInputPanel.this.textEdit.dragFile(file);
-				if (support == false) {
-					ChatInputPanel.this.textEdit.insert("[不支持的类型]");
-					return false;
+				if (data.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+					// 获取拖入的所有文件
+					Object obj = data.getTransferData(DataFlavor.javaFileListFlavor);
+					List<?> files = null;
+					if (obj instanceof List) {
+						files = (List<?>) obj;
+					} else
+						return false;
+					// 获取拖入的第一个文件
+					for (Object file : files) {
+						boolean support = ChatInputPanel.this.textEdit.dragFile((File) file);
+						if (support == false) {
+							ChatInputPanel.this.textEdit.insert("[不支持的类型]");
+						}
+					}
+					return true;
+				} else if (data.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+					String str = (String) data.getTransferData(DataFlavor.stringFlavor);
+					ChatInputPanel.this.textEdit.insert(str);
+					return true;
 				}
-				return true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.log.warn("向文本框导入数据失败！", e);
 			}
 			return false;
 		}
 
 		@Override
-		public boolean canImport(JComponent comp, DataFlavor[] flavors) {
-			for (int i = 0; i < flavors.length; i++) {
-				if (DataFlavor.javaFileListFlavor.equals(flavors[i])) {
-					return true;
-				}
-			}
-			return false;
+		public boolean canImport(TransferSupport support) {
+			return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
+					|| support.isDataFlavorSupported(DataFlavor.stringFlavor);
 		}
 	};
+
 	/** 文本输入框 */
 	private ChatTextEditPane textEdit = new ChatTextEditPane(this);
 
@@ -131,7 +126,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		// 设置默认布局
 		this.setLayout(layout);
 		// 文件拖拽
-		textEdit.setTransferHandler(fileDrag);
+		textEdit.setTransferHandler(new TransferHandlerFile(textEdit.getTransferHandler()));
 		// 添加文字编辑区域
 		JScrollPane scroll = new JScrollPane(textEdit);
 		JScrollBar bar = new JScrollBar();

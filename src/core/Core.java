@@ -35,7 +35,7 @@ public class Core {
 	public static void main(String[] args) {
 		proxy.init();
 		proxy.launch();
-		// 启动核心
+//		// 启动核心
 		core.lunch();
 	}
 

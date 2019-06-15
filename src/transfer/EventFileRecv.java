@@ -1,4 +1,4 @@
-package file;
+package transfer;
 
 /** 接受文件事件 */
 public class EventFileRecv extends EventFile {

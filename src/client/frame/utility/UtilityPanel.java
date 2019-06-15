@@ -14,6 +14,7 @@ import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
 import client.word.Word;
+import client.word.WordFile;
 import client.word.WordString;
 import core.Core;
 import event.IEventBus;
@@ -208,7 +209,11 @@ public class UtilityPanel extends JPanel implements ITickable {
 	@SubscribeEvent
 	public void sendWords(client.event.EventSendInputWords e) {
 		for (Word w : e.words) {
-			EventsBridge.sendString(w.toString(), e.toUser);
+			if (w.id == Word.FILE) {
+				EventsBridge.sendFile(((WordFile) w).getFile(), e.toUser);
+			} else {
+				EventsBridge.sendString(w.toString(), e.toUser);
+			}
 		}
 
 	}

@@ -150,7 +150,7 @@ public class RecvDealMessage implements IRecvDeal {
 		bytes[1] = (byte) input.read();
 		this.check(bytes[0]);
 		this.check(bytes[1]);
-		int size = bytes[0] | bytes[1] << 8;
+		int size = 0x00ff & bytes[0] | bytes[1] << 8;
 		// 创建buff
 		ByteBuffer buffer = ByteBuffer.allocate(size);
 		// 读取
