@@ -18,6 +18,7 @@ import javax.swing.plaf.ButtonUI;
 import client.frame.Theme;
 import client.frame.ui.RoundedRecBorder;
 import client.user.UserClient;
+import jdk.internal.org.objectweb.asm.Label;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
 
@@ -32,15 +33,16 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	private String userFile = "";
 	private String userExtension = "";
 	private String userTime = "";
+	private String userMessageStatus = "未读";
 	private Type type = Type.NULL;
 	private ImageIcon imageIcon;
 	private JButton Icon;
-	//private JButton dialog;
-	private Bubble dialog; 
+	// private JButton dialog;
+	private Bubble dialog;
 	private JLabel displayedName;
-	private JLabel readStatus;
-	
-	/** 构造函数，生成一个对话气泡，显示信息的参数待定！*/
+	private JLabel messageStatus;
+
+	/** 构造函数，生成一个对话气泡，显示信息的参数待定！ */
 	public ChatBubblePanel(boolean isMySelf, String info, String localName, Type type, String time) {
 		// TODO Auto-generated constructor stub
 		if (type == Type.LINE) {
@@ -50,7 +52,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 			this.add(lineLabel);
 			this.setVisible(true);
 		} else if (type == Type.TIME) {
-			JLabel lineLabel = new JLabel("--------"+time+"--------");
+			JLabel lineLabel = new JLabel("--------" + time + "--------");
 			lineLabel.setVisible(true);
 			this.setLayout(new FlowLayout(FlowLayout.CENTER));
 			this.add(lineLabel);
@@ -74,9 +76,9 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		this.setBackground(Theme.COLOR0);
 		this.setOpaque(false);
 		this.setSize(this.getWidth(), 80);
-		
+
 	}
-	
+
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -88,6 +90,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		nbt.setString("File", this.userFile);
 		nbt.setString("Extension", this.userExtension);
 		nbt.setString("Time", this.userTime);
+		nbt.setString("Status", this.userMessageStatus);
 		return nbt;
 	}
 
@@ -105,10 +108,11 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		this.userFile = nbt.getString("File");
 		this.userExtension = nbt.getString("Extension");
 		this.userTime = nbt.getString("Time");
+		this.userMessageStatus = nbt.getString("Status");
 		this.reConstructComponents();
 	}
-	
-	public void initalUI(String info ) {
+
+	public void initalUI(String info) {
 		switch (this.type) {
 		case WORD:
 			this.userDialog = info;
@@ -130,9 +134,9 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		RoundedRecBorder border = new RoundedRecBorder(Theme.COLOR0, 1, 10);
 		this.Icon.setBorder(border);
 		this.Icon.setBorderPainted(true);
-		
+
 	}
-	
+
 	/** 设置用户图标 */
 	private void setIcon(String userName) {
 		imageIcon = new ImageIcon("src/img/1.png");
@@ -142,29 +146,34 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		if (this.userID) {
 			this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			displayedName.setText(":" + userName);
-				this.add(dialog);
-				this.add(displayedName);
-				this.add(Icon);
-		}else {
+			this.messageStatus = new JLabel(this.userMessageStatus);
+			this.messageStatus.setOpaque(false);
+			this.messageStatus.setForeground(Theme.COLOR2);
+			this.add(messageStatus);
+			this.add(dialog);
+			this.add(displayedName);
+			this.add(Icon);
+		} else {
 			this.setLayout(new FlowLayout(FlowLayout.LEFT));
-			displayedName.setText(userName + ":");	
-				this.add(Icon);
-				this.add(displayedName);
-				this.add(dialog);
+			displayedName.setText(userName + ":");
+			this.add(Icon);
+			this.add(displayedName);
+			this.add(dialog);
 		}
 		dialog.setFont(Theme.FONT1);
 		displayedName.setFont(Theme.FONT1);
 	}
-	
+
 	/** 重构组件 */
 	public void reConstructComponents() {
 		int length = this.getComponentCount();
-		this.remove(length-1);
-		this.remove(length-2);
-		this.remove(length-3);
+		this.remove(length - 1);
+		this.remove(length - 2);
+		this.remove(length - 3);
+		this.remove(length - 4);
 		initalUI(this.userDialog);
 	}
-	
+
 	/** 获取时间 */
 	public String getTime() {
 		return userTime;

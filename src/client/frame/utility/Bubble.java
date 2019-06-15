@@ -1,5 +1,6 @@
 package client.frame.utility;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -22,15 +23,10 @@ public class Bubble extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JLabel words;
 	private RButton rbutton;
-	public MouseAdapter mouse = new MouseAdapter() {
-		@Override
-		public void mouseClicked(java.awt.event.MouseEvent e) {
-			System.out.println("clicked");
-			ProgressFrame progress = new ProgressFrame(100);
-		};
-	};
+	
 	public Bubble(String words, Type type) {
 		this.words = new JLabel(words);
+		this.setLayout(new BorderLayout());
 		if (type == Type.FILE) {
 			this.words.setSize(150, 0);
 		} else {
@@ -39,9 +35,8 @@ public class Bubble extends JPanel {
 		this.JlabelSetText(this.words, words);
 		//System.out.println(this.words.getText());
 		this.rbutton = new RButton(this.words.getText());
-		this.rbutton.addMouseListener(mouse);
 		//this.add(this.words);
-		this.add(rbutton);
+		this.add(rbutton, BorderLayout.WEST);
 		this.setOpaque(true);
 		this.setBackground(Theme.COLOR0);
 		this.setVisible(true);

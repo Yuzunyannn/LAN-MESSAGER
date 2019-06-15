@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 
 import client.frame.Theme;
 import core.Core;
+import event.SubscribeEvent;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
 import user.User;
@@ -115,6 +116,11 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 			}
 		}, 20);
 		this.revalidate();
+	}
+	
+	@SubscribeEvent
+	public void selectDownload(client.event.EventSelectDownload e) {
+		
 	}
 
 }
