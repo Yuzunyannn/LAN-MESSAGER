@@ -168,7 +168,6 @@ public class StoryFileSender extends Story {
 	@Override
 	protected void onEnd() {
 		this.close();
-		System.out.println(this + "已经结束");
 	}
 
 	// 初始化接收端临时文件存储
@@ -358,6 +357,8 @@ public class StoryFileSender extends Story {
 					return;
 				}
 			}
+			if (this.want == null)
+				return;
 			// 根据每个用户的状态发送文件数据
 			Iterator<UserFileInfo> itr = usersFileInfoList.iterator();
 			while (itr.hasNext()) {

@@ -24,7 +24,7 @@ import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
-import client.frame.utility.JPanelUtility;
+import client.frame.utility.UtilityPanel;
 import client.user.UserClient;
 import log.Logger;
 import user.User;
@@ -32,8 +32,8 @@ import user.User;
 public class MemberButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	public final static int MEMBERBUTTON_HEIGHT = 70;
-	public static final 	String[] MEMBERITEMSTR = { EventFriendOperation.DELETEFRIEND, EventChatOperation.DELETECHAT, EventChatOperation.FIXEDCHAT,
-			EventChatOperation.CANELFIXEDCHAT };
+	public static final String[] MEMBERITEMSTR = { EventFriendOperation.DELETEFRIEND, EventChatOperation.DELETECHAT,
+			EventChatOperation.FIXEDCHAT, EventChatOperation.CANELFIXEDCHAT };
 	private String memberName = "小明";
 	private User user;
 	public int count;
@@ -44,13 +44,14 @@ public class MemberButton extends JButton {
 	private boolean envelope;
 	// 是否正在与该用户聊天
 	private boolean isChat;
-	public	MemberButton() {
-		
+
+	public MemberButton() {
+
 	}
+
 	public MemberButton(String name) {
 		memberName = name;
 		count = 0;
-		MemberButton mbutton = this;
 		user = new UserClient(name);
 		JLabel member = new JLabel(name);
 		this.setLayout(null);
@@ -63,23 +64,24 @@ public class MemberButton extends JButton {
 		this.setMinimumSize(size);
 		this.setMaximumSize(size);
 		this.setContentAreaFilled(false);
-		ActionListener memberItemListener=new MemberMenuItemMonitor();
+		ActionListener memberItemListener = new MemberMenuItemMonitor();
 		envelope = true;
-		mouse = new UButtonMouse(MEMBERITEMSTR,memberItemListener) {
+		mouse = new UButtonMouse(MEMBERITEMSTR, memberItemListener) {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
-				EventsBridge.frontendEventHandle.post(new EventShow(JPanelUtility.TOOLID_CHATING, user));
+				EventsBridge.frontendEventHandle.post(new EventShow(UtilityPanel.TOOLID_CHATING, user.getUserName()));
 				MemberButton mb = (MemberButton) e.getComponent();
 				mb.isChoose();
 				if (e.getButton() == MouseEvent.BUTTON1) {
 
 					// 产生选择事件
-					EventsBridge.frontendEventHandle.post(new EventShow(JPanelUtility.TOOLID_CHATING, user));
+					EventsBridge.frontendEventHandle
+							.post(new EventShow(UtilityPanel.TOOLID_CHATING, user.getUserName()));
 					// count=0;
 					/**
-					 * 消息计数测试用 EventsBridge.frontendEventHandle.post(new EventRecvString(new
-					 * User(memberName), ""));
+					 * 消息计数测试用 EventsBridge.frontendEventHandle.post(new
+					 * EventRecvString(new User(memberName), ""));
 					 */
 					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient(memberName), "test"));
 				}
@@ -150,7 +152,8 @@ class UButtonMouse extends MouseAdapter {
 	private JMenuItem item[];
 	private String username;
 	private ActionListener ItemMonitor;
-	public UButtonMouse(String[] str,ActionListener actionListener) {
+
+	public UButtonMouse(String[] str, ActionListener actionListener) {
 		super();
 		popmenu = new JPopupMenu();
 		item = new JMenuItem[str.length];
@@ -171,7 +174,7 @@ class UButtonMouse extends MouseAdapter {
 		popmenu.setBorder(border);
 		// popmenu.setPopupSize(160,200);
 	}
-	
+
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON3)
@@ -192,7 +195,7 @@ class MemberMenuItemMonitor implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 
-		String[] str =MemberButton.MEMBERITEMSTR;
+		String[] str = MemberButton.MEMBERITEMSTR;
 		String temp = ((JMenuItem) event.getSource()).getText();
 		String username = ((JMenuItem) event.getSource()).getActionCommand();
 		if (temp.equals(str[0])) {

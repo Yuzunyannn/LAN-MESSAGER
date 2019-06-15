@@ -178,6 +178,10 @@ public class Story implements ITickable {
 				entry = revs.getLast();
 				revs.removeLast();
 			}
+			if (entry.getValue() == null) {
+				this.setEnd();
+				return ITickable.SUCCESS;
+			}
 			this.onGet(entry.getValue(), entry.getKey());
 		}
 		this.onTick();

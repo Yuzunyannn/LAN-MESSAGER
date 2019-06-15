@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import client.frame.utility.JPanelUtility;
+import client.frame.utility.UtilityPanel;
 import event.Event;
 import user.User;
 
@@ -21,7 +21,7 @@ public class EventULChange extends Event {
 
 	public EventULChange(ArrayList<User> users, int flags) {
 		for (User u : users)
-			infos.add(new ChangeInfo(u, JPanelUtility.TOOLID_CHATING, flags));
+			infos.add(new ChangeInfo(u, UtilityPanel.TOOLID_CHATING, flags));
 	}
 
 	static public class ChangeInfo {

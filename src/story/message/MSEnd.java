@@ -7,6 +7,7 @@ import network.Connection;
 import network.IMessage;
 import network.Side;
 import story.Story;
+import user.User;
 import util.StreamHelper;
 
 /** 结束一个story，只能作用于服务端发给客户端 */
@@ -35,7 +36,7 @@ public class MSEnd implements IMessage {
 	public void execute(Connection con) {
 		if (con.isServer())
 			return;
-		Story.endStory(storyId, Side.CLIENT);
+		Story.pushRev(storyId, null, User.EMPTY, Side.CLIENT);
 	}
 
 }

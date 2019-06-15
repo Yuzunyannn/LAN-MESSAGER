@@ -27,6 +27,9 @@ import user.User;
 /** 界面右边的区域 聊天区域 操作区域 */
 public class UtilityPanel extends JPanel implements ITickable {
 
+	/** 聊天工具框ID */
+	public static final String TOOLID_CHATING = "chat";
+
 	private static final long serialVersionUID = 1L;
 	/** 功能区域自定义布局 */
 	private LayoutManager layout = new LayoutManager() {
@@ -196,8 +199,8 @@ public class UtilityPanel extends JPanel implements ITickable {
 	// 处理切换事件
 	@SubscribeEvent
 	public void changeChat(EventShow e) {
-		if (e.toolId.equals(JPanelUtility.TOOLID_CHATING)) {
-			this.toChat(e.user.toString());
+		if (e.toolId.equals(UtilityPanel.TOOLID_CHATING)) {
+			this.toChat(e.id);
 		}
 	}
 
