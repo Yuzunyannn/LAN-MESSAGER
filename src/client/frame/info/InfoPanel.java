@@ -46,11 +46,16 @@ public class InfoPanel extends JPanel {
 		this.revalidate();
 		this.repaint();
 	}
+	/**如果要实现切盘操作，需要再实例化一个ListScrollPanel，调用addNewMember(String name,Boolean isSearch)*/
 	// 响应事件函数
 	@SubscribeEvent
 	public void onStateChange(client.event.EventIPC e) {
 		System.out.println("infoPanel的状态发生了变化，从状态" + state + "变为状态" + e.state);
 		state = e.state;
+		/**测试searchButton的右键事件*/
+//		memberField.deleteAllMember();
+//		memberField.addNewMember("1", state==EventIPC.SEARCH);
+//		this.refresh();
 	}
 
 	@SubscribeEvent
