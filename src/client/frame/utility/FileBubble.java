@@ -1,6 +1,7 @@
 package client.frame.utility;
 
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.ImageIcon;
@@ -31,6 +32,11 @@ public class FileBubble extends Bubble {
 			System.out.println("暂不支持图标显示的文件类型");
 		}
 		
+	}
+	
+	public void addProgress() {
+		ProgressFrame progress = new ProgressFrame(100);
+		this.add(progress.panel);
 	}
 	
 
