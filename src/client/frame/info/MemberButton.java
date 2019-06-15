@@ -32,16 +32,21 @@ import user.User;
 public class MemberButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	public final static int MEMBERBUTTON_HEIGHT = 70;
+	public static final 	String[] MEMBERITEMSTR = { EventFriendOperation.DELETEFRIEND, EventChatOperation.DELETECHAT, EventChatOperation.FIXEDCHAT,
+			EventChatOperation.CANELFIXEDCHAT };
 	private String memberName = "小明";
 	private User user;
 	public int count;
+	MouseAdapter mouse;
 	public static ImageIcon icon_open = new ImageIcon("src/img/envelope_open.png");
 	public static ImageIcon icon_closed = new ImageIcon("src/img/envelope_closed.png");
 	// 显示的信封开闭，true开，false闭
 	private boolean envelope;
 	// 是否正在与该用户聊天
 	private boolean isChat;
-
+	public	MemberButton() {
+		
+	}
 	public MemberButton(String name) {
 		memberName = name;
 		count = 0;
@@ -58,8 +63,9 @@ public class MemberButton extends JButton {
 		this.setMinimumSize(size);
 		this.setMaximumSize(size);
 		this.setContentAreaFilled(false);
+		ActionListener memberItemListener=new MemberMenuItemMonitor();
 		envelope = true;
-		MouseAdapter mouse = new UButtonMouse() {
+		mouse = new UButtonMouse(MEMBERITEMSTR,memberItemListener) {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
@@ -143,16 +149,13 @@ class UButtonMouse extends MouseAdapter {
 	private JPopupMenu popmenu;
 	private JMenuItem item[];
 	private String username;
-
-	public UButtonMouse() {
+	private ActionListener ItemMonitor;
+	public UButtonMouse(String[] str,ActionListener actionListener) {
 		super();
 		popmenu = new JPopupMenu();
-
-		item = new JMenuItem[4];
-		String[] str = { EventFriendOperation.DELETEFRIEND, EventChatOperation.DELETECHAT, EventChatOperation.FIXEDCHAT,
-				EventChatOperation.CANELFIXEDCHAT };
+		item = new JMenuItem[str.length];
 		Border border = BorderFactory.createLineBorder(Theme.COLOR7);
-		MenuItemMonitor menuItemMonitor = new MenuItemMonitor();
+		ItemMonitor = actionListener;
 		for (int i = 0; i < item.length; i++) {
 			item[i] = new JMenuItem(str[i]);
 			item[i].setFont(Theme.FONT4);
@@ -161,14 +164,14 @@ class UButtonMouse extends MouseAdapter {
 			item[i].setHorizontalAlignment(SwingConstants.CENTER);
 			item[i].setBorder(null);
 			item[i].setActionCommand(i + "");
-			item[i].addActionListener(menuItemMonitor);
+			item[i].addActionListener(ItemMonitor);
 
 		}
 		popmenu.setBackground(Color.WHITE);
 		popmenu.setBorder(border);
 		// popmenu.setPopupSize(160,200);
 	}
-
+	
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON3)
@@ -185,13 +188,11 @@ class UButtonMouse extends MouseAdapter {
 	}
 }
 
-class MenuItemMonitor implements ActionListener {
-
+class MemberMenuItemMonitor implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 
-		String[] str = { EventFriendOperation.DELETEFRIEND, EventChatOperation.DELETECHAT, EventChatOperation.FIXEDCHAT,
-				EventChatOperation.CANELFIXEDCHAT };
+		String[] str =MemberButton.MEMBERITEMSTR;
 		String temp = ((JMenuItem) event.getSource()).getText();
 		String username = ((JMenuItem) event.getSource()).getActionCommand();
 		if (temp.equals(str[0])) {

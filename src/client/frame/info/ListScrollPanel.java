@@ -2,10 +2,6 @@ package client.frame.info;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -14,7 +10,6 @@ import javax.swing.JScrollPane;
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventRecv.EventRecvString;
-
 import client.event.EventSearchRequest;
 import client.event.EventShow;
 import client.event.EventsBridge;
@@ -37,7 +32,6 @@ public class ListScrollPanel extends JScrollPane {
 	public ListScrollPanel() {
 		super();
 		p = new JPanel();
-		Component temp = this;
 		int width = super.getWidth();
 		p.setPreferredSize(new Dimension(width, getHeight()));
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
@@ -57,6 +51,7 @@ public class ListScrollPanel extends JScrollPane {
 		bar.setBackground(Theme.COLOR1);
 
 	}
+	
 
 	/* 在加入User类后需要修改 */
 	public void setTop(String name) {
@@ -77,6 +72,7 @@ public class ListScrollPanel extends JScrollPane {
 		for (Component i : content) {
 			p.add(i);
 		}
+		this.refresh();
 		// for (Component i : p.getComponents())
 		// System.out.println(((MemberButton) i).getMemberName());
 
@@ -115,7 +111,11 @@ public class ListScrollPanel extends JScrollPane {
 	public void setPHeight(int height) {
 		this.height = height;
 	}
-
+	public void	addNewMember(String name,Boolean isSearch) {
+		if(isSearch)
+		p.add(new SearchButton(name));
+		else return;
+	}
 	public void addNewMember(String name) {
 		p.add(new MemberButton(name));
 
@@ -128,14 +128,13 @@ public class ListScrollPanel extends JScrollPane {
 		// System.out.println("height"+this.height);
 		p.setPreferredSize(new Dimension(width, height));
 	}
-/**删除到两个的时候刷新出现问题*/
+
 	public void deductMember(String name) {
-		if(content.length==2)
-			Logger.log.warn("删除到两个的时候刷新出现问题");
+
 		for (int i = p.getComponentCount(); i > 0; i--) {
-			MemberButton temp = (MemberButton) p.getComponent(i-1);
+			MemberButton temp = (MemberButton) p.getComponent(i - 1);
 			if (temp.getMemberName().equals(name)) {
-				p.remove(i-1);
+				p.remove(i - 1);
 				height -= MemberButton.MEMBERBUTTON_HEIGHT;
 				content = p.getComponents();
 				break;
@@ -143,8 +142,6 @@ public class ListScrollPanel extends JScrollPane {
 			} else
 				Logger.log.error(name + "查无此人");
 			int width = super.getWidth();
-
-			
 			standardHeight(super.getPreferredSize());
 			p.setPreferredSize(new Dimension(width, height));
 		}
@@ -174,12 +171,15 @@ public class ListScrollPanel extends JScrollPane {
 
 				// break;
 			}
-
 		for (Component i : content) {
 			p.add(i);
 		}
-		this.revalidate();
+		this.refresh();
+	}
 
+	public void refresh() {
+		this.revalidate();
+		this.repaint();
 	}
 
 	/** 事件处理 */
@@ -194,15 +194,19 @@ public class ListScrollPanel extends JScrollPane {
 		for (Component i : content) {
 			p.add(i);
 		}
+		this.refresh();
 	}
 
 	@SubscribeEvent
 	public void onFreindOperator(EventFriendOperation e) {
-		if (e.type.equals(EventFriendOperation.ADDFRIEND))
-			addNewMember(e.username);
-		else if (e.type.equals(EventFriendOperation.DELETEFRIEND))
+
+		/**
+		 * 添加好友应在添加search的panel中响应事件 if (e.type.equals(EventFriendOperation.ADDFRIEND))
+		 * addNewMember(e.username);
+		 */
+		if (e.type.equals(EventFriendOperation.DELETEFRIEND))
 			deductMember(e.username);
-		this.revalidate();
+		this.refresh();
 	}
 
 	@SubscribeEvent
@@ -213,7 +217,7 @@ public class ListScrollPanel extends JScrollPane {
 			deductMember(e.username);
 		else if (e.type.equals(EventChatOperation.CANELFIXEDCHAT))
 			canelFixed();
-		this.revalidate();
+		this.refresh();
 	}
 
 	public void initEvent(IEventBus bus) {
