@@ -91,38 +91,40 @@ public class MemberButton extends JButton {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.setColor(Theme.COLOR2);
 		int width = super.getWidth();
 		int height = super.getHeight();
 		g.fillRect(0, 0, width, height);
 		int x = 200, y = 23;
-//		if (envelope) {
-//			g.drawImage(icon_open.getImage(), x, y - 6, null);
-//		} else {
-//			g.drawImage(icon_closed.getImage(), x, y, null);
-//			g.setColor(Color.red);
-//			if (count > 99)
-//				g.fillOval(x + 25, y + 14, 10, 10);
-//			else {
-//				g.fillOval(x + 20, y + 12, 20, 20);
-//				g.setColor(Color.white);
-//				if (count < 10)
-//					g.drawString("" + count, x + 28, y + 27);
-//				else
-//					g.drawString("" + count, x + 24, y + 27);
-//			}
-//			g.setColor(Color.black);
-//		}
-
-		super.paint(g);
+		if (envelope) {
+			g.drawImage(icon_open.getImage(), x, y - 6, null);
+		} else {
+			g.drawImage(icon_closed.getImage(), x, y, null);
+			g.setColor(Color.red);
+			if (count > 99)
+				g.fillOval(x + 25, y + 14, 10, 10);
+			else {
+				g.fillOval(x + 20, y + 12, 20, 20);
+				g.setColor(Color.white);
+				if (count < 10)
+					g.drawString("" + count, x + 28, y + 27);
+				else
+					g.drawString("" + count, x + 24, y + 27);
+			}
+			g.setColor(Color.black);
+		}
 	}
+
 
 	/***/
 	public void isChoose() {
 		isChat = true;
 		count = 0;
 	}
+
+
 
 	/**
 	 * 收到消息后执行
@@ -136,6 +138,7 @@ public class MemberButton extends JButton {
 			envelope = false;
 		}
 	}
+
 }
 
 class UButtonMouse extends MouseAdapter {
@@ -188,6 +191,7 @@ class MenuItemMonitor implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+
 		String[] str = { EventFriendOperation.DELETEFRIEND, EventChatOperation.DELETECHAT, EventChatOperation.FIXEDCHAT,EventChatOperation.CANELFIXEDCHAT };
 		String temp=((JMenuItem)event.getSource()).getText();
 		String username=((JMenuItem)event.getSource()).getActionCommand();
@@ -207,6 +211,8 @@ class MenuItemMonitor implements ActionListener {
 			EventsBridge.frontendEventHandle.post(new EventChatOperation(username,str[3]) );
 			Logger.log.impart(EventChatOperation.CANELFIXEDCHAT+username);
 		}
-	}
 
+	}
 }
+
+

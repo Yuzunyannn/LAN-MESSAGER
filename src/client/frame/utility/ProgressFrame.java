@@ -23,21 +23,24 @@ import javax.swing.event.ChangeEvent;
 
 import javax.swing.event.ChangeListener;
 
+import com.sun.xml.internal.ws.org.objectweb.asm.Label;
+
 import javafx.scene.control.ProgressBar;
 
 public class ProgressFrame implements ActionListener, ChangeListener {
-	private JFrame frame = null;
+	public JFrame frame = null;
 	private JProgressBar progressbar;
 	private JLabel label;
 	private Timer timer;
 	private JButton b;
 	private boolean transferCompleted = false;
+	public JPanel panel = new JPanel();
 	
 	/** 设置进度条的总时长 */
 	public ProgressFrame(int timer) {
 		frame = new JFrame("下载文件⏬");
 		frame.setBounds(100, 100, 400, 130);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container contentPanel = frame.getContentPane();
 		label = new JLabel("", JLabel.CENTER);
 		progressbar = new JProgressBar();
@@ -50,7 +53,7 @@ public class ProgressFrame implements ActionListener, ChangeListener {
 		progressbar.setPreferredSize(new Dimension(300, 20));
 		progressbar.setBorderPainted(true);
 		progressbar.setBackground(Color.pink);
-		JPanel panel = new JPanel();
+		//JPanel panel = new JPanel();
 		this.timer = new Timer(timer, this);
 		contentPanel.add(panel, BorderLayout.SOUTH);
 		contentPanel.add(progressbar, BorderLayout.CENTER);

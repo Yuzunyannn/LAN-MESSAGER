@@ -38,6 +38,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	//private JButton dialog;
 	private Bubble dialog; 
 	private JLabel displayedName;
+	private JLabel readStatus;
 	
 	/** 构造函数，生成一个对话气泡，显示信息的参数待定！*/
 	public ChatBubblePanel(boolean isMySelf, String info, String localName, Type type, String time) {
