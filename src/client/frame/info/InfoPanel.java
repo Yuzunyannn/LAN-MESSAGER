@@ -7,8 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import client.event.EventIPC;
-import client.event.EventRecv.EventRecvString;
-import client.event.EventsBridge;
+import client.event.EventULChange;
 import client.frame.Theme;
 import event.IEventBus;
 import event.SubscribeEvent;
@@ -22,6 +21,7 @@ public class InfoPanel extends JPanel {
 	private SearchPanel searchField;
 	private UserPanel userField;
 	private int state;
+
 	public InfoPanel() {
 		this.setBackground(Theme.COLOR2);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -31,27 +31,32 @@ public class InfoPanel extends JPanel {
 		this.add(userField);
 		this.add(searchField);
 		this.add(memberField);
-		state=EventIPC.FRIENDS;
+		state = EventIPC.FRIENDS;
 		userField.setPreferredSize(new Dimension(0, 80));
 		searchField.setPreferredSize(new Dimension(0, 50));
 	}
+
 	public void initEvent(IEventBus bus) {
 		bus.register(this);
 		memberField.initEvent(bus);
 		searchField.initEvent(bus);
 	}
-//响应事件函数
+
+	// 响应事件函数
 	@SubscribeEvent
-	public void onStateChange(client.event.EventIPC e) 
-	{
-		System.out.println("infoPanel的状态发生了变化，从状态"+state+"变为状态"+e.state);
-		state=e.state;
+	public void onStateChange(client.event.EventIPC e) {
+		System.out.println("infoPanel的状态发生了变化，从状态" + state + "变为状态" + e.state);
+		state = e.state;
 	}
+
 	@SubscribeEvent
 	public void onULChange(client.event.EventULChange e) {
 		memberField.deleteAllMember();
-		for (User u : e.ul) {
-			addMember(u.userName);
+		for (EventULChange.ChangeInfo info : e.infos) {
+			if ((info.flags & EventULChange.ADD) != 0)
+				addMember(info.user.userName);
+			else if ((info.flags & EventULChange.REMOVE) != 0)
+				removeMember(info.user.userName);
 		}
 	}
 
@@ -81,7 +86,6 @@ public class InfoPanel extends JPanel {
 	}
 
 	public void setUserList(ArrayList<User> ul) {
-		// TODO Auto-generated method stub
 		// 需要修改
 		for (int i = 0; i < ul.size(); i++) {
 			this.addMember(ul.get(i).userName);

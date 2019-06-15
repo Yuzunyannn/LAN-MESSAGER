@@ -22,6 +22,7 @@ import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
+import client.frame.utility.JPanelUtility;
 import client.user.UserClient;
 import user.User;
 
@@ -33,10 +34,11 @@ public class MemberButton extends JButton {
 	public int count;
 	public static ImageIcon icon_open = new ImageIcon("src/img/envelope_open.png");
 	public static ImageIcon icon_closed = new ImageIcon("src/img/envelope_closed.png");
-	//显示的信封开闭，true开，false闭
+	// 显示的信封开闭，true开，false闭
 	private boolean envelope;
-	//是否正在与该用户聊天
+	// 是否正在与该用户聊天
 	private boolean isChat;
+
 	public MemberButton(String name) {
 		memberName = name;
 		count = 0;
@@ -58,13 +60,13 @@ public class MemberButton extends JButton {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
-				EventsBridge.frontendEventHandle.post(new EventShow(user));
-				MemberButton mb=(MemberButton)e.getComponent();
+				EventsBridge.frontendEventHandle.post(new EventShow(JPanelUtility.TOOLID_CHATING, user));
+				MemberButton mb = (MemberButton) e.getComponent();
 				mb.isChoose();
 				if (e.getButton() == MouseEvent.BUTTON1) {
 
 					// 产生选择事件
-					EventsBridge.frontendEventHandle.post(new EventShow(user));
+					EventsBridge.frontendEventHandle.post(new EventShow(JPanelUtility.TOOLID_CHATING, user));
 					// count=0;
 					/**
 					 * 消息计数测试用 EventsBridge.frontendEventHandle.post(new EventRecvString(new
@@ -92,48 +94,46 @@ public class MemberButton extends JButton {
 		int width = super.getWidth();
 		int height = super.getHeight();
 		g.fillRect(0, 0, width, height);
-		int x=200,y=23;
+		int x = 200, y = 23;
 		if (envelope) {
-			g.drawImage(icon_open.getImage(), x, y-6, null);
+			g.drawImage(icon_open.getImage(), x, y - 6, null);
 		} else {
 			g.drawImage(icon_closed.getImage(), x, y, null);
 			g.setColor(Color.red);
 			if (count > 99)
-				g.fillOval(x+25, y+14, 10, 10);
+				g.fillOval(x + 25, y + 14, 10, 10);
 			else {
-				g.fillOval(x+20, y+12, 20, 20);
+				g.fillOval(x + 20, y + 12, 20, 20);
 				g.setColor(Color.white);
 				if (count < 10)
-					g.drawString("" + count, x+28, y+27);
+					g.drawString("" + count, x + 28, y + 27);
 				else
-					g.drawString("" + count, x+24, y+27);
+					g.drawString("" + count, x + 24, y + 27);
 			}
 			g.setColor(Color.black);
 		}
 
 		super.paint(g);
 	}
-/***/
-	public void isChoose()
-	{
-		isChat=true;
-		count=0;
+
+	/***/
+	public void isChoose() {
+		isChat = true;
+		count = 0;
 	}
-/**
- * 收到消息后执行*/
-public void RecvMessage() 
-{
-	if(isChat)
-	{
-		envelope=true;
-		count=0;
+
+	/**
+	 * 收到消息后执行
+	 */
+	public void RecvMessage() {
+		if (isChat) {
+			envelope = true;
+			count = 0;
+		} else {
+			count++;
+			envelope = false;
+		}
 	}
-	else
-	{
-		count++;
-		envelope=false;
-	}
-}
 }
 
 class UButtonMouse extends MouseAdapter {
@@ -182,13 +182,13 @@ class MenuItemMonitor implements ActionListener {
 		// 将上面取到的String格式的内容变为int类型作为发事件的下标
 		int nIndex = Integer.parseInt(strIndex);
 		if (nIndex == 0)
-			System.out.println('\t'+str[0]);
+			System.out.println('\t' + str[0]);
 		else if (nIndex == 1)
-			System.out.println('\t'+str[1]);
+			System.out.println('\t' + str[1]);
 		else if (nIndex == 2)
-			System.out.println('\t'+str[2]);
+			System.out.println('\t' + str[2]);
 		else
-			System.out.println('\t'+str[3]);
+			System.out.println('\t' + str[3]);
 
 	}
 

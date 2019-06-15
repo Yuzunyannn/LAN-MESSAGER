@@ -205,6 +205,15 @@ public class Story implements ITickable {
 		return side.isServer();
 	}
 
+	public String getSideString() {
+		return '[' + (this.isServer() ? "Server" : "Client") + ']';
+	}
+
+	@Override
+	public String toString() {
+		return this.getSideString() + "stroy(" + this.getId() + ")";
+	}
+
 	public boolean hasMember(User user) {
 		for (User u : users) {
 			if (u.equals(user))

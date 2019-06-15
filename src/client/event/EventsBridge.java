@@ -27,8 +27,9 @@ public class EventsBridge {
 	public static void sendString(String str, String toUser) {
 		UserClient.sendToServer(new MUSString(toUser, str));
 	}
+
 	/** [后台]当受到用户列表 */
-	public static void recvUserList(ArrayList<User>ul) {
-		EventsBridge.frontendEventHandle.post(new EventULChange(ul));
+	public static void recvUserList(ArrayList<User> ul) {
+		EventsBridge.frontendEventHandle.post(new EventULChange(ul, EventULChange.ADD));
 	}
 }

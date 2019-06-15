@@ -42,14 +42,7 @@ public class RecvDealMessage implements IRecvDeal {
 		int length = 0;
 		int realAt = 0;
 		while (realAt < bytes.length) {
-			if (realAt == 0) {
-				length = input.read(bytes);
-			} else {
-				byte[] tmp = new byte[bytes.length - realAt];
-				length = input.read(tmp);
-				this.check(length);
-				System.arraycopy(tmp, 0, bytes, realAt, length);
-			}
+			length = input.read(bytes, realAt, bytes.length - realAt);
 			realAt += length;
 			this.check(length);
 		}

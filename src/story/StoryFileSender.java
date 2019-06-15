@@ -50,6 +50,7 @@ public class StoryFileSender extends Story {
 	private static class UserFileInfo {
 		public long byteAt = 0;
 		public User user;
+		public FileInputStream fileIStream = null;
 	}
 
 	public static void initStory(StoryFileSender story, User sender, int key) {
@@ -78,16 +79,16 @@ public class StoryFileSender extends Story {
 			if (from.equals(daddy)) {
 				if (nbt.hasKey("flags"))
 					this.flags = nbt.getByte("flags");
-				if ((this.flags & FLAG_FINISH) != 0)
+				if (this.isFinish())
 					this.finishRecv();
 			}
 		} else {
 			if (nbt.hasKey("flags"))
 				this.flags = nbt.getByte("flags");
-			if ((this.flags & FLAG_FAIL) != 0) {
+			if (this.isFail()) {
 				this.whenFail();
 				return;
-			} else if ((this.flags & FLAG_FINISH) != 0) {
+			} else if (this.isFinish()) {
 				this.finishRecv();
 				return;
 			}
@@ -121,7 +122,7 @@ public class StoryFileSender extends Story {
 				}
 			}
 		} else {
-			Logger.log.impart("文件传输(", this.getId(), ")已启动，发件者用户：" + this.daddy + "的文件");
+			Logger.log.impart(this, "文件传输已启动，发件者用户：" + this.daddy + "的文件");
 		}
 	}
 
@@ -167,15 +168,15 @@ public class StoryFileSender extends Story {
 			this.fail();
 			return;
 		}
-		// 创建输出流
-		try {
-			fileIStream = new FileInputStream(want);
-		} catch (FileNotFoundException e) {
-			Logger.log.warn("服务器打开临时文件[输出流]时候出现异常！", e);
-			this.fail();
-			return;
-		}
-		Logger.log.impart("准备接受用户：", this.daddy, "的文件:“", fileName, "”，临时文件名：“", tmpName, "”");
+		Logger.log.impart(this, "准备接受用户：", this.daddy, "的文件:“", fileName, "”，临时文件名：“", tmpName, "”");
+	}
+
+	public boolean isFinish() {
+		return (this.flags & FLAG_FINISH) != 0;
+	}
+
+	public boolean isFail() {
+		return (this.flags & FLAG_FAIL) != 0;
 	}
 
 	// 生成头
@@ -216,9 +217,9 @@ public class StoryFileSender extends Story {
 	// 完成接收
 	private void finishRecv() {
 		if (this.isServer()) {
-			Logger.log.impart("服务器临时文件：“", want.getName(), "”已全部接受完成！");
+			Logger.log.impart(this, "服务器临时文件：“", want.getName(), "”已全部接受完成！");
 		} else {
-			Logger.log.impart("文件“", want.getName(), "”已全部接受完成！");
+			Logger.log.impart(this, "文件“", want.getName(), "”已全部接受完成！");
 		}
 		try {
 			fileOStream.close();
@@ -259,15 +260,15 @@ public class StoryFileSender extends Story {
 
 	/** 成功结束 */
 	protected void successEnd() {
-		Logger.log.impart("文件传输(", this.getId(), ")已成功结束！");
+		Logger.log.impart(this, "文件传输已成功结束！总共发给了" + sons + "个用户");
 	}
 
 	// 处理失败情况
 	private void whenFail() {
 		if ((this.flags & FLAG_FORBIDDEN) != 0) {
-			Logger.log.impart("服务器拒绝用户" + this.daddy + "希望传输的文件！");
+			Logger.log.impart(this, "服务器拒绝用户" + this.daddy + "希望传输的文件！");
 		} else {
-			Logger.log.impart("用户" + this.daddy + "文件传输失败！");
+			Logger.log.impart(this, "用户" + this.daddy + "文件传输失败！");
 		}
 		this.setEnd();
 	}
@@ -286,12 +287,12 @@ public class StoryFileSender extends Story {
 	@Override
 	protected void onTick() {
 		// 如果flgas是失败
-		if ((this.flags & FLAG_FAIL) != 0) {
+		if (this.isFail()) {
 			this.whenFail();
 			return;
 		}
 		if (this.isClient()) {
-			if ((this.flags & FLAG_FINISH) != 0)
+			if (this.isFinish())
 				return;
 			// 读取流不为空，则发送数据
 			if (fileIStream != null) {
@@ -305,7 +306,7 @@ public class StoryFileSender extends Story {
 			return;
 		} else {
 			if (usersFileInfoList.isEmpty()) {
-				if ((this.flags & FLAG_FINISH) != 0) {
+				if (this.isFinish()) {
 					this.successEnd();
 					this.setEnd();
 					return;
@@ -315,8 +316,24 @@ public class StoryFileSender extends Story {
 			Iterator<UserFileInfo> itr = usersFileInfoList.iterator();
 			while (itr.hasNext()) {
 				UserFileInfo info = itr.next();
-				if (info.byteAt == 0)
+				if (info.byteAt == 0 && info.fileIStream == null) {
 					this.sendData(this.getRecvHead(), info.user);
+					try {
+						info.fileIStream = new FileInputStream(this.want);
+					} catch (FileNotFoundException e) {
+						Logger.log.warn(this + "在给" + info.user + "建立输出流的时候，出现异常！");
+						itr.remove();
+						NBTTagCompound nbt = new NBTTagCompound();
+						nbt.setByte("flags", FLAG_FAIL);
+						this.sendData(nbt, info.user);
+						return;
+					}
+				}
+				if (!this.isFinish()) {
+					if (info.byteAt > this.byteAt - bytesPreSend) {
+						continue;
+					}
+				}
 				NBTTagCompound nbt = new NBTTagCompound();
 				boolean finish = this.sendTick(nbt, info);
 				if (finish) {
@@ -349,9 +366,9 @@ public class StoryFileSender extends Story {
 			Logger.log.warn("发数据的时候，读取文件流出现异常！", e);
 			this.fail();
 		}
-		byteAt += bytesPreSend;
 		if (length == -1)
 			return true;
+		byteAt += length;
 		return false;
 	}
 
@@ -360,16 +377,16 @@ public class StoryFileSender extends Story {
 		byte[] bytes = new byte[bytesPreSend];
 		int length = 0;
 		try {
-			length = fileIStream.read(bytes, (int) info.byteAt, bytesPreSend);
+			length = info.fileIStream.read(bytes);
 			nbt.setByteArray("datas", bytes);
 			nbt.setLong("at", info.byteAt);
 		} catch (IOException e) {
 			Logger.log.warn("发数据的时候，读取文件流出现异常！", e);
 			this.fail();
 		}
-		info.byteAt += bytesPreSend;
 		if (length == -1)
 			return true;
+		info.byteAt += length;
 		return false;
 	}
 
@@ -380,12 +397,12 @@ public class StoryFileSender extends Story {
 		long byteAt = nbt.getLong("at");
 		byte[] bytes = nbt.getByteArray("datas");
 		if (this.byteAt != byteAt) {
-			Logger.log.warn("文件数据包接受出现不连续的中断！！");
+			Logger.log.warn(this + "文件数据包接受出现不连续的中断！！");
 		}
 		try {
 			fileOStream.write(bytes);
 		} catch (IOException e) {
-			Logger.log.warn("接受文件数据的时候，写取文件流出现异常！", e);
+			Logger.log.warn(this + "接受文件数据的时候，写取文件流出现异常！", e);
 			if (this.isServer()) {
 				this.fail();
 			} else {

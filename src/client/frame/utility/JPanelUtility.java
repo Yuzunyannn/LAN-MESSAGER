@@ -7,6 +7,8 @@ import nbt.NBTTagCompound;
 
 public abstract class JPanelUtility extends JPanel implements INBTSerializable<NBTTagCompound> {
 	private static final long serialVersionUID = 1L;
+	/** 聊天工具框ID */
+	public static final String TOOLID_CHATING = "chat";
 }
 
 class JPanelUtilityBlank extends JPanelUtility {

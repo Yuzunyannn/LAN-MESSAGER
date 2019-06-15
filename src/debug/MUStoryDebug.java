@@ -5,6 +5,7 @@ import nbt.NBTTagCompound;
 import network.Side;
 import story.Story;
 import story.StoryFileSender;
+import user.UOnline;
 import user.User;
 import user.message.MessageUser;
 
@@ -26,7 +27,7 @@ public class MUStoryDebug extends MessageUser implements Runnable {
 	public void run() {
 		StoryFileSender story = (StoryFileSender) Story.newStory("fileSender", Story.giveStoryId(), null, Side.SERVER);
 		StoryFileSender.initStory(story, this.from, 0);
-		story.addMember(from);
+		story.addMember(from, UOnline.getInstance().getUser("ssj"));
 	}
 
 }
