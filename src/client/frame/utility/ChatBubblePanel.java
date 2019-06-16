@@ -123,7 +123,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		case EXTENSION:
 			break;
 		case FILE:
-			this.dialog = new FileBubble(info);
+			this.dialog = new FileBubble(info, this.userID);
 			break;
 		default:
 			this.dialog = new Bubble("", Type.WORD);

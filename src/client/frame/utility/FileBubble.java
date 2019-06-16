@@ -43,7 +43,7 @@ public class FileBubble extends Bubble {
 		};
 	};
 
-	public FileBubble(String name) {
+	public FileBubble(String name, boolean isMySelf) {
 		super(name, Type.FILE);
 		if (name.indexOf(".doc") != -1 || name.indexOf(".txt") != -1) {
 			imageIcon = new ImageIcon("src/img/icons/" + "icon-document.jpg");
@@ -52,9 +52,12 @@ public class FileBubble extends Bubble {
 			fileButton.setIcon(imageIcon);
 			fileButton.setBorderPainted(false);
 			this.add(fileButton, BorderLayout.EAST);
-			progress = new ProgressPanel(100);
+			if (isMySelf) {
+				progress = new ProgressPanel(100, TransferType.UPLOAD);
+			} else {
+				progress = new ProgressPanel(100, TransferType.DOWNLOAD);
+			}			
 			progress.setSize(this.getSize());
-			progress.setVisible(false);
 			this.add(progress, BorderLayout.SOUTH);
 			this.fileButton.addMouseListener(this.mouse);
 		} else {
