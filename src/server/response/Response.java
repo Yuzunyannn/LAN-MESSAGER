@@ -1,7 +1,9 @@
 package server.response;
 
 import log.Logger;
-import nbt.*;
+import nbt.NBTTagCompound;
+import nbt.NBTTagList;
+import nbt.NBTTagString;
 import user.User;
 import user.message.MUGULRequest;
 
@@ -17,7 +19,7 @@ public class Response implements Runnable {
 	}
 
 	public boolean query() {
-		String[] s = new String[] { "ssj", "lyl", "ycy","myk" };
+		String[] s = new String[] { "ssj", "lyl", "ycy", "myk", "debug" };
 		MUGULRequest msg = new MUGULRequest(user);
 		NBTTagCompound nbt = msg.getNBT();
 		NBTTagList list = new NBTTagList();

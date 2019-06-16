@@ -1,31 +1,22 @@
 package client.frame.utility;
 
-import java.awt.Button;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Insets;
-import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.plaf.ButtonUI;
 
 import client.frame.Theme;
 import client.frame.ui.RoundedRecBorder;
 import client.user.UserClient;
-import jdk.internal.org.objectweb.asm.Label;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
+import resmgt.UserResource;
 
 /** 对话气泡 */
 public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCompound> {
 	private static final long serialVersionUID = 1L;
-	private final int USERICONSIZE = 40;
 	private boolean userID;
 	private String userIcon;
 	private String userName;
@@ -44,7 +35,6 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 
 	/** 构造函数，生成一个对话气泡，显示信息的参数待定！ */
 	public ChatBubblePanel(boolean isMySelf, String info, String localName, Type type, String time) {
-		// TODO Auto-generated constructor stub
 		if (type == Type.LINE) {
 			JLabel lineLabel = new JLabel("--------以下为全部消息--------");
 			lineLabel.setVisible(true);
@@ -139,8 +129,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 
 	/** 设置用户图标 */
 	private void setIcon(String userName) {
-		imageIcon = new ImageIcon("src/img/1.png");
-		imageIcon.setImage(imageIcon.getImage().getScaledInstance(USERICONSIZE, USERICONSIZE, USERICONSIZE));
+		imageIcon = UserResource.getHeadIcon("guest", UserResource.HeadIconSize.SMALL);
 		Icon = new JButton();
 		Icon.setIcon(imageIcon);
 		if (this.userID) {

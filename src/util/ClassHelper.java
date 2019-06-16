@@ -29,7 +29,7 @@ public class ClassHelper {
 					e.printStackTrace();
 				}
 		} else
-			ClassLoader.getSystemResource(packageName);
+			url = ClassLoader.getSystemResource(packageName);
 		return url;
 	}
 

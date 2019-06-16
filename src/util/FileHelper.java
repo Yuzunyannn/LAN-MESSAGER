@@ -1,5 +1,6 @@
 package util;
 
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -15,7 +16,10 @@ public class FileHelper {
 		try {
 			if (Platform.getOS() == OS.WINDOWS) {
 				sun.awt.shell.ShellFolder sf = sun.awt.shell.ShellFolder.getShellFolder(f);
-				return new ImageIcon(sf.getIcon(true));
+				if (sf == null)
+					return null;
+				Image img = sf.getIcon(true);
+				return img == null ? null : new ImageIcon(img);
 			} else {
 				javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
 				return fc.getUI().getFileView(fc).getIcon(f);

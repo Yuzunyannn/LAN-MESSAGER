@@ -183,6 +183,8 @@ public class Story implements ITickable {
 				return ITickable.SUCCESS;
 			}
 			this.onGet(entry.getValue(), entry.getKey());
+			if (this.isEnd)
+				return ITickable.SUCCESS;
 		}
 		this.onTick();
 		return ITickable.SUCCESS;

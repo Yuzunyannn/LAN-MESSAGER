@@ -19,7 +19,6 @@ import javax.swing.border.Border;
 
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
-import client.event.EventRecv.EventRecvString;
 import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
@@ -27,6 +26,7 @@ import client.frame.Theme;
 import client.frame.utility.UtilityPanel;
 import client.user.UserClient;
 import log.Logger;
+import resmgt.ResourceManagement;
 import user.User;
 
 public class MemberButton extends JButton {
@@ -38,8 +38,10 @@ public class MemberButton extends JButton {
 	private User user;
 	public int count;
 	MouseAdapter mouse;
-	public static ImageIcon icon_open = new ImageIcon("src/img/envelope_open.png");
-	public static ImageIcon icon_closed = new ImageIcon("src/img/envelope_closed.png");
+	public static ImageIcon icon_open = new ImageIcon(
+			ResourceManagement.instance.getResource("img/envelope_open.png").getImage());
+	public static ImageIcon icon_closed = new ImageIcon(
+			ResourceManagement.instance.getResource("img/envelope_closed.png").getImage());
 	// 显示的信封开闭，true开，false闭
 	private boolean envelope;
 	// 是否正在与该用户聊天
@@ -83,7 +85,8 @@ public class MemberButton extends JButton {
 					 * 消息计数测试用 EventsBridge.frontendEventHandle.post(new
 					 * EventRecvString(new User(memberName), ""));
 					 */
-					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient(memberName), "test"));
+					// EventsBridge.frontendEventHandle.post(new
+					// EventRecvString(new UserClient(memberName), "test"));
 				}
 			}
 		};

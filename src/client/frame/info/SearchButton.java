@@ -40,7 +40,6 @@ class SearchMenuItemMonitor implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String[] str =SearchButton.SEARCHITEMSTR;
 		String temp = ((JMenuItem) e.getSource()).getText();
-		String username = ((JMenuItem) e.getSource()).getActionCommand();
 		if(temp.equals(str[0])) {
 			System.out.println(str[0]);
 		}

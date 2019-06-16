@@ -36,6 +36,7 @@ import nbt.INBTSerializable;
 import nbt.NBTBase;
 import nbt.NBTTagList;
 import nbt.NBTTagString;
+import resmgt.ResourceManagement;
 import util.FileHelper;
 
 /** 文本输入框的类 */
@@ -196,16 +197,18 @@ public class ChatTextEditPane extends JTextPane implements INBTSerializable<NBTT
 		}
 		if (lastStart != length)
 			words.add(new WordString(doc.getText(lastStart, length - lastStart)));
-		// if (!words.isEmpty()) {
-		// String str = words.getLast().toString();
-		// if (str.length() == 1 && str.charAt(0) == '\n') {
-		// words.removeLast();
-		// }
-		// }
 		return words;
 	}
 
 	static private class IconInfo implements Icon {
+
+		static public final ImageIcon nuknowFileIcon;
+		static {
+			nuknowFileIcon = new ImageIcon(ResourceManagement.instance.getResource("img/unkonw_file.png").getImage());
+			nuknowFileIcon.setImage(nuknowFileIcon.getImage().getScaledInstance(
+					32 * nuknowFileIcon.getIconWidth() / nuknowFileIcon.getIconHeight(), 32, Image.SCALE_DEFAULT));
+
+		}
 
 		final public static int IMAGE = 0;
 		final public static int FILE = 0;
@@ -216,7 +219,7 @@ public class ChatTextEditPane extends JTextPane implements INBTSerializable<NBTT
 		public final int type;
 
 		public IconInfo(Icon icon, File file, int type) {
-			this.icon = icon;
+			this.icon = icon == null ? nuknowFileIcon : icon;
 			this.file = file;
 			this.type = type;
 		}

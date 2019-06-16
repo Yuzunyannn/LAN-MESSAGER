@@ -1,6 +1,7 @@
 package core;
 
 import java.io.IOException;
+import java.net.BindException;
 
 import log.Logger;
 import network.Network;
@@ -45,6 +46,9 @@ public class ServerProxy extends Proxy {
 		Logger.log.impart("数据库驱动加载成功！");
 		try {
 			net = new Network(Core.SERVER_PORT);
+		} catch (BindException e) {
+			Logger.log.error("端口" + Core.SERVER_PORT + "已经被占用！服务端只能启动一次啊！");
+			Core.shutdownWithError();
 		} catch (IOException e) {
 			Logger.log.error("网络启动失败！", e);
 			Core.shutdownWithError();

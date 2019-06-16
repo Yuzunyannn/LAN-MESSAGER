@@ -15,7 +15,6 @@ import user.User;
 
 /** 界面左边的区域 用户区域 */
 public class InfoPanel extends JPanel {
-	private static final int PS = 10;
 	private static final long serialVersionUID = 1L;
 	private ListScrollPanel memberField;
 	private SearchPanel searchField;

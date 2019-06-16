@@ -8,12 +8,9 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import client.event.EventShow;
-import client.event.EventsBridge;
 import client.frame.info.InfoPanel;
 import client.frame.utility.UtilityPanel;
 import event.IEventBus;
-import event.SubscribeEvent;
 import user.User;
 
 public class MainFrame extends JFrame {
@@ -86,12 +83,13 @@ public class MainFrame extends JFrame {
 	public void initEvent(IEventBus bus) {
 		infoPanel.initEvent(bus);
 		utilityPanel.initEvent(bus);
-		
+
 	}
-	public InfoPanel getInfoPanel() 
-	{
+
+	public InfoPanel getInfoPanel() {
 		return infoPanel;
 	}
+
 	/** 初始化窗体大小和位置 */
 	public void fixed() {
 		this.pack();
@@ -113,5 +111,5 @@ public class MainFrame extends JFrame {
 	public void setUserList(ArrayList<User> ul) {
 		infoPanel.setUserList(ul);
 	}
-	
+
 }

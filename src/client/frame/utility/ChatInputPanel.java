@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -23,15 +24,19 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.TransferHandler;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
 
+import client.event.EventDebugInfoOuting;
+import client.event.EventRecv;
+import client.event.EventsBridge;
 import client.frame.Theme;
-import client.user.UserClient;
 import client.word.Word;
-import debug.MUStoryDebug;
+import core.Core;
 import log.Logger;
 import nbt.INBTSerializable;
 import nbt.NBTTagList;
+import user.UOnline;
 
 public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagList> {
 
@@ -50,28 +55,48 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		/** 布局 */
 		@Override
 		public void layoutContainer(Container parent) {
-			Component[]cons=parent.getComponents();Component text=cons[0];Component send=cons[1];Component quick=cons[2];Component tools=cons[3];int width=parent.getWidth();int height=parent.getHeight();
+			Component[] cons = parent.getComponents();
+			Component text = cons[0];
+			Component send = cons[1];
+			Component quick = cons[2];
+			Component tools = cons[3];
+			int width = parent.getWidth();
+			int height = parent.getHeight();
 
-	text.setLocation(10,EDIT_MARGIN);text.setSize(width-20,height-EDIT_MARGIN*2);((JTextPane)((JScrollPane)text).getViewport().getComponent(0)).updateUI();
+			text.setLocation(10, EDIT_MARGIN);
+			text.setSize(width - 20, height - EDIT_MARGIN * 2);
+			((JTextPane) ((JScrollPane) text).getViewport().getComponent(0)).updateUI();
 
-	send.setLocation(width-25-send.getWidth(),height-EDIT_MARGIN+(int)(EDIT_MARGIN*0.1f));quick.setLocation(25,(EDIT_MARGIN-EDIT_MARGIN/3*2)/2);tools.setLocation(25+tools.getWidth()+25,(EDIT_MARGIN-EDIT_MARGIN/3*2)/2);}
+			send.setLocation(width - 25 - send.getWidth(), height - EDIT_MARGIN + (int) (EDIT_MARGIN * 0.1f));
+			quick.setLocation(25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
+			tools.setLocation(25 + tools.getWidth() + 25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
+		}
 
-	@Override public Dimension minimumLayoutSize(Container arg0){return new Dimension(arg0.getWidth(),64*2);}
+		@Override
+		public Dimension minimumLayoutSize(Container arg0) {
+			return new Dimension(arg0.getWidth(), 64 * 2);
+		}
 
-	@Override public Dimension preferredLayoutSize(Container arg0){return new Dimension(arg0.getWidth(),64*4);}
+		@Override
+		public Dimension preferredLayoutSize(Container arg0) {
+			return new Dimension(arg0.getWidth(), 64 * 4);
+		}
 
-	@Override public void removeLayoutComponent(Component arg0){
+		@Override
+		public void removeLayoutComponent(Component arg0) {
 
-	}};
+		}
+	};
 
 	/** 输入栏文件拖拽 */
 	class TransferHandlerFile extends TransferHandler {
 		private static final long serialVersionUID = 1L;
 		TransferHandler handle;
-		public TransferHandlerFile(TransferHandler handle ){
+
+		public TransferHandlerFile(TransferHandler handle) {
 			this.handle = handle;
 		}
-		
+
 		@Override
 		public void exportToClipboard(JComponent comp, Clipboard clip, int action) {
 			this.handle.exportToClipboard(comp, clip, action);
@@ -180,14 +205,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		quickMenu.add(this.getQuickMenuItem("我要睡觉去了，晚安。"));
 		// 工具弹出菜单
 		toolsMenu = new JPopupMenu();
-		JMenuItem item = new JMenuItem("debug story");
-		item.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				UserClient.sendToServer(new MUStoryDebug());
-			}
-		});
-		toolsMenu.add(item);
+		toolsMenu.add(this.getMenuItem("选择文件", new SelectFileMenuItemMouseAdapter()));
+		toolsMenu.add(this.getMenuItem("Debug", new DebugInfoMenuItemMouseAdapter()));
 	}
 
 	// 快捷回复的菜单栏
@@ -227,7 +246,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		textEdit.deserializeNBT(nbt);
 	}
 
-	@SuppressWarnings("unused")
+	/** 快捷消息鼠标点击适配 */
 	private class QuickMenuItemMouseAdapter extends MouseAdapter {
 		final String str;
 
@@ -242,14 +261,58 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		}
 	}
 
+	/** 获取一个快捷消息 */
 	private JMenuItem getQuickMenuItem(String str) {
 		String title = str;
 		if (str.length() > 6)
 			title = str.substring(0, 6) + "...";
-		JMenuItem mi = new JMenuItem(title);
-		mi.addMouseListener(new QuickMenuItemMouseAdapter(str));
+		return getMenuItem(title, new QuickMenuItemMouseAdapter(str));
+	}
+
+	/** 获取一个菜单项目 */
+	private JMenuItem getMenuItem(String titlte, MouseAdapter ma) {
+		JMenuItem mi = new JMenuItem(titlte);
+		mi.addMouseListener(ma);
 		mi.setBackground(Theme.COLOR1);
 		return mi;
+	}
+
+	private static final JFileChooser fileChooser = new JFileChooser();
+	{
+		FileSystemView fsv = FileSystemView.getFileSystemView();
+		fileChooser.setCurrentDirectory(fsv.getHomeDirectory());
+		fileChooser.setDialogTitle("请选择要发送的文件...");
+		fileChooser.setApproveButtonText("选择");
+	}
+
+	/** 选择文件鼠标适配 */
+	private class SelectFileMenuItemMouseAdapter extends MouseAdapter {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int result = fileChooser.showOpenDialog(null);
+			if (JFileChooser.APPROVE_OPTION == result) {
+				ChatInputPanel.this.textEdit.dragFile(fileChooser.getSelectedFile());
+			}
+		}
+	}
+
+	/** debuginfo输出 */
+	private class DebugInfoMenuItemMouseAdapter extends MouseAdapter {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			EventDebugInfoOuting debug = new EventDebugInfoOuting();
+			EventsBridge.frontendEventHandle.post(debug);
+			Core.task(new Runnable() {
+				@Override
+				public void run() {
+					for (String str : debug.debufInfos) {
+						EventsBridge.frontendEventHandle
+								.post(new EventRecv.EventRecvString(UOnline.getInstance().getUser("debug"), str));
+					}
+				}
+			});
+		}
 	}
 
 }

@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-import debug.MUStoryDebug;
 import log.Logger;
 import log.NeedLog;
 import network.RecvDealMessage;
@@ -38,7 +37,6 @@ public class Proxy {
 		if (hasRun)
 			return;
 		hasRun = true;
-		Logger.log.impart("当前平台：" + Platform.platform);
 		try {
 			// 初始化所有类中带有指定的标签内容
 			List<Class<?>> initList = ClassHelper.findClasses(ClassHelper.getRuntimeURL(""), "", true);
@@ -77,8 +75,6 @@ public class Proxy {
 		RecvDealMessage.registerMessage("msmem", MSMemberIn.class);
 		RecvDealMessage.registerMessage("msmsend", MSNbtSend.class);
 		RecvDealMessage.registerMessage("file_send", UMFileSendToUser.class);
-
-		RecvDealMessage.registerMessage("debug", MUStoryDebug.class);
 	}
 
 	private static void registerAllStory() {

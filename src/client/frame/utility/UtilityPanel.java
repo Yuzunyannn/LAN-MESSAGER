@@ -104,12 +104,12 @@ public class UtilityPanel extends JPanel implements ITickable {
 
 	/** 获取聊天PaneLInfo */
 	private PanelInfo getChatPanelInfo(String username) {
-		String newInfo = "U" + username;
+		String newInfo = UtilityPanel.TOOLID_CHATING + username;
 		PanelInfo info;
 		if (panels.containsKey(newInfo)) {
 			info = panels.get(newInfo);
 		} else {
-			info = new PanelInfo("U", username, new ChatPanel(username));
+			info = new PanelInfo(UtilityPanel.TOOLID_CHATING, username, new ChatPanel(username));
 			panels.put(info.info, info);
 		}
 		return info;
@@ -126,7 +126,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 
 	/** 切换聊天界面 */
 	public void toChat(String username) {
-		String newInfo = "U" + username;
+		String newInfo = UtilityPanel.TOOLID_CHATING + username;
 		if (newInfo.equals(panelInfo))
 			return;
 		PanelInfo info = this.getChatPanelInfo(username);
@@ -219,5 +219,10 @@ public class UtilityPanel extends JPanel implements ITickable {
 			}
 		}
 
+	}
+
+	@SubscribeEvent
+	public void debug(client.event.EventDebugInfoOuting e) {
+		e.debufInfos.add("UtilityPanel(" + tick + ")当前板子的id为:" + panelInfo);
 	}
 }

@@ -3,8 +3,6 @@ package client.frame.info;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.TextField;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -20,9 +18,7 @@ import client.event.EventSearch;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
-import event.Event;
 import event.IEventBus;
-import event.SubscribeEvent;
 
 public class SearchPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

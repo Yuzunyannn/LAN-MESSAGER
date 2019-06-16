@@ -1,22 +1,17 @@
 package client.frame.utility;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 import client.frame.Theme;
 import core.Core;
 import event.SubscribeEvent;
-import javafx.scene.layout.BorderStroke;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
 import user.User;

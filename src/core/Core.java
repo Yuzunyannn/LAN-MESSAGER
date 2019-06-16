@@ -11,12 +11,14 @@ import java.util.concurrent.TimeUnit;
 
 import log.Logger;
 import network.Side;
+import platform.Platform;
+import resmgt.ResourceManagement;
 import story.ITickable;
 import user.UOnline;
 
 public class Core {
 
-	static final String SERVER_IP = "127.0.0.1";//10.19.35.30
+	static final String SERVER_IP = "127.0.0.1";// 10.19.35.30
 	static final int SERVER_PORT = 35275;
 
 	static final Proxy proxy = new DebugProxy(Side.SERVER);
@@ -33,9 +35,11 @@ public class Core {
 
 	// 主函数
 	public static void main(String[] args) {
+		Logger.log.impart("当前平台：" + Platform.platform);
+		ResourceManagement.instance.init();
 		proxy.init();
 		proxy.launch();
-//		// 启动核心
+		// 启动核心
 		core.lunch();
 	}
 

@@ -2,6 +2,7 @@ package client.frame.info;
 
 import java.awt.Component;
 import java.awt.Dimension;
+
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -11,15 +12,10 @@ import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventRecv.EventRecvString;
 import client.event.EventSearchRequest;
-import client.event.EventShow;
-import client.event.EventsBridge;
 import client.frame.Theme;
-import client.user.UserClient;
-import event.Event;
 import event.IEventBus;
 import event.SubscribeEvent;
 import log.Logger;
-import user.User;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;

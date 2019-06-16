@@ -135,10 +135,11 @@ public class StoryFileSender extends Story {
 				return;
 			}
 		}
-		if (want == null) {
+		if (nbt.hasKey("size")) {
 			fileSize = nbt.getLong("size");
 			fileName = nbt.getString("filename");
-			this.fileRecvInit();
+			if (this.want == null)
+				this.fileRecvInit();
 		} else {
 			if (nbt.hasKey("datas"))
 				this.recvTick(nbt);
