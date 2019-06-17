@@ -21,6 +21,7 @@ import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventShow;
 import client.event.EventsBridge;
+import client.event.EventRecv.EventRecvString;
 import client.frame.MainFrame;
 import client.frame.Theme;
 import client.frame.utility.UtilityPanel;
@@ -37,6 +38,7 @@ public class MemberButton extends JButton {
 	private String memberName = "小明";
 	private User user;
 	public int count;
+	private String toolId;
 	MouseAdapter mouse;
 	public static ImageIcon icon_open = new ImageIcon(
 			ResourceManagement.instance.getResource("img/envelope_open.png").getImage());
@@ -52,6 +54,7 @@ public class MemberButton extends JButton {
 	}
 
 	public MemberButton(String name) {
+		toolId=UtilityPanel.TOOLID_CHATING;
 		memberName = name;
 		count = 0;
 		user = new UserClient(name);
@@ -72,28 +75,28 @@ public class MemberButton extends JButton {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
-				EventsBridge.frontendEventHandle.post(new EventShow(UtilityPanel.TOOLID_CHATING, user.getUserName()));
+				
 				MemberButton mb = (MemberButton) e.getComponent();
 				mb.isChoose();
 				if (e.getButton() == MouseEvent.BUTTON1) {
 
 					// 产生选择事件
-					EventsBridge.frontendEventHandle
-							.post(new EventShow(UtilityPanel.TOOLID_CHATING, user.getUserName()));
+					EventsBridge.frontendEventHandle.post(new EventShow(toolId, user.getUserName()));
 					// count=0;
 					/**
-					 * 消息计数测试用 EventsBridge.frontendEventHandle.post(new
-					 * EventRecvString(new User(memberName), ""));
+					 *  EventsBridge.frontendEventHandle.post(new EventRecvString (((User)new UserClient("1")),"debug"));
 					 */
-					// EventsBridge.frontendEventHandle.post(new
-					// EventRecvString(new UserClient(memberName), "test"));
+					System.out.println("左键点击");
+
 				}
 			}
 		};
 		this.addMouseListener(mouse);
 
 	}
-
+	public void setToolId(String tid) {
+		toolId=tid;
+	}
 	public String getMemberName() {
 		return memberName;
 	}
@@ -180,7 +183,7 @@ class UButtonMouse extends MouseAdapter {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON3)
+		if (e.getButton() == MouseEvent.BUTTON3) {
 			if (e.isPopupTrigger()) {
 				username = ((MemberButton) e.getSource()).getMemberName();
 				for (int i = 0; i < item.length; i++) {
@@ -189,7 +192,7 @@ class UButtonMouse extends MouseAdapter {
 				}
 				popmenu.show(e.getComponent(), e.getX(), e.getY());
 			}
-		System.out.println("右键点击");
+		System.out.println("右键点击");}
 
 	}
 }

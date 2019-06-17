@@ -12,6 +12,7 @@ import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventRecv.EventRecvString;
 import client.event.EventSearchRequest;
+import client.event.EventsBridge;
 import client.frame.Theme;
 import event.IEventBus;
 import event.SubscribeEvent;
@@ -47,9 +48,29 @@ public class ListScrollPanel extends JScrollPane {
 		bar.setBackground(Theme.COLOR1);
 
 	}
-	
+	/**置顶并且消息数置为recvcount*/
+	public void setTop(String name ,int recvcount) {
+		int temp;
+		temp = getMember(name);
+		if (temp == -1)
+			return;
+		Component tempbutton;
+		tempbutton = content[temp];
 
-	/* 在加入User类后需要修改 */
+		for (int i = temp; i > fixed; i--) {
+			content[i] = content[i - 1];
+		}
+		((MemberButton)tempbutton).count=recvcount;
+		content[fixed] = tempbutton;
+		Component[] re = content;
+		p.removeAll();
+		content = re;
+		for (Component i : content) {
+			p.add(i);
+		}
+		this.refresh();
+}
+	/** 把成员置顶*/
 	public void setTop(String name) {
 		int temp;
 		temp = getMember(name);
@@ -108,9 +129,16 @@ public class ListScrollPanel extends JScrollPane {
 		this.height = height;
 	}
 	public void	addNewMember(String name,Boolean isSearch) {
-		if(isSearch)
-		p.add(new SearchButton(name));
-		else return;
+		if(isSearch) {
+			p.add(new SearchButton(name));
+			content = p.getComponents();
+			height += MemberButton.MEMBERBUTTON_HEIGHT;
+			int width = super.getWidth();
+			standardHeight(super.getPreferredSize());
+			p.setPreferredSize(new Dimension(width, height));
+			}
+		else 
+			addNewMember(name);
 	}
 	public void addNewMember(String name) {
 		p.add(new MemberButton(name));
@@ -156,17 +184,23 @@ public class ListScrollPanel extends JScrollPane {
 
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
-		p.removeAll();
-
+		
+		boolean have = false;
+		for(Component i:content)
+			if(((MemberButton) i).getMemberName().equals(e.from.getUserName()))
+				have=true;
+			else have=false;
+		if(!have)
+			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.from.getUserName(),EventChatOperation.ADDCHAT));
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
 				((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
 				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
 						+ ((MemberButton) content[i]).count);
 				setTop(((MemberButton) content[i]).getMemberName());
-
-				// break;
+				System.out.println(((MemberButton) content[i]).getMemberName()+((MemberButton) content[i]).count);
 			}
+		p.removeAll();
 		for (Component i : content) {
 			p.add(i);
 		}
@@ -184,6 +218,8 @@ public class ListScrollPanel extends JScrollPane {
 
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
+				/**？？？？*/
+				Logger.log.warn("为啥调用RecvMessage?");
 				((MemberButton) content[i]).RecvMessage();
 			}
 
@@ -198,23 +234,17 @@ public class ListScrollPanel extends JScrollPane {
 
 		/**
 		 * 添加好友应在添加search的panel中响应事件 if (e.type.equals(EventFriendOperation.ADDFRIEND))
-		 * addNewMember(e.username);
+		 * 好友列表添加
+		 * EventsBridge.frontendEventHandle.post(new EventChatOperation(e.username,EventChatOperation.ADDCHAT))
 		 */
 		if (e.type.equals(EventFriendOperation.DELETEFRIEND))
-			deductMember(e.username);
+			/**
+			 * 好友列表删除*/
+			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.username,EventChatOperation.DELETECHAT));
 		this.refresh();
 	}
 
-	@SubscribeEvent
-	public void onChatOperator(EventChatOperation e) {
-		if (e.type.equals(EventChatOperation.FIXEDCHAT))
-			setFixed(e.username);
-		else if (e.type.equals(EventChatOperation.DELETECHAT))
-			deductMember(e.username);
-		else if (e.type.equals(EventChatOperation.CANELFIXEDCHAT))
-			canelFixed();
-		this.refresh();
-	}
+
 
 	public void initEvent(IEventBus bus) {
 		bus.register(this);

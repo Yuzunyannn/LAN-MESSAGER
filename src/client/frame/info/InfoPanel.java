@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import client.event.EventChatOperation;
 import client.event.EventIPC;
 import client.event.EventULChange;
 import client.frame.Theme;
@@ -56,7 +57,22 @@ public class InfoPanel extends JPanel {
 //		memberField.addNewMember("1", state==EventIPC.SEARCH);
 //		this.refresh();
 	}
-
+	@SubscribeEvent
+	public void onChatOperator(EventChatOperation e) {
+		if (e.optype.equals(EventChatOperation.FIXEDCHAT))
+			memberField.setFixed(e.username);
+		else if (e.optype.equals(EventChatOperation.DELETECHAT))
+			memberField.deductMember(e.username);
+		else if (e.optype.equals(EventChatOperation.CANELFIXEDCHAT))
+			memberField.canelFixed();
+		else if(e.optype.equals(EventChatOperation.ADDCHAT)) {
+			/**此处需要添加对于是否处于好友列表的判断*/
+			memberField.addNewMember(e.username);
+			memberField.setTop(e.username, 1);
+			
+			}
+		this.refresh();
+	}
 	@SubscribeEvent
 	public void onULChange(client.event.EventULChange e) {
 		memberField.deleteAllMember();
