@@ -18,7 +18,9 @@ import javax.swing.JProgressBar;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.plaf.ButtonUI;;
+import javax.swing.plaf.ButtonUI;
+
+import event.SubscribeEvent;;
 
 public class ProgressPanel extends JPanel implements ActionListener, ChangeListener {
 	private JProgressBar progressbar;
@@ -44,6 +46,9 @@ public class ProgressPanel extends JPanel implements ActionListener, ChangeListe
 		progressbar.setBorderPainted(true);
 		progressbar.setBackground(Color.pink);
 		// JPanel panel = new JPanel();
+		if (this.type == TransferType.UPLOAD) {
+			this.label.setText("上传文件");
+		}
 		b = new JButton("开始");
 		b.setForeground(Color.blue);
 		b.addActionListener(this);
@@ -112,6 +117,7 @@ public class ProgressPanel extends JPanel implements ActionListener, ChangeListe
 			this.timer.start();
 		}
 	}
+	
 }
 
 enum TransferType {

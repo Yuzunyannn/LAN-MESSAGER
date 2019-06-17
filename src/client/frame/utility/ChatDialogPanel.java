@@ -1,7 +1,9 @@
 package client.frame.utility;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.LayoutManager;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -22,6 +24,43 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 	private JPanel panel;
 	private User chatToUser;
 	private JScrollBar scrollBar = this.getVerticalScrollBar();
+	private LayoutManager chatDialogLayout = new LayoutManager() {
+		
+		@Override
+		public void removeLayoutComponent(Component comp) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public Dimension preferredLayoutSize(Container parent) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public Dimension minimumLayoutSize(Container parent) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public void layoutContainer(Container parent) {
+			// TODO Auto-generated method stub
+			Component[] cons = parent.getComponents();
+			for (int i = 0; i < cons.length; i++) {
+				if (cons[i] instanceof ChatBubblePanel) {
+					cons[i].setSize(parent.getSize());
+				}
+			}
+		}
+		
+		@Override
+		public void addLayoutComponent(String name, Component comp) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
 
 	public ChatDialogPanel(User chatToUser) {
 		super(new JPanel());
@@ -32,7 +71,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		System.out.println("2/:" + this.panel.getWidth());
 		panel.setSize(this.getWidth() - this.scrollBar.getWidth(), this.getHeight());
 		System.out.println("3/:" + this.panel.getWidth());
-		panel.setLayout(null);
+		panel.setLayout(this.chatDialogLayout);
 		panel.setVisible(true);
 		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
 		this.setVisible(true);
@@ -71,7 +110,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 			addHeight = (info.length() / 50) * 30 + 60;
 			break;
 		case FILE:
-			addHeight = 200;
+			addHeight = 100;
 			break;
 		case EXTENSION:
 			addHeight = 200;

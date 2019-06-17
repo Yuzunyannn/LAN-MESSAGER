@@ -132,6 +132,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		imageIcon = UserResource.getHeadIcon("guest", UserResource.HeadIconSize.SMALL);
 		Icon = new JButton();
 		Icon.setIcon(imageIcon);
+		this.Icon.setOpaque(false);
 		if (this.userID) {
 			this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			displayedName.setText(":" + userName);

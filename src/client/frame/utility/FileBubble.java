@@ -45,8 +45,8 @@ public class FileBubble extends Bubble {
 
 	public FileBubble(String name, boolean isMySelf) {
 		super(name, Type.FILE);
-		if (name.indexOf(".doc") != -1 || name.indexOf(".txt") != -1) {
-			imageIcon = new ImageIcon("src/img/icons/" + "icon-document.jpg");
+		if (name.indexOf(".doc") != -1 || name.indexOf(".txt") != -1 || name.indexOf(".docx") != -1) {
+			imageIcon = new ImageIcon("src/resources/img/icons/" + "icon-document.jpg");
 			imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));
 			fileButton = new JButton();
 			fileButton.setIcon(imageIcon);

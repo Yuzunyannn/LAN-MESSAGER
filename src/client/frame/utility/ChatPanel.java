@@ -163,11 +163,12 @@ public class ChatPanel extends JPanelUtility {
 			chatDialogPanel.addBubble(true, "", "", Type.TIME, date.toString());
 			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString());
 		}
+		this.revalidate();
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
 	}
 
 	/** 检查发送和接收的消息类型 */
-	public Type checkType(int id) {
+	private Type checkType(int id) {
 		Type type = Type.NULL;
 		switch (id) {
 		case Word.FILE:
