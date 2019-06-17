@@ -19,7 +19,9 @@ import javax.swing.border.Border;
 
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
+import client.event.EventRecv;
 import client.event.EventShow;
+import client.event.EventUserSelect;
 import client.event.EventsBridge;
 import client.event.EventRecv.EventRecvString;
 import client.frame.MainFrame;
@@ -76,8 +78,8 @@ public class MemberButton extends JButton {
 			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
 				
-				MemberButton mb = (MemberButton) e.getComponent();
-				mb.isChoose();
+//				MemberButton mb = (MemberButton) e.getComponent();
+//				mb.isChoose();
 				if (e.getButton() == MouseEvent.BUTTON1) {
 
 					// 产生选择事件
@@ -87,7 +89,8 @@ public class MemberButton extends JButton {
 					 *  EventsBridge.frontendEventHandle.post(new EventRecvString (((User)new UserClient("1")),"debug"));
 					 */
 					System.out.println("左键点击");
-
+					EventsBridge.frontendEventHandle.post(new EventUserSelect(memberName));
+					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("debug"),"test"));
 				}
 			}
 		};
@@ -132,10 +135,18 @@ public class MemberButton extends JButton {
 		}
 	}
 
-	/***/
-	public void isChoose() {
-		isChat = true;
-		count = 0;
+	/**更改聊天状态，返回是否为正在聊天*/
+	public boolean isChoose(String username) {
+		if(username==memberName)
+		{
+			isChat = true;
+			count = 0;
+		}
+		else
+		{
+			isChat = false;
+		}
+		return isChat;
 	}
 
 	/**

@@ -12,6 +12,7 @@ import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventRecv.EventRecvString;
 import client.event.EventSearchRequest;
+import client.event.EventUserSelect;
 import client.event.EventsBridge;
 import client.frame.Theme;
 import event.IEventBus;
@@ -184,23 +185,35 @@ public class ListScrollPanel extends JScrollPane {
 		/* 测试信息 */
 		// System.out.println("count"+p.getComponentCount());
 	}
-
+	/**
+	 *当用户点击memberbutton是触发*/
+	@SubscribeEvent
+	public void onUserSelect(EventUserSelect e) 
+	{
+		for(Component i:content)
+		{
+			((MemberButton) i).isChoose(e.getUsername());
+		}
+	}
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
 
 		boolean have = false;
-		for (Component i : content)
-			if (((MemberButton) i).getMemberName().equals(e.from.getUserName())) {
-				have = true;
+
+		for(Component i:content)
+			if(((MemberButton) i).getMemberName().equals(e.from.getUserName()))
+			{
+				have=true;
 				break;
-			} else
-				have = false;
-		if (!have)
-			EventsBridge.frontendEventHandle
-					.post(new EventChatOperation(e.from.getUserName(), EventChatOperation.ADDCHAT));
+			}	
+			else have=false;
+		if(!have)
+			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.from.getUserName(),EventChatOperation.ADDCHAT));
+
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
-				((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
+				((MemberButton) content[i]).RecvMessage();
+				//((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
 				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
 						+ ((MemberButton) content[i]).count);
 				setTop(((MemberButton) content[i]).getMemberName());
@@ -226,7 +239,7 @@ public class ListScrollPanel extends JScrollPane {
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
 				/** ？？？？ */
 				Logger.log.warn("为啥调用RecvMessage?");
-				((MemberButton) content[i]).RecvMessage();
+//				((MemberButton) content[i]).RecvMessage();
 			}
 
 		for (Component i : content) {
