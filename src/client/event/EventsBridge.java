@@ -42,11 +42,14 @@ public class EventsBridge {
 		UserClient.sendToServer(new UMFileSendToUser(toUser, key, file.getName()));
 	}
 
-	/** [后台]当受到用户列表 */
+	/** [后台]当收到用户列表 */
 	public static void recvUserList(ArrayList<User> ul) {
 		EventsBridge.frontendEventHandle.post(new EventULChange(ul, EventULChange.ADD));
 	}
-
+//	/**[后台]收到搜索结果*/
+//	public static void recvSearchRequest(ArrayList<User> sul) {
+//		EventsBridge.frontendEventHandle.post(new EventSearchRequest(sul));
+//	}
 	// 转发事件
 	public static void retransmissionRecv(transfer.EventFileRecv.Start e) {
 		EventsBridge.frontendEventHandle.post(e);

@@ -232,21 +232,7 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	/** 事件处理 */
-	@SubscribeEvent
-	public void onSearchRequest(EventSearchRequest e) {
-
-		for (int i = 0; i < content.length; i++)
-			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
-				/** ？？？？ */
-				Logger.log.warn("为啥调用RecvMessage?");
-//				((MemberButton) content[i]).RecvMessage();
-			}
-
-		for (Component i : content) {
-			p.add(i);
-		}
-		this.refresh();
-	}
+	
 
 	@SubscribeEvent
 	public void onFreindOperator(EventFriendOperation e) {
