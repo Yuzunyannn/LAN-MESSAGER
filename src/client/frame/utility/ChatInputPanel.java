@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -60,6 +61,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 			Component send = cons[1];
 			Component quick = cons[2];
 			Component tools = cons[3];
+			Component emoji = cons[4];
 			int width = parent.getWidth();
 			int height = parent.getHeight();
 
@@ -70,6 +72,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 			send.setLocation(width - 25 - send.getWidth(), height - EDIT_MARGIN + (int) (EDIT_MARGIN * 0.1f));
 			quick.setLocation(25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
 			tools.setLocation(25 + tools.getWidth() + 25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
+			emoji.setLocation(25 + tools.getWidth() + 25 + emoji.getWidth() + 25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
 		}
 
 		@Override
@@ -196,6 +199,26 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 			}
 		});
 		this.add(button);
+		// 添加表情按钮
+		button = new JButton("表情");
+		button.setFont(new Font("黑体", 0, 16));
+		button.setUI(new client.frame.ui.NormalButtonUI());
+		button.setSize(50, (int) (EDIT_MARGIN * 0.8f));
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				JFrame frame = new JFrame();
+				emojiPanel = new EmojiPanel();
+				emojiPanel.setLocation(0,0);
+				emojiPanel.setSize(640,320);
+				frame.add(emojiPanel);
+				frame.setSize(emojiPanel.getSize());
+				emojiPanel.setVisible(true);
+				frame.setVisible(true);
+				System.out.println("emojiPanel");
+			}
+		});
+		this.add(button);
 		// 快捷回复的弹出菜单
 		quickMenu = new JPopupMenu();
 		quickMenu.add(this.getQuickMenuItem("好的。"));
@@ -213,6 +236,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 	JPopupMenu quickMenu;
 	// 工具的菜单栏
 	JPopupMenu toolsMenu;
+	//Emoji表情菜单栏
+	EmojiPanel emojiPanel = new EmojiPanel();
 
 	@Override
 	public void paint(Graphics g) {
