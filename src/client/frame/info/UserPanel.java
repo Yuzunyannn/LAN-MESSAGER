@@ -3,10 +3,14 @@ package client.frame.info;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import client.event.EventIPC;
+import client.event.EventsBridge;
 import client.frame.Theme;
 
 public class UserPanel extends JPanel {
@@ -21,7 +25,6 @@ public class UserPanel extends JPanel {
 		this.setBackground(Theme.COLOR4);
 		img = new UserImage();
 		this.add(img);
-
 		JLabel username = new JLabel();
 		username.setText(name);
 		username.setFont(Theme.FONT0);

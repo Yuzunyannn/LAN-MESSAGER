@@ -2,11 +2,13 @@ package client.frame.info;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.TextField;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -19,17 +21,20 @@ import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
 import event.IEventBus;
+import log.Logger;
 
 public class SearchPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private TextField search;
+	public final String INFO = "单行输入,回车键搜索";
+	boolean entry=false;
 	private KeyListener keyListener = new KeyListener() {
-
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int key = e.getKeyCode();
 			if (key == '\n')
 				EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
+//			String temp=search.getText();
 
 		}
 		@Override
@@ -53,25 +58,14 @@ public class SearchPanel extends JPanel {
 		this.setBackground(Theme.COLOR2);
 		search = new TextField();
 		search.setFont(Theme.FONT3);
-		search.setFocusable(false);
+		search.setFocusable(entry);
 		//鼠标点击事件
-		search.addMouseListener(new MouseListener() 
+		search.addMouseListener(new MouseAdapter() 
 		{
-			boolean entry=false;
-			@Override
-			public void mouseClicked(MouseEvent e) 
-			{
-				search.setFocusable(entry);
-			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
+				search.setFocusable(entry);
 			}
 
 			@Override
@@ -98,25 +92,41 @@ public class SearchPanel extends JPanel {
 				EventsBridge.frontendEventHandle.post(new EventIPC(EventIPC.SEARCH));
 			}
 		});
-		this.add(search);
+		
 		JButton b1 = new JButton();
 		JButton set = new JButton();
-		this.add(b1);
-		this.add(set);
-		String info = "单行输入";
+		SearchPanel stmp=this;
+		MouseAdapter mb=new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				EventsBridge.frontendEventHandle.post(new EventIPC(EventIPC.FRIENDS));
+				 stmp.searchInit();
+			}
+		};
+		b1.addMouseListener(mb);
 		search.addKeyListener(keyListener);
 		search.setForeground(Color.GRAY);
-		search.setSize(150, 20);
+		search.setSize(160, 20);
 		search.setLocation(5, 8);
-		search.setText(info);
-		search.addFocusListener(new DefaultFocusListener(info, search));
+		search.setText(INFO);
+		search.addFocusListener(new DefaultFocusListener(INFO, search));
 		b1.setSize(20, 20);
 		b1.setLocation(180, 8);
 		set.setSize(20, 20);
 		set.setLocation(220, 8);
+		this.add(b1);
+		this.add(set);
+		this.add(search);
 
 	}
-
+	public void searchInit() {
+		search.setForeground(Color.GRAY);
+		search.setText(INFO);
+		entry=false;
+		search.setFocusable(entry);
+		Logger.log.warn("搜索框文字大小存在异常！");
+	}
 	public void initEvent(IEventBus bus) {
 		bus.register(this);
 	}
@@ -130,6 +140,7 @@ class DefaultFocusListener implements FocusListener {
 	public DefaultFocusListener(String info, TextField textfield) {
 		this.info = info;
 		this.textfield = textfield;
+
 	}
 
 	@Override
@@ -138,6 +149,7 @@ class DefaultFocusListener implements FocusListener {
 		if (temp.equals(info)) {
 			textfield.setText(null);
 			textfield.setForeground(Color.BLACK);
+
 		}
 	}
 

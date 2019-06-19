@@ -59,18 +59,19 @@ public class InfoPanel extends JPanel {
 	public void onStateChange(client.event.EventIPC e) {
 		System.out.println("infoPanel的状态发生了变化，从状态" + state + "变为状态" + e.state);
 		if(state==EventIPC.SEARCH &&e.state==EventIPC.FRIENDS) {
-			searchMemberField.removeAll();
+			searchMemberField.deleteAllMember();;
 			this.remove(searchMemberField);
 			this.add(memberField);
+			searchField.searchInit();
+			
 			}
 		else if(state==EventIPC.FRIENDS&&e.state==EventIPC.SEARCH) {
 			this.remove(memberField);
 			this.add(searchMemberField);
 		}
 		state = e.state;
-	
-			
-	
+		/**状态切换后刷新（暂定）*/
+		this.refresh();
 		/**测试searchButton的右键事件*/
 //		memberField.deleteAllMember();
 //		memberField.addNewMember("1", state==EventIPC.SEARCH);
@@ -101,8 +102,10 @@ public class InfoPanel extends JPanel {
 			remoteSearch=true;
 			for(int i=0;i<e.name.size();i++)
 			searchMemberField.addNewMember(e.name.get(i).getUserName(), remoteSearch);
-		}
 		
+		}
+			System.out.println(searchMemberField.getComponentCount());
+			
 		
 		
 		

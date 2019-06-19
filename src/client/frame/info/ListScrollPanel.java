@@ -177,6 +177,7 @@ public class ListScrollPanel extends JScrollPane {
 
 	public void deleteAllMember() {
 		p.removeAll();
+		content=p.getComponents();
 	}
 
 	public void standardHeight(Dimension d) {
