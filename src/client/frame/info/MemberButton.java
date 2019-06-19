@@ -88,7 +88,9 @@ public class MemberButton extends JButton {
 					 *  EventsBridge.frontendEventHandle.post(new EventRecvString (((User)new UserClient("1")),"debug"));
 					 */
 					System.out.println("左键点击");
+					/**EventUserSelect是什么啊*/
 					EventsBridge.frontendEventHandle.post(new EventUserSelect(memberName));
+					Logger.log.warn("EventUserSelect干什么用的，看选中的用户应该用EventShow");
 					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("debug"),"test"));
 				}
 			}

@@ -21,14 +21,19 @@ import log.Logger;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
+	/**用于区分实例化对象是聊天还是搜索
+	 * 未来可能通过继承的方式重构实现区分*/
+	public static final String FRIENDPANEL="好友聊天列表";
+	public static final String SEARCHPANEL="搜索列表";
 	/** 添加列表中的成员数量时可能需要改变 */
 	private int height = 0;
 	private JPanel p;
 	private Component[] content;
 	private int fixed = 0;
-
+	protected String state;
 	public ListScrollPanel() {
 		super();
+		state=FRIENDPANEL;
 		p = new JPanel();
 		int width = super.getWidth();
 		p.setPreferredSize(new Dimension(width, getHeight()));
@@ -123,7 +128,9 @@ public class ListScrollPanel extends JScrollPane {
 		return -1;
 
 	}
-
+	public void setState(String str) {
+		state=str;
+	}
 	public int getPHeight() {
 		return height;
 	}
@@ -198,7 +205,6 @@ public class ListScrollPanel extends JScrollPane {
 	}
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
-
 		boolean have = false;
 
 		for(Component i:content)
@@ -209,7 +215,7 @@ public class ListScrollPanel extends JScrollPane {
 			}	
 			else have=false;
 		if(!have)
-			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.from.getUserName(),EventChatOperation.ADDCHAT));
+			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.from.getUserName(),EventChatOperation.ADDCHAT,state));
 
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
@@ -224,6 +230,7 @@ public class ListScrollPanel extends JScrollPane {
 		for (Component i : content) {
 			p.add(i);
 		}
+		content=p.getComponents();
 		this.refresh();
 	}
 

@@ -34,6 +34,7 @@ public class InfoPanel extends JPanel {
 		searchField = new SearchPanel();
 		memberField = new ListScrollPanel();
 		searchMemberField= new ListScrollPanel();
+		searchMemberField.setState(ListScrollPanel.SEARCHPANEL);
 		this.add(userField);
 		this.add(searchField);
 		this.add(memberField);
@@ -87,8 +88,10 @@ public class InfoPanel extends JPanel {
 			memberField.canelFixed();
 		else if(e.optype.equals(EventChatOperation.ADDCHAT)) {
 			/**此处需要添加对于是否处于好友列表的判断*/
+			if(e.recvpanel.equals(ListScrollPanel.FRIENDPANEL)) {
 			memberField.addNewMember(e.username);
 			memberField.setTop(e.username, 1);
+			}
 			
 			}
 		this.refresh();
