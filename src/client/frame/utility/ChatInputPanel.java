@@ -11,6 +11,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 			Component send = cons[1];
 			Component quick = cons[2];
 			Component tools = cons[3];
-			Component emoji = cons[4];
+			Component memes = cons[4];
 			int width = parent.getWidth();
 			int height = parent.getHeight();
 
@@ -72,7 +73,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 			send.setLocation(width - 25 - send.getWidth(), height - EDIT_MARGIN + (int) (EDIT_MARGIN * 0.1f));
 			quick.setLocation(25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
 			tools.setLocation(25 + tools.getWidth() + 25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
-			emoji.setLocation(25 + tools.getWidth() + 25 + emoji.getWidth() + 25, (EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
+			memes.setLocation(25 + tools.getWidth() + 25 + memes.getWidth() + 25,
+					(EDIT_MARGIN - EDIT_MARGIN / 3 * 2) / 2);
 		}
 
 		@Override
@@ -163,6 +165,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		scroll.setVerticalScrollBar(bar);
 		scroll.setBorder(null);
 		this.add(scroll);
+		// 初始化memes
+		memeFrame = new MemeFrame("Test Area");
 		// 添加发送按钮
 		JButton button = new JButton("发送");
 		button.setFont(new Font("黑体", 0, 16));// 这句设置字体，在运行前，会发白一下？
@@ -207,15 +211,44 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				JFrame frame = new JFrame();
-				emojiPanel = new EmojiPanel();
-				emojiPanel.setLocation(0,0);
-				emojiPanel.setSize(640,320);
-				frame.add(emojiPanel);
-				frame.setSize(emojiPanel.getSize());
-				emojiPanel.setVisible(true);
-				frame.setVisible(true);
-				System.out.println("emojiPanel");
+				memeFrame.setSize(400, 400);
+				memeFrame.setLocation(e.getX() - memeFrame.getWidth(), e.getY() - memeFrame.getHeight());
+				memeFrame.setLocationRelativeTo(null);
+				memeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				memeFrame.addMouseListener(new MouseListener() {
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(e.getX() + "," + e.getY());
+					}
+				});
+				memeFrame.setVisible(true);
+				System.out.println("memeFrame");
 			}
 		});
 		this.add(button);
@@ -236,8 +269,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 	JPopupMenu quickMenu;
 	// 工具的菜单栏
 	JPopupMenu toolsMenu;
-	//Emoji表情菜单栏
-	EmojiPanel emojiPanel = new EmojiPanel();
+	// 表情菜单栏
+	MemeFrame memeFrame;
 
 	@Override
 	public void paint(Graphics g) {

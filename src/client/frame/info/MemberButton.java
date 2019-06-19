@@ -19,7 +19,6 @@ import javax.swing.border.Border;
 
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
-import client.event.EventRecv;
 import client.event.EventShow;
 import client.event.EventUserSelect;
 import client.event.EventsBridge;
