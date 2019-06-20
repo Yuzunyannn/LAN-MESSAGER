@@ -13,7 +13,6 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import client.event.EventSendInputWords;
 import client.event.EventSendPicture;
 import client.event.EventsBridge;;
 
@@ -34,7 +33,6 @@ public class EmojiPanel extends JScrollPane {
 		for (int i = 0; i < 36; i++) {
 			JButton btn = new JButton();
 			ImageIcon imageIcon = new ImageIcon("src/resources/img/memes/1.jpg");
-			String name = "1.jpg";
 			imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));
 			btn.setIcon(imageIcon);
 			btn.addActionListener(new ActionListener() {

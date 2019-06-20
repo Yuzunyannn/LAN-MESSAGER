@@ -15,7 +15,6 @@ import client.event.EventsBridge;
 import client.frame.Theme;
 import client.user.UserClient;
 import client.word.Word;
-import event.SubscribeEvent;
 import nbt.NBTTagCompound;
 import nbt.NBTTagList;
 import user.UOnline;
@@ -156,18 +155,32 @@ public class ChatPanel extends JPanelUtility {
 		chatTo = UOnline.getInstance().getUser(chatToUsername);
 	}
 
+	/** 时间差大于5分钟则显示时间线 */
+	public void timeLapse(String nowDate, String lastDate) {
+		if (chatDialogPanel.firstTime) {
+			int now = Integer.parseInt(nowDate.substring(14, 15));
+			int last = Integer.parseInt(lastDate.substring(14, 15));
+			if ((now - last) >= 5) {
+				chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString());
+			}
+		} else {
+			chatDialogPanel.firstTime = true;
+			chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString());
+		}
+	}
+
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words) {
 			BubbleType type = checkType(w.id);
 			Date date = new Date();
-			chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString());
+			timeLapse(date.toString(), chatDialogPanel.lastTime);
 			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString());
-		} 
+		}
 		this.revalidate();
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
 	}
-	
+
 	public void onSendPics(String name, BubbleType type) {
 		Date date = new Date();
 		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString());
@@ -195,12 +208,10 @@ public class ChatPanel extends JPanelUtility {
 	public void onRecvMsg(Word word) {
 		BubbleType type = checkType(word.id);
 		Date date = new Date();
-		chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, date.toString());
+		timeLapse(date.toString(), chatDialogPanel.lastTime);
 		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName(), type, date.toString());
 
 	}
-	
-	
 
 	@Override
 	public NBTTagCompound serializeNBT() {
@@ -217,7 +228,5 @@ public class ChatPanel extends JPanelUtility {
 		inputPanel.deserializeNBT((NBTTagList) nbt.getTag("input"));
 		chatTo = UOnline.getInstance().getUser(nbt.getString("user"));
 	}
-	
-	
 
 }

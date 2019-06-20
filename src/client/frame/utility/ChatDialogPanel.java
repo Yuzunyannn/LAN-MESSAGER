@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -23,41 +22,58 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 	private JPanel panel;
 	private User chatToUser;
 	private JScrollBar scrollBar = this.getVerticalScrollBar();
+	private int height = 0;
+	public String lastTime;
+	public boolean firstTime = false;
+	
 	private LayoutManager chatDialogLayout = new LayoutManager() {
-		
+
 		@Override
 		public void removeLayoutComponent(Component comp) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 		@Override
 		public Dimension preferredLayoutSize(Container parent) {
 			// TODO Auto-generated method stub
 			return null;
 		}
-		
+
 		@Override
 		public Dimension minimumLayoutSize(Container parent) {
 			// TODO Auto-generated method stub
 			return null;
 		}
-		
+
 		@Override
 		public void layoutContainer(Container parent) {
 			// TODO Auto-generated method stub
 			Component[] cons = parent.getComponents();
+			int bubbleNum = 0;
 			for (int i = 0; i < cons.length; i++) {
 				if (cons[i] instanceof ChatBubblePanel) {
-					cons[i].setSize(parent.getSize());
+					cons[i].setSize(parent.getWidth(), cons[i].getHeight());
+					bubbleNum++;
 				}
 			}
+//			if (bubbleNum <= 4) {
+//				int height = 0;
+//				for (int i = cons.length - 1; i >=0 ; i--) {
+//					if (cons[i] instanceof ChatBubblePanel) {
+//						height = height + cons[i].getHeight();
+//						cons[i].setLocation(0, cons[i].getY() - height);
+//						//parent.setSize(parent.getWidth(), parent.getHeight() - cons[i].getHeight());
+//					}
+//				}
+//				parent.revalidate();
+//			}
 		}
-		
+
 		@Override
 		public void addLayoutComponent(String name, Component comp) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	};
 
@@ -65,17 +81,14 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		super(new JPanel());
 		this.chatToUser = chatToUser;
 		panel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
-		// panel.setLayout(new GridLayout(0, 1));
-		System.out.println("1/:" + this.getWidth());
-		System.out.println("2/:" + this.panel.getWidth());
 		panel.setSize(this.getWidth() - this.scrollBar.getWidth(), this.getHeight());
 		System.out.println("3/:" + this.panel.getWidth());
 		panel.setLayout(this.chatDialogLayout);
 		panel.setVisible(true);
 		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
 		this.setVisible(true);
-		// 开始区域                                                                                                                                                                                                                                                                                                                                                                             
-		this.addBubble(true, "", "", BubbleType.LINE, "");
+		// 开始区域
+		this.addBubble(false, "", "", BubbleType.LINE, "");
 		// 数据添加可能是在调用setValue之后发生，所以此处引入runnable
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -85,6 +98,9 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		this.panel.setOpaque(true);
 		this.panel.setBackground(Theme.COLOR1);
 	}
+	
+	
+
 
 	/** 添加一个对话气泡 */
 	public void addBubble(boolean isMySelf, String info, String name, BubbleType type, String time) {
@@ -94,6 +110,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 			return;
 		}
 		// panel.setSize(panel.getWidth(), panel.getHeight() + 20);
+		this.lastTime = time;
 		chatBubble = new ChatBubblePanel(isMySelf, info, name, type, time);
 		int addHeight = 0;
 		switch (type) {
@@ -124,16 +141,23 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 //		} else {
 //			chatBubble.setBorder(BorderFactory.createLineBorder(Color.red, 3));
 //		}
-
-		chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(), addHeight);
+		//chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(), addHeight);
+		chatBubble.setBounds(0, this.height, this.panel.getWidth(), addHeight);
+		this.height = this.height + addHeight;
 		// panel.setSize(panel.getWidth(), panel.getHeight() + chatBubble.getHeight());
-		panel.setPreferredSize(new Dimension(panel.getWidth() - this.scrollBar.getWidth(), panel.getHeight() + addHeight));
-		panel.setSize(panel.getWidth(), panel.getHeight() + addHeight);
+		
+		if (this.height > panel.getHeight()) {
+			panel.setPreferredSize(
+					new Dimension(panel.getWidth() - this.scrollBar.getWidth(), panel.getHeight() + addHeight));
+			panel.setSize(panel.getWidth(), panel.getHeight() + addHeight);
+		}
 		panel.add(chatBubble);
 		panel.revalidate();
 		Core.task(new Runnable() {
 			public void run() {
 				scrollBar.setValue(scrollBar.getMaximum());
+				scrollBar.revalidate();
+				scrollBar.repaint();
 			}
 		}, 50);
 	}
@@ -152,6 +176,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		}
 		nbt.setInteger("Count", comNum);
 		nbt.setInteger("ScrollValue", this.getVerticalScrollBar().getValue());
+		
 		// System.out.println(this.getVerticalScrollBar().getValue());
 		return nbt;
 	}

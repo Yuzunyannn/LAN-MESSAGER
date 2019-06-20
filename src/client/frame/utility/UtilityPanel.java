@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
-import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,7 +13,6 @@ import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
-import client.user.UserClient;
 import client.word.Word;
 import client.word.WordFile;
 import client.word.WordString;
