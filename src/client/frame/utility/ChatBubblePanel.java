@@ -25,7 +25,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	private String userExtension = "";
 	private String userTime = "";
 	private String userMessageStatus = "未读";
-	private Type type = Type.NULL;
+	private BubbleType type = BubbleType.NULL;
 	private ImageIcon imageIcon;
 	private JButton Icon;
 	// private JButton dialog;
@@ -33,15 +33,45 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	private JLabel displayedName;
 	private JLabel messageStatus;
 
+	private class FileType {
+		public BubbleType check(String name) {
+			if (name.length() <= 4) {
+				return BubbleType.NULL;
+			}
+			String suffix = name.substring(name.length() - 5, name.length() - 1);
+			switch (suffix) {
+			case ".jpg":
+			case ".png":
+				return BubbleType.PICTURE;
+			case ".doc":
+			case ".ppt":
+				return BubbleType.FILE;
+			default:
+				break;
+			}
+			suffix = name.substring(name.length() - 4, name.length() - 1);
+			switch (suffix) {
+			case ".jpeg":
+				return BubbleType.PICTURE;
+			case ".docx":
+			case ".pptx":
+				return BubbleType.FILE;
+			default:
+				break;
+			}
+			return BubbleType.NULL;
+		}
+	};
+
 	/** 构造函数，生成一个对话气泡，显示信息的参数待定！ */
-	public ChatBubblePanel(boolean isMySelf, String info, String localName, Type type, String time) {
-		if (type == Type.LINE) {
+	public ChatBubblePanel(boolean isMySelf, String info, String localName, BubbleType type, String time) {
+		if (type == BubbleType.LINE) {
 			JLabel lineLabel = new JLabel("--------以下为全部消息--------");
 			lineLabel.setVisible(true);
 			this.setLayout(new FlowLayout(FlowLayout.CENTER));
 			this.add(lineLabel);
 			this.setVisible(true);
-		} else if (type == Type.TIME) {
+		} else if (type == BubbleType.TIME) {
 			JLabel lineLabel = new JLabel("--------" + time + "--------");
 			lineLabel.setVisible(true);
 			this.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -57,7 +87,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 				this.userName = localName;
 			}
 			initalUI(info);
-			if (type == Type.NULL) {
+			if (type == BubbleType.NULL) {
 				this.setVisible(false);
 			} else {
 				this.setVisible(true);
@@ -90,7 +120,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 			System.out.println("NBT为空！");
 			return;
 		}
-		this.type = Type.values()[nbt.getInteger("Type")];
+		this.type = BubbleType.values()[nbt.getInteger("Type")];
 		this.userID = nbt.getBoolean("isMyself");
 		this.userIcon = nbt.getString("UserIcon");
 		this.userName = nbt.getString("Username");
@@ -106,17 +136,21 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		switch (this.type) {
 		case WORD:
 			this.userDialog = info;
-			this.dialog = new Bubble(info, Type.WORD);
-			break;
-		case PICTURE:
+			this.dialog = new Bubble(info, BubbleType.WORD);
 			break;
 		case EXTENSION:
 			break;
 		case FILE:
 			this.dialog = new FileBubble(info, this.userID);
 			break;
+		case PICTURE:
+			this.dialog = new PictureBubble(info, BubbleType.PICTURE);
+			break;
+		case MEME:
+			this.dialog = new PictureBubble(info, BubbleType.MEME);
+			break;
 		default:
-			this.dialog = new Bubble("", Type.WORD);
+			this.dialog = new Bubble("", BubbleType.WORD);
 			break;
 		}
 		this.displayedName = new JLabel();
@@ -169,9 +203,4 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		return userTime;
 	}
 
-}
-
-/** 对话气泡类型 */
-enum Type {
-	WORD, FILE, PICTURE, EXTENSION, NULL, LINE, TIME
 }

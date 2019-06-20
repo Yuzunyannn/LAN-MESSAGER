@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,6 +14,7 @@ import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
+import client.user.UserClient;
 import client.word.Word;
 import client.word.WordFile;
 import client.word.WordString;
@@ -218,11 +220,21 @@ public class UtilityPanel extends JPanel implements ITickable {
 				EventsBridge.sendString(w.toString(), e.toUser);
 			}
 		}
-
 	}
 
 	@SubscribeEvent
 	public void debug(client.event.EventDebugInfoOuting e) {
 		e.debufInfos.add("UtilityPanel(" + tick + ")当前板子的id为:" + panelInfo);
 	}
+	
+	/** 发送图片or表情 */
+	@SubscribeEvent
+	public void sendPicture(client.event.EventSendPicture e) {
+		System.out.println("Pic event got!");
+		
+		((ChatPanel)this.currPanel).onSendPics(e.picName, e.type);
+
+	}
+	
+	
 }

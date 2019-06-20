@@ -11,7 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JViewport;;
+import javax.swing.JViewport;
+
+import client.event.EventSendInputWords;
+import client.event.EventSendPicture;
+import client.event.EventsBridge;;
 
 public class EmojiPanel extends JScrollPane {
 
@@ -30,6 +34,7 @@ public class EmojiPanel extends JScrollPane {
 		for (int i = 0; i < 36; i++) {
 			JButton btn = new JButton();
 			ImageIcon imageIcon = new ImageIcon("src/resources/img/memes/1.jpg");
+			String name = "1.jpg";
 			imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));
 			btn.setIcon(imageIcon);
 			btn.addActionListener(new ActionListener() {
@@ -37,6 +42,8 @@ public class EmojiPanel extends JScrollPane {
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 					if (e.getSource() instanceof JButton) {
+						System.out.println("SUCCESS");
+						EventsBridge.frontendEventHandle.post(new EventSendPicture("1.jpg", BubbleType.MEME));
 						getParent().getParent().getParent().setVisible(false);
 					} else {
 						System.out.println("Fail");

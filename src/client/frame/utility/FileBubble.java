@@ -1,26 +1,17 @@
 package client.frame.utility;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Event;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-import com.sun.xml.internal.ws.api.Component;
-
-import client.event.EventSelectDownload;
-import client.event.EventsBridge;
-import javafx.scene.control.Alert;
 
 public class FileBubble extends Bubble {
-	private JButton fileButton = new JButton();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JButton fileButton;
 	private ProgressPanel progress;
 	private ImageIcon imageIcon;
 	private MouseAdapter mouse = new MouseAdapter() {
@@ -44,7 +35,7 @@ public class FileBubble extends Bubble {
 	};
 
 	public FileBubble(String name, boolean isMySelf) {
-		super(name, Type.FILE);
+		super(name, BubbleType.FILE);
 		if (name.indexOf(".doc") != -1 || name.indexOf(".txt") != -1 || name.indexOf(".docx") != -1) {
 			imageIcon = new ImageIcon("src/resources/img/icons/" + "icon-document.jpg");
 			imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));

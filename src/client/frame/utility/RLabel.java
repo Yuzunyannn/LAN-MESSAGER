@@ -8,6 +8,11 @@ import java.awt.geom.RoundRectangle2D;
 import client.frame.Theme;
 
 public class RLabel extends javax.swing.JLabel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public RLabel(String name) {
         this.setText(name);
         this.setFont(Theme.FONT1);

@@ -13,7 +13,6 @@ import javax.swing.SwingUtilities;
 
 import client.frame.Theme;
 import core.Core;
-import event.SubscribeEvent;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
 import user.User;
@@ -75,16 +74,8 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		panel.setVisible(true);
 		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
 		this.setVisible(true);
-		// 开始区域
-//		panel.add(                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new ChatBubblePanel(true, "", "", Type.NULL, ""));
-//		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
-//		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
-//		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
-//		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
-//		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
-//		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
-//		panel.add(new ChatBubblePanel(true, "", "", Type.NULL, ""));
-		this.addBubble(true, "", "", Type.LINE, "");
+		// 开始区域                                                                                                                                                                                                                                                                                                                                                                             
+		this.addBubble(true, "", "", BubbleType.LINE, "");
 		// 数据添加可能是在调用setValue之后发生，所以此处引入runnable
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -96,9 +87,9 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 	}
 
 	/** 添加一个对话气泡 */
-	public void addBubble(boolean isMySelf, String info, String name, Type type, String time) {
+	public void addBubble(boolean isMySelf, String info, String name, BubbleType type, String time) {
 		// TODO Auto-generated method stub
-		if (type == Type.NULL) {
+		if (type == BubbleType.NULL) {
 			System.out.println("添加气泡失败！类型为NULL");
 			return;
 		}
@@ -120,6 +111,10 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 			break;
 		case TIME:
 			addHeight = 40;
+			break;
+		case PICTURE:
+		case MEME:
+			addHeight = 200;
 			break;
 		default:
 			break;
@@ -177,7 +172,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		}
 		for (Integer i = 0; i < count; i++) {
 			NBTTagCompound upperNBT = (NBTTagCompound) nbt.getTag(i.toString());
-			ChatBubblePanel bubble = new ChatBubblePanel(true, "", "", Type.NULL, "");
+			ChatBubblePanel bubble = new ChatBubblePanel(true, "", "", BubbleType.NULL, "");
 			bubble.deserializeNBT(upperNBT);
 			this.panel.add(bubble);
 		}
@@ -187,11 +182,6 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 			}
 		}, 20);
 		this.revalidate();
-	}
-
-	@SubscribeEvent
-	public void selectDownload(client.event.EventSelectDownload e) {
-
 	}
 
 }

@@ -1,6 +1,5 @@
 package client.frame.info;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
@@ -108,10 +107,6 @@ public class InfoPanel extends JPanel {
 		
 		}
 			System.out.println(searchMemberField.getComponentCount());
-			
-		
-		
-		
 		this.refresh();
 	}
 	/**发送搜索内容到服务器
