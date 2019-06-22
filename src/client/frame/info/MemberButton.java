@@ -77,9 +77,6 @@ public class MemberButton extends JButton {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
-				
-//				MemberButton mb = (MemberButton) e.getComponent();
-//				mb.isChoose();
 				if (e.getButton() == MouseEvent.BUTTON1) {
 
 					// 产生选择事件

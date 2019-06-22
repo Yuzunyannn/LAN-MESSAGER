@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import client.event.EventChatOperation;
 import client.event.EventIPC;
 import client.event.EventULChange;
+import client.event.EventUserSelect;
 import client.frame.Theme;
 import event.IEventBus;
 import event.SubscribeEvent;
@@ -85,7 +86,14 @@ public class InfoPanel extends JPanel {
 		this.refresh();
 		
 	}
-
+	@SubscribeEvent
+	public void onUserSelect(EventUserSelect e) 
+	{
+		if(state==EventIPC.FRIENDS)
+		{
+			this.memberField.onUserSelect(e);
+		}
+	}
 	/* 暂时作为测试 */
 	public void addMembers(String[] members) {
 		for (int i = 0; i < members.length; i++) {

@@ -184,7 +184,6 @@ public class ListScrollPanel extends JScrollPane {
 	}
 	/**
 	 *当用户点击memberbutton是触发*/
-	@SubscribeEvent
 	public void onUserSelect(EventUserSelect e) 
 	{
 		for(Component i:content)
@@ -229,14 +228,6 @@ public class ListScrollPanel extends JScrollPane {
 	/** 事件处理 */
 	@SubscribeEvent
 	public void onSearchRequest(EventSearchRequest e) {
-
-		for (int i = 0; i < content.length; i++)
-			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
-				/**？？？？*/
-				Logger.log.warn("为啥调用RecvMessage?");
-//				((MemberButton) content[i]).RecvMessage();
-			}
-
 		for (Component i : content) {
 			p.add(i);
 		}
