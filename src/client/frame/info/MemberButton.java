@@ -19,7 +19,6 @@ import javax.swing.border.Border;
 
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
-import client.event.EventRecv;
 import client.event.EventShow;
 import client.event.EventUserSelect;
 import client.event.EventsBridge;
@@ -86,7 +85,9 @@ public class MemberButton extends JButton {
 					 *  EventsBridge.frontendEventHandle.post(new EventRecvString (((User)new UserClient("1")),"debug"));
 					 */
 					System.out.println("左键点击");
+					/**EventUserSelect是什么啊*/
 					EventsBridge.frontendEventHandle.post(new EventUserSelect(memberName));
+					Logger.log.warn("EventUserSelect干什么用的，看选中的用户应该用EventShow");
 					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("debug"),"test"));
 				}
 			}

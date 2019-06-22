@@ -30,7 +30,7 @@ public class Theme {
 	public static Font FONT1 = new Font("冬青黑体", Font.PLAIN, 14);
 	/** 联系人名字体 冬青黑体 粗 24号 */
 	public static Font FONT2 = new Font("冬青黑体", Font.BOLD, 24);
-	/** 搜索框字体 冬青黑体 细 8号 */
+	/** 搜索框字体 冬青黑体 细 12号 */
 	public static Font FONT3 = new Font("冬青黑体", Font.PLAIN, 12);
 	/**	左侧弹出菜单字体	宋体 粗  12号*/
 	public static Font FONT4 = new Font("宋体", Font.BOLD, 14);

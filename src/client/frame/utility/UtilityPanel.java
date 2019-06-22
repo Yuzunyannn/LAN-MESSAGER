@@ -218,11 +218,21 @@ public class UtilityPanel extends JPanel implements ITickable {
 				EventsBridge.sendString(w.toString(), e.toUser);
 			}
 		}
-
 	}
 
 	@SubscribeEvent
 	public void debug(client.event.EventDebugInfoOuting e) {
 		e.debufInfos.add("UtilityPanel(" + tick + ")当前板子的id为:" + panelInfo);
 	}
+	
+	/** 发送图片or表情 */
+	@SubscribeEvent
+	public void sendPicture(client.event.EventSendPicture e) {
+		System.out.println("Pic event got!");
+		
+		((ChatPanel)this.currPanel).onSendPics(e.picName, e.type);
+
+	}
+	
+	
 }

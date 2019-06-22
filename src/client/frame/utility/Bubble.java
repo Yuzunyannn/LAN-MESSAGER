@@ -6,11 +6,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.event.MouseAdapter;
 import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import client.frame.Theme;
@@ -24,10 +22,10 @@ public class Bubble extends JPanel {
 	private JLabel words;
 	private RButton rbutton;
 	
-	public Bubble(String words, Type type) {
+	public Bubble(String words, BubbleType type) {
 		this.words = new JLabel(words);
 		this.setLayout(new BorderLayout());
-		if (type == Type.FILE) {
+		if (type == BubbleType.FILE) {
 			this.words.setSize(150, 0);
 		} else {
 			this.words.setSize(300, 0);

@@ -16,6 +16,7 @@ import story.message.MSNbtSend;
 import transfer.StoryFileSender;
 import transfer.message.UMFileSendToUser;
 import user.message.MUGULRequest;
+import user.message.MUSSearch;
 import user.message.MUSString;
 import user.message.MessageLogin;
 import util.ClassHelper;
@@ -75,6 +76,7 @@ public class Proxy {
 		RecvDealMessage.registerMessage("msmem", MSMemberIn.class);
 		RecvDealMessage.registerMessage("msmsend", MSNbtSend.class);
 		RecvDealMessage.registerMessage("file_send", UMFileSendToUser.class);
+		RecvDealMessage.registerMessage("user_search", MUSSearch.class);
 	}
 
 	private static void registerAllStory() {

@@ -21,14 +21,19 @@ import log.Logger;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
+	/**用于区分实例化对象是聊天还是搜索
+	 * 未来可能通过继承的方式重构实现区分*/
+	public static final String FRIENDPANEL="好友聊天列表";
+	public static final String SEARCHPANEL="搜索列表";
 	/** 添加列表中的成员数量时可能需要改变 */
 	private int height = 0;
 	private JPanel p;
 	private Component[] content;
 	private int fixed = 0;
-
+	protected String state;
 	public ListScrollPanel() {
 		super();
+		state=FRIENDPANEL;
 		p = new JPanel();
 		int width = super.getWidth();
 		p.setPreferredSize(new Dimension(width, getHeight()));
@@ -49,8 +54,9 @@ public class ListScrollPanel extends JScrollPane {
 		bar.setBackground(Theme.COLOR1);
 
 	}
-	/**置顶并且消息数置为recvcount*/
-	public void setTop(String name ,int recvcount) {
+
+	/** 置顶并且消息数置为recvcount */
+	public void setTop(String name, int recvcount) {
 		int temp;
 		temp = getMember(name);
 		if (temp == -1)
@@ -61,7 +67,7 @@ public class ListScrollPanel extends JScrollPane {
 		for (int i = temp; i > fixed; i--) {
 			content[i] = content[i - 1];
 		}
-		((MemberButton)tempbutton).count=recvcount;
+		((MemberButton) tempbutton).count = recvcount;
 		content[fixed] = tempbutton;
 		Component[] re = content;
 		p.removeAll();
@@ -70,8 +76,9 @@ public class ListScrollPanel extends JScrollPane {
 			p.add(i);
 		}
 		this.refresh();
-}
-	/** 把成员置顶*/
+	}
+
+	/** 把成员置顶 */
 	public void setTop(String name) {
 		int temp;
 		temp = getMember(name);
@@ -121,7 +128,9 @@ public class ListScrollPanel extends JScrollPane {
 		return -1;
 
 	}
-
+	public void setState(String str) {
+		state=str;
+	}
 	public int getPHeight() {
 		return height;
 	}
@@ -129,18 +138,19 @@ public class ListScrollPanel extends JScrollPane {
 	public void setPHeight(int height) {
 		this.height = height;
 	}
-	public void	addNewMember(String name,Boolean isSearch) {
-		if(isSearch) {
+
+	public void addNewMember(String name, Boolean isSearch) {
+		if (isSearch) {
 			p.add(new SearchButton(name));
 			content = p.getComponents();
 			height += MemberButton.MEMBERBUTTON_HEIGHT;
 			int width = super.getWidth();
 			standardHeight(super.getPreferredSize());
 			p.setPreferredSize(new Dimension(width, height));
-			}
-		else 
+		} else
 			addNewMember(name);
 	}
+
 	public void addNewMember(String name) {
 		p.add(new MemberButton(name));
 
@@ -174,6 +184,7 @@ public class ListScrollPanel extends JScrollPane {
 
 	public void deleteAllMember() {
 		p.removeAll();
+		content=p.getComponents();
 	}
 
 	public void standardHeight(Dimension d) {
@@ -193,8 +204,8 @@ public class ListScrollPanel extends JScrollPane {
 	}
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
-		
 		boolean have = false;
+
 		for(Component i:content)
 			if(((MemberButton) i).getMemberName().equals(e.from.getUserName()))
 			{
@@ -203,7 +214,8 @@ public class ListScrollPanel extends JScrollPane {
 			}	
 			else have=false;
 		if(!have)
-			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.from.getUserName(),EventChatOperation.ADDCHAT));
+			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.from.getUserName(),EventChatOperation.ADDCHAT,state));
+
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
 				((MemberButton) content[i]).RecvMessage();
@@ -211,12 +223,13 @@ public class ListScrollPanel extends JScrollPane {
 				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
 						+ ((MemberButton) content[i]).count);
 				setTop(((MemberButton) content[i]).getMemberName());
-				System.out.println(((MemberButton) content[i]).getMemberName()+((MemberButton) content[i]).count);
+				System.out.println(((MemberButton) content[i]).getMemberName() + ((MemberButton) content[i]).count);
 			}
 		p.removeAll();
 		for (Component i : content) {
 			p.add(i);
 		}
+		content=p.getComponents();
 		this.refresh();
 	}
 
@@ -233,23 +246,21 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		this.refresh();
 	}
-
 	@SubscribeEvent
 	public void onFreindOperator(EventFriendOperation e) {
 
 		/**
 		 * 添加好友应在添加search的panel中响应事件 if (e.type.equals(EventFriendOperation.ADDFRIEND))
-		 * 好友列表添加
-		 * EventsBridge.frontendEventHandle.post(new EventChatOperation(e.username,EventChatOperation.ADDCHAT))
+		 * 好友列表添加 EventsBridge.frontendEventHandle.post(new
+		 * EventChatOperation(e.username,EventChatOperation.ADDCHAT))
 		 */
 		if (e.type.equals(EventFriendOperation.DELETEFRIEND))
 			/**
-			 * 好友列表删除*/
-			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.username,EventChatOperation.DELETECHAT));
+			 * 好友列表删除
+			 */
+			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.username, EventChatOperation.DELETECHAT));
 		this.refresh();
 	}
-
-
 
 	public void initEvent(IEventBus bus) {
 		bus.register(this);

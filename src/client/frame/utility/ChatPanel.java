@@ -155,26 +155,48 @@ public class ChatPanel extends JPanelUtility {
 		chatTo = UOnline.getInstance().getUser(chatToUsername);
 	}
 
+	/** 时间差大于5分钟则显示时间线 */
+	public void timeLapse(String nowDate, String lastDate) {
+		if (chatDialogPanel.firstTime) {
+			int now = Integer.parseInt(nowDate.substring(14, 15));
+			int last = Integer.parseInt(lastDate.substring(14, 15));
+			if ((now - last) >= 5) {
+				chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString());
+			}
+		} else {
+			chatDialogPanel.firstTime = true;
+			chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString());
+		}
+	}
+
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words) {
-			Type type = checkType(w.id);
+			BubbleType type = checkType(w.id);
 			Date date = new Date();
-			chatDialogPanel.addBubble(true, "", "", Type.TIME, date.toString());
+			timeLapse(date.toString(), chatDialogPanel.lastTime);
 			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString());
 		}
+		this.revalidate();
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
 	}
 
+	public void onSendPics(String name, BubbleType type) {
+		Date date = new Date();
+		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString());
+		chatDialogPanel.addBubble(true, name, UserClient.getClientUsername(), type, date.toString());
+		this.revalidate();
+	}
+
 	/** 检查发送和接收的消息类型 */
-	public Type checkType(int id) {
-		Type type = Type.NULL;
+	private BubbleType checkType(int id) {
+		BubbleType type = BubbleType.NULL;
 		switch (id) {
 		case Word.FILE:
-			type = Type.FILE;
+			type = BubbleType.FILE;
 			break;
 		case Word.STRING:
-			type = Type.WORD;
+			type = BubbleType.WORD;
 			break;
 		default:
 			break;
@@ -184,9 +206,9 @@ public class ChatPanel extends JPanelUtility {
 
 	/** 当点击收到消息的时候调用 */
 	public void onRecvMsg(Word word) {
-		Type type = checkType(word.id);
+		BubbleType type = checkType(word.id);
 		Date date = new Date();
-		chatDialogPanel.addBubble(false, "", "", Type.TIME, date.toString());
+		timeLapse(date.toString(), chatDialogPanel.lastTime);
 		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName(), type, date.toString());
 
 	}

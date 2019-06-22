@@ -2,25 +2,22 @@ package client.frame.utility;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.Delayed;
-
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.ButtonUI;;
+import javax.swing.event.ChangeListener;;
 
 public class ProgressPanel extends JPanel implements ActionListener, ChangeListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JProgressBar progressbar;
 	private Timer timer;
 	private JButton b;
@@ -44,6 +41,9 @@ public class ProgressPanel extends JPanel implements ActionListener, ChangeListe
 		progressbar.setBorderPainted(true);
 		progressbar.setBackground(Color.pink);
 		// JPanel panel = new JPanel();
+		if (this.type == TransferType.UPLOAD) {
+			this.label.setText("上传文件");
+		}
 		b = new JButton("开始");
 		b.setForeground(Color.blue);
 		b.addActionListener(this);
@@ -112,6 +112,7 @@ public class ProgressPanel extends JPanel implements ActionListener, ChangeListe
 			this.timer.start();
 		}
 	}
+	
 }
 
 enum TransferType {

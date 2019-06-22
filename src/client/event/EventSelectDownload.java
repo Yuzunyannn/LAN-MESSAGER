@@ -1,6 +1,6 @@
 package client.event;
 
-import event.Event;;
+import event.Event;
 
 public class EventSelectDownload extends Event {
 	public int pos = 0;
