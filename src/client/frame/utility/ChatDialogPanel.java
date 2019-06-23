@@ -57,17 +57,6 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 					bubbleNum++;
 				}
 			}
-//			if (bubbleNum <= 4) {
-//				int height = 0;
-//				for (int i = cons.length - 1; i >=0 ; i--) {
-//					if (cons[i] instanceof ChatBubblePanel) {
-//						height = height + cons[i].getHeight();
-//						cons[i].setLocation(0, cons[i].getY() - height);
-//						//parent.setSize(parent.getWidth(), parent.getHeight() - cons[i].getHeight());
-//					}
-//				}
-//				parent.revalidate();
-//			}
 		}
 
 		@Override
@@ -118,7 +107,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 			addHeight = (info.length() / 50) * 30 + 60;
 			break;
 		case FILE:
-			addHeight = 100;
+			addHeight = 80;
 			break;
 		case EXTENSION:
 			addHeight = 200;
@@ -176,13 +165,18 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		}
 		nbt.setInteger("Count", comNum);
 		nbt.setInteger("ScrollValue", this.getVerticalScrollBar().getValue());
-		
+		nbt.setBoolean("firstTime", this.firstTime);
+		nbt.setString("lastTime", this.lastTime);
+		nbt.setInteger("height", this.height);
 		// System.out.println(this.getVerticalScrollBar().getValue());
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
+		this.firstTime = nbt.getBoolean("firstTime");
+		this.lastTime = nbt.getString("lastTime");
+		this.height = nbt.getInteger("height");
 		int count = nbt.getInteger("Count");
 		if (count == 0) {
 			// System.out.println("组件数量为0");

@@ -85,6 +85,7 @@ public class EmojiPanel extends JScrollPane {
 			});
 			this.contentPanel.add(btn);
 		}
+		
 		this.contentPanel.setVisible(true);
 	}
 

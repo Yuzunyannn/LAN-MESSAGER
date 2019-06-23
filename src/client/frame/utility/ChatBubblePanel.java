@@ -24,7 +24,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	private String userFile = "";
 	private String userExtension = "";
 	private String userTime = "";
-	private String userMessageStatus = "未读";
+	private Boolean userMessageStatus = false;
 	private BubbleType type = BubbleType.NULL;
 	private ImageIcon imageIcon;
 	private JButton Icon;
@@ -32,36 +32,6 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	private Bubble dialog;
 	private JLabel displayedName;
 	private JLabel messageStatus;
-
-	private class FileType {
-		public BubbleType check(String name) {
-			if (name.length() <= 4) {
-				return BubbleType.NULL;
-			}
-			String suffix = name.substring(name.length() - 5, name.length() - 1);
-			switch (suffix) {
-			case ".jpg":
-			case ".png":
-				return BubbleType.PICTURE;
-			case ".doc":
-			case ".ppt":
-				return BubbleType.FILE;
-			default:
-				break;
-			}
-			suffix = name.substring(name.length() - 4, name.length() - 1);
-			switch (suffix) {
-			case ".jpeg":
-				return BubbleType.PICTURE;
-			case ".docx":
-			case ".pptx":
-				return BubbleType.FILE;
-			default:
-				break;
-			}
-			return BubbleType.NULL;
-		}
-	};
 
 	/** 构造函数，生成一个对话气泡，显示信息的参数待定！ */
 	public ChatBubblePanel(boolean isMySelf, String info, String localName, BubbleType type, String time) {
@@ -103,6 +73,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setBoolean("isMyself", this.userID);
+		nbt.setBoolean("Status", this.userMessageStatus);
 		nbt.setInteger("Type", this.type.ordinal());
 		nbt.setString("UserIcon", this.userIcon);
 		nbt.setString("Username", this.userName);
@@ -110,7 +81,6 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		nbt.setString("File", this.userFile);
 		nbt.setString("Extension", this.userExtension);
 		nbt.setString("Time", this.userTime);
-		nbt.setString("Status", this.userMessageStatus);
 		return nbt;
 	}
 
@@ -128,7 +98,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		this.userFile = nbt.getString("File");
 		this.userExtension = nbt.getString("Extension");
 		this.userTime = nbt.getString("Time");
-		this.userMessageStatus = nbt.getString("Status");
+		this.userMessageStatus = nbt.getBoolean("Status");
 		this.reConstructComponents();
 	}
 
@@ -170,7 +140,12 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		if (this.userID) {
 			this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			displayedName.setText(":" + userName);
-			this.messageStatus = new JLabel(this.userMessageStatus);
+			if (this.userMessageStatus) {
+				this.messageStatus = new JLabel("已读");
+			} else {
+				this.messageStatus = new JLabel("未读");
+			}
+			
 			this.messageStatus.setOpaque(false);
 			this.messageStatus.setForeground(Theme.COLOR2);
 			this.add(messageStatus);

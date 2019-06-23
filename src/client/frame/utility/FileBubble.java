@@ -36,7 +36,7 @@ public class FileBubble extends Bubble {
 
 	public FileBubble(String name, boolean isMySelf) {
 		super(name, BubbleType.FILE);
-		if (name.indexOf(".doc") != -1 || name.indexOf(".txt") != -1 || name.indexOf(".docx") != -1) {
+		if (this.checkFileType(name) == BubbleType.FILE) {
 			imageIcon = new ImageIcon("src/resources/img/icons/" + "icon-document.jpg");
 			imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));
 			fileButton = new JButton();
@@ -54,6 +54,9 @@ public class FileBubble extends Bubble {
 		} else {
 			System.out.println("暂不支持图标显示的文件类型");
 		}
+//		if (name.indexOf(".doc") != -1 || name.indexOf(".txt") != -1 || name.indexOf(".docx") != -1) {
+//			
+//		} 
 
 	}
 
