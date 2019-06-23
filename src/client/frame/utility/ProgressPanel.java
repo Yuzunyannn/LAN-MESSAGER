@@ -11,7 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;;
+import javax.swing.event.ChangeListener;
+
+import client.frame.Theme;;
 
 public class ProgressPanel extends JPanel implements ActionListener, ChangeListener {
 	/**
@@ -30,6 +32,7 @@ public class ProgressPanel extends JPanel implements ActionListener, ChangeListe
 		// this.setBounds(50, 50, 100, 100);
 		this.downloadTime = timer;
 		this.type = type;
+		this.setBackground(Theme.COLOR0);
 		progressbar = new JProgressBar();
 		progressbar.setOrientation(JProgressBar.HORIZONTAL);
 		progressbar.setMinimum(0);

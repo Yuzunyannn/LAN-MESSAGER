@@ -66,6 +66,58 @@ public class Bubble extends JPanel {
         //Button.setText(builder.toString());
     }
 	
+	public BubbleType checkFileType(String name) {
+		if (name.length() <= 4) {
+			return BubbleType.NULL;
+		}
+		String suffix = name.substring(name.length() - 5, name.length());
+		if (suffix.indexOf('.') == 0) {
+			switch (suffix) {
+			case ".jpeg":
+				return BubbleType.PICTURE;
+			case ".docx":
+			case ".pptx":
+			case ".pdf":
+			case ".c":
+			case ".h":
+			case ".java":
+			case ".cpp":
+			case ".hpp":
+				return BubbleType.FILE;
+			default:
+				break;
+			}
+		} else {
+			suffix = name.substring(name.length() - 4, name.length());
+			if (suffix.indexOf('.') == 0) {
+				switch (suffix) {
+				case ".jpg":
+					return BubbleType.PICTURE;
+				case ".pdf":
+				case ".cpp":
+				case ".hpp":
+					return BubbleType.FILE;
+				default:
+					break;
+				}
+			} else {
+				suffix = name.substring(name.length() - 2, name.length());
+				if (suffix.indexOf('.') == 0) {
+					switch (suffix) {
+					case "":
+						return BubbleType.PICTURE;
+					case ".c":
+					case ".h":
+						return BubbleType.FILE;
+					default:
+						break;
+					}
+				}
+			}
+		}
+		return BubbleType.NULL;
+	}
+	
 	@Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();

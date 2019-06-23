@@ -8,6 +8,8 @@ import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputAdapter;
@@ -20,16 +22,16 @@ public class MemeFrame extends JFrame {
 	private static final int TITLE_HEIGHT = 20;
 	private EmojiPanel emojiPanel;
 
-	public MemeFrame() throws HeadlessException {
-		super();
-		this.emojiPanel = new EmojiPanel();
-		this.setContentPane(this.emojiPanel);
-		setUndecorated(true);
-		MouseHandler ml = new MouseHandler();
-		addMouseListener(ml);
-		addMouseMotionListener(ml);
-		this.setAlwaysOnTop(true);
-	}
+//	public MemeFrame() throws HeadlessException {
+//		super();
+//		this.emojiPanel = new EmojiPanel();
+//		this.setContentPane(this.emojiPanel);
+//		setUndecorated(true);
+//		MouseHandler ml = new MouseHandler();
+//		addMouseListener(ml);
+//		addMouseMotionListener(ml);
+//		this.setAlwaysOnTop(true);
+//	}
 
 	public MemeFrame(String title) throws HeadlessException {
 		super(title);
@@ -37,9 +39,24 @@ public class MemeFrame extends JFrame {
 		this.setContentPane(this.emojiPanel);
 		setUndecorated(true);
 		MouseHandler ml = new MouseHandler();
-		addMouseListener(ml);
+		//addMouseListener(ml);
 		addMouseMotionListener(ml);
+		this.addWindowFocusListener(new WindowFocusListener() {
+			
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+				// TODO Auto-generated method stub
+				dispose();
+			}
+			
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		this.setAlwaysOnTop(true);
+		this.setOpacity(1);
 	}
 
 	public Insets getInsets() {

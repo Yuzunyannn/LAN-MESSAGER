@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.awt.Toolkit;
 import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
@@ -79,12 +80,21 @@ public class LoginFrame extends JFrame {
 		loginButton.setUI(new client.frame.ui.NormalButtonUI());
 		loginButton.setSize(75, 35);
 		this.add(loginButton);
+		this.setLocationRelativeTo(null);
 		// 设置关闭操作
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// 设置最小窗体大小
 		this.setMinimumSize(layout.minimumLayoutSize(this));
 		// 设置窗体大小和位置
 		this.pack();
+		//居中显示窗体
+		int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+		int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+		// 得到窗体的宽、高
+		int windowsWidth = this.getWidth();
+		int windowsHeight = this.getHeight();
+		//System.out.println(windowsWidth+","+windowsHeight);
+		this.setBounds((width - windowsWidth) / 2,(height - windowsHeight) / 2, windowsWidth, windowsHeight);
 	}
 
 	public void setLoginListener(MouseListener listener) {

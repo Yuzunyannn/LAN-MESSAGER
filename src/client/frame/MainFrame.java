@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -78,6 +79,14 @@ public class MainFrame extends JFrame {
 		this.setMinimumSize(layout.minimumLayoutSize(this));
 		// 设置窗体大小和位置
 		this.fixed();
+		//居中显示
+		int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+		int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+		// 得到窗体的宽、高
+		int windowsWidth = this.getWidth();
+		int windowsHeight = this.getHeight();
+		//System.out.println(windowsWidth+","+windowsHeight);
+		this.setBounds((width - windowsWidth) / 2,(height - windowsHeight) / 2, windowsWidth, windowsHeight);
 	}
 
 	public void initEvent(IEventBus bus) {
