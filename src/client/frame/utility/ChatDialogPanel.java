@@ -1,9 +1,12 @@
 package client.frame.utility;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -50,13 +53,12 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		public void layoutContainer(Container parent) {
 			// TODO Auto-generated method stub
 			Component[] cons = parent.getComponents();
-			int bubbleNum = 0;
 			for (int i = 0; i < cons.length; i++) {
 				if (cons[i] instanceof ChatBubblePanel) {
 					cons[i].setSize(parent.getWidth(), cons[i].getHeight());
-					bubbleNum++;
 				}
 			}
+			repaint();
 		}
 
 		@Override
@@ -125,11 +127,11 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		default:
 			break;
 		}
-//		if (isMySelf) {
-//			chatBubble.setBorder(BorderFactory.createLineBorder(Color.blue, 3));
-//		} else {
-//			chatBubble.setBorder(BorderFactory.createLineBorder(Color.red, 3));
-//		}
+		if (isMySelf) {
+			chatBubble.setBorder(BorderFactory.createLineBorder(Color.blue, 3));
+		} else {
+			chatBubble.setBorder(BorderFactory.createLineBorder(Color.red, 3));
+		}
 		//chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(), addHeight);
 		chatBubble.setBounds(0, this.height, this.panel.getWidth(), addHeight);
 		this.height = this.height + addHeight;

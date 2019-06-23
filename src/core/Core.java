@@ -40,10 +40,10 @@ public class Core {
 		proxy.init();
 		proxy.launch();
 		// 启动核心
-		core.lunch();
+		core.launch();
 	}
 
-	private void lunch() {
+	private void launch() {
 		scheduExec.scheduleAtFixedRate(new TickTask(), 0, 50, TimeUnit.MILLISECONDS);
 	}
 
