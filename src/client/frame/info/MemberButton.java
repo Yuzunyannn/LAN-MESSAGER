@@ -38,15 +38,15 @@ public class MemberButton extends JButton {
 	public int count;
 	private String toolId;
 	MouseAdapter mouse;
-	public static ImageIcon icon_open = new ImageIcon(
-			ResourceManagement.instance.getResource("img/envelope_open.png").getImage());
-	public static ImageIcon icon_closed = new ImageIcon(
-			ResourceManagement.instance.getResource("img/envelope_closed.png").getImage());
 	// 显示的信封开闭，true开，false闭
 	private boolean envelope;
 	// 是否正在与该用户聊天
 	private boolean isChat;
-
+	//图片资源
+	public static ImageIcon icon_open = new ImageIcon(
+			ResourceManagement.instance.getResource("img/envelope_open.png").getImage());
+	public static ImageIcon icon_closed = new ImageIcon(
+			ResourceManagement.instance.getResource("img/envelope_closed.png").getImage());
 	public MemberButton() {
 
 	}
@@ -55,19 +55,21 @@ public class MemberButton extends JButton {
 		toolId=UtilityPanel.TOOLID_CHATING;
 		memberName = name;
 		count = 0;
+		envelope = true;
+		isChat=false;
 		JLabel member = new JLabel(name);
 		this.setLayout(null);
-		this.add(member);
 		member.setSize(150, 30);
 		member.setLocation(0, 20);
 		member.setFont(Theme.FONT2);
+		this.add(member);
 		Dimension size = new Dimension(MainFrame.INFO_RIGION_WIDTH, MEMBERBUTTON_HEIGHT);
 		this.setPreferredSize(size);
 		this.setMinimumSize(size);
 		this.setMaximumSize(size);
 		this.setContentAreaFilled(false);
 		ActionListener memberItemListener = new MemberMenuItemMonitor();
-		envelope = true;
+		//右键菜单的监听器
 		mouse = new UButtonMouse(MEMBERITEMSTR, memberItemListener) {
 			@Override
 			public void mousePressed(MouseEvent e) {
