@@ -12,7 +12,7 @@ import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventRecv.EventRecvString;
 import client.event.EventSearchRequest;
-import client.event.EventUserSelect;
+import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.Theme;
 import event.IEventBus;
@@ -195,12 +195,11 @@ public class ListScrollPanel extends JScrollPane {
 	}
 	/**
 	 *当用户点击memberbutton是触发*/
-	@SubscribeEvent
-	public void onUserSelect(EventUserSelect e) 
+	public void onUserSelect(EventShow e) 
 	{
 		for(Component i:content)
 		{
-			((MemberButton) i).isChoose(e.getUsername());
+			((MemberButton) i).isChoose(e.id);
 		}
 	}
 	@SubscribeEvent
@@ -240,8 +239,13 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	/** 事件处理 */
-	
-
+	@SubscribeEvent
+	public void onSearchRequest(EventSearchRequest e) {
+		for (Component i : content) {
+			p.add(i);
+		}
+		this.refresh();
+	}
 	@SubscribeEvent
 	public void onFreindOperator(EventFriendOperation e) {
 

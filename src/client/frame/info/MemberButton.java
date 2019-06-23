@@ -20,7 +20,6 @@ import javax.swing.border.Border;
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventShow;
-import client.event.EventUserSelect;
 import client.event.EventsBridge;
 import client.event.EventRecv.EventRecvString;
 import client.frame.MainFrame;
@@ -29,27 +28,25 @@ import client.frame.utility.UtilityPanel;
 import client.user.UserClient;
 import log.Logger;
 import resmgt.ResourceManagement;
-import user.User;
 
 public class MemberButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	public final static int MEMBERBUTTON_HEIGHT = 70;
 	public static final String[] MEMBERITEMSTR = { EventFriendOperation.DELETEFRIEND, EventChatOperation.DELETECHAT,
 			EventChatOperation.FIXEDCHAT, EventChatOperation.CANELFIXEDCHAT };
-	private String memberName = "小明";
-	private User user;
+	private String memberName;
 	public int count;
 	private String toolId;
 	MouseAdapter mouse;
-	public static ImageIcon icon_open = new ImageIcon(
-			ResourceManagement.instance.getResource("img/envelope_open.png").getImage());
-	public static ImageIcon icon_closed = new ImageIcon(
-			ResourceManagement.instance.getResource("img/envelope_closed.png").getImage());
 	// 显示的信封开闭，true开，false闭
 	private boolean envelope;
 	// 是否正在与该用户聊天
 	private boolean isChat;
-
+	//图片资源
+	public static ImageIcon icon_open = new ImageIcon(
+			ResourceManagement.instance.getResource("img/envelope_open.png").getImage());
+	public static ImageIcon icon_closed = new ImageIcon(
+			ResourceManagement.instance.getResource("img/envelope_closed.png").getImage());
 	public MemberButton() {
 
 	}
@@ -58,39 +55,30 @@ public class MemberButton extends JButton {
 		toolId=UtilityPanel.TOOLID_CHATING;
 		memberName = name;
 		count = 0;
-		user = new UserClient(name);
+		envelope = true;
+		isChat=false;
 		JLabel member = new JLabel(name);
 		this.setLayout(null);
-		this.add(member);
 		member.setSize(150, 30);
 		member.setLocation(0, 20);
 		member.setFont(Theme.FONT2);
+		this.add(member);
 		Dimension size = new Dimension(MainFrame.INFO_RIGION_WIDTH, MEMBERBUTTON_HEIGHT);
 		this.setPreferredSize(size);
 		this.setMinimumSize(size);
 		this.setMaximumSize(size);
 		this.setContentAreaFilled(false);
 		ActionListener memberItemListener = new MemberMenuItemMonitor();
-		envelope = true;
+		//右键菜单的监听器
 		mouse = new UButtonMouse(MEMBERITEMSTR, memberItemListener) {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
-				
-//				MemberButton mb = (MemberButton) e.getComponent();
-//				mb.isChoose();
 				if (e.getButton() == MouseEvent.BUTTON1) {
 
 					// 产生选择事件
-					EventsBridge.frontendEventHandle.post(new EventShow(toolId, user.getUserName()));
+					EventsBridge.frontendEventHandle.post(new EventShow(toolId, memberName));
 					// count=0;
-					/**
-					 *  EventsBridge.frontendEventHandle.post(new EventRecvString (((User)new UserClient("1")),"debug"));
-					 */
-					System.out.println("左键点击");
-					/**EventUserSelect是什么啊*/
-					EventsBridge.frontendEventHandle.post(new EventUserSelect(memberName));
-					Logger.log.warn("EventUserSelect干什么用的，看选中的用户应该用EventShow");
 					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("debug"),"test"));
 				}
 			}
@@ -112,9 +100,14 @@ public class MemberButton extends JButton {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(Theme.COLOR2);
 		int width = super.getWidth();
 		int height = super.getHeight();
+		if(isChat){
+			g.setColor(Theme.COLOR2.darker());
+		}
+		else{
+			g.setColor(Theme.COLOR2);
+		}
 		g.fillRect(0, 0, width, height);
 		int x = 200, y = 23;
 		if (envelope) {

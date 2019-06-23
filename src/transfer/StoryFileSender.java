@@ -68,6 +68,8 @@ public class StoryFileSender extends Story {
 	private static class UserFileInfo {
 		public long byteAt = 0;
 		public User user;
+		public boolean clientOk = false;
+		public int okTimeout = 0;
 		public FileInputStream fileIStream = null;
 
 		public void close() {
@@ -330,6 +332,20 @@ public class StoryFileSender extends Story {
 		return true;
 	}
 
+	// 客户端创建成功
+	@Override
+	public void clientStoryCreateSuccess(User user) {
+		if (user.equals(this.daddy)) {
+			return;
+		}
+		for (UserFileInfo info : usersFileInfoList) {
+			if (info.user.equals(user)) {
+				info.clientOk = true;
+			}
+		}
+		Logger.log.warn(this + "出现了一个非法用户(" + user + ")试图加入文件接受！");
+	}
+
 	@Override
 	protected void onTick() {
 		// 如果flgas是失败
@@ -364,6 +380,15 @@ public class StoryFileSender extends Story {
 			Iterator<UserFileInfo> itr = usersFileInfoList.iterator();
 			while (itr.hasNext()) {
 				UserFileInfo info = itr.next();
+				if (info.clientOk == false) {
+					info.okTimeout++;
+					if (info.okTimeout >= 20 * 60) {
+						info.close();
+						itr.remove();
+						Logger.log.warn("用户(" + info.user + ")始终未能开始接受文件！");
+					}
+					continue;
+				}
 				if (info.byteAt == 0 && info.fileIStream == null) {
 					this.sendData(this.getRecvHead(), info.user);
 					try {

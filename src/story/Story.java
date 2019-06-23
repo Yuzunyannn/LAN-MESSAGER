@@ -334,6 +334,13 @@ public class Story implements ITickable {
 	}
 
 	/**
+	 * 客户端的story创建成功，服务端调用
+	 */
+	public void clientStoryCreateSuccess(User user) {
+
+	}
+
+	/**
 	 * 收到发送的数据，处理这个数据
 	 * 
 	 * @from 从某个用户发来的，只有服务端有效，否则为User.Empty
