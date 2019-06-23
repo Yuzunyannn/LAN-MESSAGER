@@ -87,16 +87,31 @@ public class Logger {
 
 	/** 打印 */
 	synchronized private void print(String str) {
-		out.println(this.getCurThread() + this.getCurTime() + str);
-		System.out.println(this.getCurThread() + this.getCurTime() + str);
+		str = this.getCurThread() + this.getCurTime() + str;
+		out.println(str);
+		System.out.println(str);
 	}
 
-	/** 打印 */
-	synchronized private void print(String format, Object... objs) {
-		out.printf(this.getCurThread() + this.getCurTime() + format, objs);
-		out.println();
-		System.out.printf(this.getCurThread() + this.getCurTime() + format, objs);
-		System.out.println();
+	synchronized private void print(String str, StackTraceElement[] stacks, int index) {
+		if (stacks == null)
+			return;
+		if (index < 0) {
+			str = this.getCurThread() + this.getCurTime() + str;
+			out.println(str);
+			System.out.println(str);
+			for (int i = 0; i < stacks.length; i++) {
+				out.println(stacks[i]);
+				System.out.println(stacks[i]);
+			}
+		} else {
+			if (stacks.length <= index) {
+				str = this.getCurThread() + this.getCurTime() + str;
+			} else {
+				str = this.getCurThread() + this.getCurTime() + str + "  ------- " + stacks[index];
+			}
+			out.println(str);
+			System.out.println(str);
+		}
 	}
 
 	/** 输出一条正常信息 */
@@ -116,7 +131,7 @@ public class Logger {
 	/** 输出一条警告信息 */
 	public void warn(String str) {
 		str = "[warn]" + str;
-		this.print(str);
+		this.print(str, Thread.currentThread().getStackTrace(), 2);
 	}
 
 	/** 输出一条警告信息 */
@@ -128,7 +143,7 @@ public class Logger {
 	/** 输出一条错误信息 */
 	public void error(String str) {
 		str = "[error]" + str;
-		this.print(str);
+		this.print(str, Thread.currentThread().getStackTrace(), 2);
 	}
 
 	/** 输出一条错误信息 */

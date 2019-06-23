@@ -33,10 +33,8 @@ public class Connection implements Runnable {
 	/**
 	 * 建立客户端连接
 	 * 
-	 * @param ip
-	 *            ip地址
-	 * @param port
-	 *            目标端口
+	 * @param ip   ip地址
+	 * @param port 目标端口
 	 */
 	public Connection(String ip, int port) throws UnknownHostException, IOException {
 		this(new Socket(ip, port), Side.CLIENT);
@@ -101,7 +99,10 @@ public class Connection implements Runnable {
 				Logger.log.error(this.toString() + "出现IO错误", e);
 				break;
 			} catch (Exception e) {
-				Logger.log.error(this.toString() + "出现严重错误", e);
+				Logger.log.error(this.toString() + "出现较严重错误", e);
+				break;
+			} catch (Throwable e) {
+				Logger.log.error(this.toString() + "出现意料之外的非常严重错误", e);
 				break;
 			}
 		}

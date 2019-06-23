@@ -7,12 +7,12 @@ import java.util.List;
 import log.Logger;
 import log.NeedLog;
 import network.RecvDealMessage;
-import platform.Platform;
 import story.Story;
 import story.message.MSBegin;
 import story.message.MSEnd;
 import story.message.MSMemberIn;
 import story.message.MSNbtSend;
+import story.message.MSResult;
 import transfer.StoryFileSender;
 import transfer.message.UMFileSendToUser;
 import user.message.MUGULRequest;
@@ -43,7 +43,14 @@ public class Proxy {
 			List<Class<?>> initList = ClassHelper.findClasses(ClassHelper.getRuntimeURL(""), "", true);
 			// 扫描所有类
 			for (Class<?> cls : initList) {
-				Field[] fields = cls.getDeclaredFields();
+				Field[] fields;
+				try {
+					fields = cls.getDeclaredFields();
+				} catch (NoClassDefFoundError e) {
+					System.out.println("当前搜寻类：" + cls);
+					e.printStackTrace();
+					continue;
+				}
 				for (Field field : fields) {
 					if (!Modifier.isStatic(field.getModifiers()))
 						continue;
@@ -72,6 +79,7 @@ public class Proxy {
 		RecvDealMessage.registerMessage("us_str", MUSString.class);
 		RecvDealMessage.registerMessage("ul_change", MUGULRequest.class);
 		RecvDealMessage.registerMessage("msbegin", MSBegin.class);
+		RecvDealMessage.registerMessage("msresult", MSResult.class);
 		RecvDealMessage.registerMessage("msend", MSEnd.class);
 		RecvDealMessage.registerMessage("msmem", MSMemberIn.class);
 		RecvDealMessage.registerMessage("msmsend", MSNbtSend.class);

@@ -9,4 +9,8 @@ abstract public class MessageStory extends MessageUser implements Runnable {
 	protected void executeServer(User from, User to, NBTTagCompound nbt) {
 	}
 
+
+	@Override
+	protected void executeClient(User from, NBTTagCompound nbt) {
+	}
 }

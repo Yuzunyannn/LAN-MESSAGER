@@ -35,12 +35,18 @@ public class Core {
 
 	// 主函数
 	public static void main(String[] args) {
-		Logger.log.impart("当前平台：" + Platform.platform);
-		ResourceManagement.instance.init();
-		proxy.init();
-		proxy.launch();
-		// 启动核心
-		core.lunch();
+		try {
+			Logger.log.impart("当前平台：" + Platform.platform);
+			ResourceManagement.instance.init();
+			Logger.log.warn("test");
+			proxy.init();
+			proxy.launch();
+			// 启动核心
+			core.lunch();
+		} catch (Throwable e) {
+			Logger.log.error("程序加载或称中，出现无法意料的错误！", e);
+			Core.shutdownWithError();
+		}
 	}
 
 	private void lunch() {
@@ -50,38 +56,41 @@ public class Core {
 	private class TickTask extends TimerTask {
 		@Override
 		public void run() {
-			// tick更新部份
-			Iterator<ITickable> itr = tickTasks.iterator();
-			while (itr.hasNext()) {
-				ITickable tick = itr.next();
-				try {
-					int flags = tick.update();
-					if (flags == ITickable.END) {
-						synchronized (tickTasks) {
-							itr.remove();
+			try {
+				// tick更新部份
+				Iterator<ITickable> itr = tickTasks.iterator();
+				while (itr.hasNext()) {
+					ITickable tick = itr.next();
+					try {
+						int flags = tick.update();
+						if (flags == ITickable.END) {
+							synchronized (tickTasks) {
+								itr.remove();
+							}
+						}
+					} catch (Exception e) {
+						int flags = tick.recover(e);
+						if (flags == ITickable.END) {
+							synchronized (tickTasks) {
+								itr.remove();
+							}
 						}
 					}
-				} catch (Exception e) {
-					Logger.log.warn("tick运行中，出现异常！", e);
-				} catch (Throwable t) {
-					Logger.log.warn("tick运行中，出现错误！", t);
-					Core.shutdownWithError();
 				}
-			}
-			// 同步任务更新部份
-			while (true) {
-				Runnable run = Core.this.getTask();
-				if (run == null)
-					break;
-				try {
-					run.run();
-				} catch (Exception e) {
-					Logger.log.warn("同步任务运行中，出现异常！", e);
-				} catch (Throwable t) {
-					Logger.log.warn("同步任务运行中，出现错误！", t);
-					Core.shutdownWithError();
+				// 同步任务更新部份
+				while (true) {
+					Runnable run = Core.this.getTask();
+					if (run == null)
+						break;
+					try {
+						run.run();
+					} catch (Exception e) {
+						Logger.log.warn("同步任务运行中，出现异常！", e);
+					}
 				}
-
+			} catch (Throwable e) {
+				Logger.log.error("同步进程出现未知错误！", e);
+				Core.shutdownWithError();
 			}
 		}
 	}

@@ -38,8 +38,7 @@ public class EventBus implements IEventBus, IEventExceptionHandle {
 	/**
 	 * 注册一个携带有event的对象
 	 * 
-	 * @param obj
-	 *            携带有event的对象
+	 * @param obj 携带有event的对象
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -95,8 +94,7 @@ public class EventBus implements IEventBus, IEventExceptionHandle {
 	/***
 	 * 传递事件，在EventBus上
 	 * 
-	 * @param event
-	 *            需要传递的事件
+	 * @param event 需要传递的事件
 	 * @return 事件正常完成（未被取消）
 	 */
 	@Override
@@ -107,16 +105,16 @@ public class EventBus implements IEventBus, IEventExceptionHandle {
 		if (list == null)
 			return true;
 		EventHandle handle = null;
-		try {
-			for (int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
+			try {
 				handle = list.get(i);
 				handle.invoke(event);
 				if (event.isStop())
 					break;
+			} catch (Throwable throwable) {
+				Logger.log.warn("在传递事件的时候出现异常！", throwable);
+				exceptionHandle.handleException(throwable, event, handle, this);
 			}
-		} catch (Throwable throwable) {
-			Logger.log.warn("在传递事件的时候出现异常！", throwable);
-			exceptionHandle.handleException(throwable, event, handle, this);
 		}
 		return !event.isCancel();
 	}
