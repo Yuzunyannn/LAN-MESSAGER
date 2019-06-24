@@ -1,5 +1,6 @@
 package client.frame.utility;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -127,11 +128,11 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		default:
 			break;
 		}
-//		if (isMySelf) {
-//			chatBubble.setBorder(BorderFactory.createLineBorder(Color.blue, 3));
-//		} else {
-//			chatBubble.setBorder(BorderFactory.createLineBorder(Color.red, 3));
-//		}
+		if (isMySelf) {
+			chatBubble.setBorder(BorderFactory.createLineBorder(Color.blue, 3));
+		} else {
+			chatBubble.setBorder(BorderFactory.createLineBorder(Color.red, 3));
+		}
 		// chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(),
 		// addHeight);
 		chatBubble.setBounds(0, this.height, this.panel.getWidth(), addHeight);

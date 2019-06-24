@@ -40,14 +40,14 @@ public class Core {
 			proxy.init();
 			proxy.launch();
 			// 启动核心
-			core.lunch();
+			core.launch();
 		} catch (Throwable e) {
 			Logger.log.error("程序加载或称中，出现无法意料的错误！", e);
 			Core.shutdownWithError();
 		}
 	}
 
-	private void lunch() {
+	private void launch() {
 		scheduExec.scheduleAtFixedRate(new TickTask(), 0, 50, TimeUnit.MILLISECONDS);
 	}
 
