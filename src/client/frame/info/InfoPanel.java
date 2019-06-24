@@ -35,7 +35,7 @@ public class InfoPanel extends JPanel {
 	private int state;
 	private LinkedList<UserClient>ul;
 	public InfoPanel() {
-		this.setBackground(Theme.COLOR2);
+		this.setBackground(Theme.COLOR5);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		userField = new UserPanel();
 		searchField = new SearchPanel();

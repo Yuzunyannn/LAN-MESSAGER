@@ -55,7 +55,7 @@ public class SearchPanel extends JPanel {
 		this.setLayout(null);
 		this.setMinimumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, 30));
 		this.setMaximumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, 30));
-		this.setBackground(Theme.COLOR2);
+		this.setBackground(Theme.COLOR5);
 		search = new TextField();
 		search.setFont(Theme.FONT3);
 		search.setFocusable(entry);

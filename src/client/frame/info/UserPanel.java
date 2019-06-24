@@ -3,19 +3,15 @@ package client.frame.info;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import client.event.EventIPC;
-import client.event.EventsBridge;
+import client.frame.MainFrame;
 import client.frame.Theme;
 
 public class UserPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private final static int USERPANEL_WIDTH = 275;
 	private String name = "Tatsuu";
 	private SearchPanel sp;
 	private UserImage img;
@@ -30,10 +26,10 @@ public class UserPanel extends JPanel {
 		username.setFont(Theme.FONT0);
 		this.add(username);
 		username.setSize(150, 50);
-		username.setLocation(USERPANEL_WIDTH - 175, 15);
+		username.setLocation(MainFrame.INFO_RIGION_WIDTH - 175, 15);
 
-		this.setMinimumSize(new Dimension(USERPANEL_WIDTH, 80));
-		this.setMaximumSize(new Dimension(USERPANEL_WIDTH, 80));
+		this.setMinimumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, 80));
+		this.setMaximumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, 80));
 	}
 
 	public String getName() {
@@ -55,7 +51,7 @@ public class UserPanel extends JPanel {
 		g.setColor(Color.BLACK);
 		g.drawLine(0, 0, width, 0);
 		/* 名字大小测试 */
-		g.drawRect(USERPANEL_WIDTH - 175, 15, 150, 50);
+		g.drawRect(MainFrame.INFO_RIGION_WIDTH - 175, 15, 150, 50);
 	}
 
 }
