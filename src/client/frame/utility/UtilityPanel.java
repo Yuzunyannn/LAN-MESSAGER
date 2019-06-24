@@ -74,7 +74,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 		// 更换布局
 		this.setLayout(layout);
 		// 默认面板
-		blankPanel.setBackground(Theme.COLOR4);
+		blankPanel.setBackground(Theme.COLOR2);
 		// 当前面板
 		currPanel = blankPanel;
 		currPanel.setLocation(0, 0);
@@ -121,6 +121,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 		if (!info.canUse()) {
 			info.reborn();
 		}
+		info.tick = this.tick;
 		((ChatPanel) info.panel).onRecvMsg(new WordString(str));
 	}
 

@@ -20,7 +20,7 @@ import user.UOnline;
 import user.message.MUGULRequest;
 import user.message.MessageLogin;
 
-public class ClientProxy extends Proxy {
+public class ClientProxy extends Proxy implements Runnable {
 
 	public ClientProxy() {
 		super(Side.CLIENT);
@@ -64,26 +64,8 @@ public class ClientProxy extends Proxy {
 				if (!logFrame.isEnable())
 					return;
 				logFrame.setLoginButtonEnable(false);
-				try {
-					if (toServer == null) {
-						toServer = new Connection(Core.SERVER_IP, Core.SERVER_PORT);
-						if (!RecvDealValidation.check(toServer)) {
-							toServer = null;
-							Logger.log.warn("服务器拒绝您的登录！");
-							return;
-						}
-						UserClient.toServer = toServer;
-					}
-					String username = logFrame.getUserName();
-					if (username == null || username.isEmpty()) {
-						Logger.log.impart("请输入用户名");
-						return;
-					}
-					sendUsername = username;
-					UserClient.sendToServer(new MessageLogin(username, logFrame.getPassword(), Side.CLIENT));
-				} catch (IOException e1) {
-					Logger.log.warn("连接服务器出现异常！", e1);
-				}
+				logFrame.setHint("");
+				Core.task(ClientProxy.this);
 			}
 		});
 	}
@@ -97,6 +79,7 @@ public class ClientProxy extends Proxy {
 		if (e.username.equals(sendUsername)) {
 			if (!e.info.equals(Network.VALIDATION)) {
 				Logger.log.impart(e.username + "登录失败！");
+				logFrame.setHint("用户名或密码错误！");
 				return;
 			}
 			Logger.log.impart(e.username + "登录成功！");
@@ -107,6 +90,33 @@ public class ClientProxy extends Proxy {
 			frame.setVisible(true);
 		} else {
 			Logger.log.warn("登录失败，传送回的用户名和发送的不符！" + e.username);
+			logFrame.setHint("登陆失败！");
+		}
+	}
+
+	@Override
+	public void run() {
+		try {
+			if (toServer == null) {
+				toServer = new Connection(Core.SERVER_IP, Core.SERVER_PORT);
+				if (!RecvDealValidation.check(toServer)) {
+					toServer = null;
+					Logger.log.warn("服务器拒绝您的登录！");
+					return;
+				}
+				UserClient.toServer = toServer;
+			}
+			String username = logFrame.getUserName();
+			if (username == null || username.isEmpty()) {
+				Logger.log.impart("请输入用户名");
+				return;
+			}
+			sendUsername = username;
+			UserClient.sendToServer(new MessageLogin(username, logFrame.getPassword(), Side.CLIENT));
+		} catch (IOException e1) {
+			logFrame.setLoginButtonEnable(true);
+			logFrame.setHint("无法连接到服务器！");
+			Logger.log.warn("连接服务器出现异常！", e1);
 		}
 	}
 }

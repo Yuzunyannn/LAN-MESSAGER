@@ -1,5 +1,6 @@
 package client.frame;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -7,8 +8,10 @@ import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -26,9 +29,10 @@ public class LoginFrame extends JFrame {
 		public void layoutContainer(Container parent) {
 			Component[] cons = parent.getComponents();
 			Dimension size = parent.getSize();
-			Component button = cons[2];
+			Component button = cons[3];
 			Component userName = cons[0];
 			Component password = cons[1];
+			Component label = cons[2];
 
 			userName.setSize(size.width / 2, 26);
 			userName.setLocation((size.width - userName.getWidth()) / 2, (size.height - userName.getHeight()) / 4);
@@ -38,6 +42,10 @@ public class LoginFrame extends JFrame {
 
 			button.setSize(size.width / 3, 35);
 			button.setLocation((size.width - button.getWidth()) / 2, (size.height - button.getHeight()) / 4 * 3);
+
+			label.setSize(size.width / 2, 35);
+			label.setLocation((size.width - label.getWidth()) / 2,
+					(size.height - password.getHeight()) / 4 + userName.getHeight() + 16 + password.getHeight() + 16);
 
 		}
 
@@ -60,6 +68,7 @@ public class LoginFrame extends JFrame {
 	JButton loginButton;
 	JTextField userNameText;
 	JPasswordField password;
+	JLabel hint;
 
 	public LoginFrame() {
 		// 设置标题
@@ -71,10 +80,16 @@ public class LoginFrame extends JFrame {
 		this.getContentPane().setBackground(Theme.COLOR0);
 		// 账号框
 		userNameText = new JTextField("guest");
+		userNameText.setBorder(BorderFactory.createLineBorder(Theme.COLOR6));
 		this.add(userNameText);
 		// 密码框
 		password = new JPasswordField();
+		password.setBorder(BorderFactory.createLineBorder(Theme.COLOR6));
 		this.add(password);
+		// 信息提示
+		hint = new JLabel("", JLabel.CENTER);
+		hint.setForeground(Color.RED);
+		this.add(hint);
 		// 登录按钮
 		loginButton = new JButton("登录");
 		loginButton.setUI(new client.frame.ui.NormalButtonUI());
@@ -87,14 +102,14 @@ public class LoginFrame extends JFrame {
 		this.setMinimumSize(layout.minimumLayoutSize(this));
 		// 设置窗体大小和位置
 		this.pack();
-		//居中显示窗体
+		// 居中显示窗体
 		int width = Toolkit.getDefaultToolkit().getScreenSize().width;
 		int height = Toolkit.getDefaultToolkit().getScreenSize().height;
 		// 得到窗体的宽、高
 		int windowsWidth = this.getWidth();
 		int windowsHeight = this.getHeight();
-		//System.out.println(windowsWidth+","+windowsHeight);
-		this.setBounds((width - windowsWidth) / 2,(height - windowsHeight) / 2, windowsWidth, windowsHeight);
+		// System.out.println(windowsWidth+","+windowsHeight);
+		this.setBounds((width - windowsWidth) / 2, (height - windowsHeight) / 2, windowsWidth, windowsHeight);
 	}
 
 	public void setLoginListener(MouseListener listener) {
@@ -115,5 +130,9 @@ public class LoginFrame extends JFrame {
 
 	public boolean isEnable() {
 		return loginButton.isEnabled();
+	}
+
+	public void setHint(String str) {
+		hint.setText(str);
 	}
 }

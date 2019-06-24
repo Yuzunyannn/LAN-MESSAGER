@@ -21,24 +21,26 @@ import log.Logger;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
-	/**用于区分实例化对象是聊天还是搜索
-	 * 未来可能通过继承的方式重构实现区分*/
-	public static final String FRIENDPANEL="好友聊天列表";
-	public static final String SEARCHPANEL="搜索列表";
+	/**
+	 * 用于区分实例化对象是聊天还是搜索 未来可能通过继承的方式重构实现区分
+	 */
+	public static final String FRIENDPANEL = "好友聊天列表";
+	public static final String SEARCHPANEL = "搜索列表";
 	/** 添加列表中的成员数量时可能需要改变 */
 	private int height = 0;
 	private JPanel p;
 	private Component[] content;
 	private int fixed = 0;
 	protected String state;
+
 	public ListScrollPanel() {
 		super();
-		state=FRIENDPANEL;
+		state = FRIENDPANEL;
 		p = new JPanel();
 		int width = super.getWidth();
 		p.setPreferredSize(new Dimension(width, getHeight()));
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-		p.setBackground(Theme.COLOR0);
+		p.setBackground(Theme.COLOR5);
 		content = p.getComponents();
 		this.add(p);
 
@@ -51,7 +53,6 @@ public class ListScrollPanel extends JScrollPane {
 		bar.setUI(new client.frame.ui.ScrollBarUI());
 		this.setVerticalScrollBar(bar);
 		this.setBorder(null);
-		bar.setBackground(Theme.COLOR1);
 
 	}
 
@@ -128,9 +129,11 @@ public class ListScrollPanel extends JScrollPane {
 		return -1;
 
 	}
+
 	public void setState(String str) {
-		state=str;
+		state = str;
 	}
+
 	public int getPHeight() {
 		return height;
 	}
@@ -184,7 +187,7 @@ public class ListScrollPanel extends JScrollPane {
 
 	public void deleteAllMember() {
 		p.removeAll();
-		content=p.getComponents();
+		content = p.getComponents();
 	}
 
 	public void standardHeight(Dimension d) {
@@ -193,33 +196,34 @@ public class ListScrollPanel extends JScrollPane {
 		/* 测试信息 */
 		// System.out.println("count"+p.getComponentCount());
 	}
+
 	/**
-	 *当用户点击memberbutton是触发*/
-	public void onUserSelect(EventShow e) 
-	{
-		for(Component i:content)
-		{
+	 * 当用户点击memberbutton是触发
+	 */
+	public void onUserSelect(EventShow e) {
+		for (Component i : content) {
 			((MemberButton) i).isChoose(e.id);
 		}
 	}
+
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
 		boolean have = false;
 
-		for(Component i:content)
-			if(((MemberButton) i).getMemberName().equals(e.from.getUserName()))
-			{
-				have=true;
+		for (Component i : content)
+			if (((MemberButton) i).getMemberName().equals(e.from.getUserName())) {
+				have = true;
 				break;
-			}	
-			else have=false;
-		if(!have)
-			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.from.getUserName(),EventChatOperation.ADDCHAT,state));
+			} else
+				have = false;
+		if (!have)
+			EventsBridge.frontendEventHandle
+					.post(new EventChatOperation(e.from.getUserName(), EventChatOperation.ADDCHAT, state));
 
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
 				((MemberButton) content[i]).RecvMessage();
-				//((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
+				// ((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
 				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
 						+ ((MemberButton) content[i]).count);
 				setTop(((MemberButton) content[i]).getMemberName());
@@ -229,7 +233,7 @@ public class ListScrollPanel extends JScrollPane {
 		for (Component i : content) {
 			p.add(i);
 		}
-		content=p.getComponents();
+		content = p.getComponents();
 		this.refresh();
 	}
 
@@ -246,6 +250,7 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		this.refresh();
 	}
+
 	@SubscribeEvent
 	public void onFreindOperator(EventFriendOperation e) {
 

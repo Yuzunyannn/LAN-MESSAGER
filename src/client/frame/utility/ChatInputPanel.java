@@ -165,6 +165,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		scroll.setVerticalScrollBar(bar);
 		scroll.setBorder(null);
 		this.add(scroll);
+		//this.setBorder(null);
 		// 初始化memes
 		memeFrame = new MemeFrame("Test Area");
 		// 添加发送按钮

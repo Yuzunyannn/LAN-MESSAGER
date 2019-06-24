@@ -20,7 +20,7 @@ public class MainFrame extends JFrame {
 	/** 窗体标题 */
 	public static final String FRAME_TITLE = "Chatroom";
 	/** 左信息区域宽度 */
-	public static final int INFO_RIGION_WIDTH = 275;
+	public static final int INFO_RIGION_WIDTH = 300;
 	/** 主窗体布局 */
 	private LayoutManager layout = new LayoutManager() {
 

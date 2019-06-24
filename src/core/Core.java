@@ -10,7 +10,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import log.Logger;
-import network.Side;
 import platform.Platform;
 import resmgt.ResourceManagement;
 import story.ITickable;
@@ -18,10 +17,10 @@ import user.UOnline;
 
 public class Core {
 
-	static final String SERVER_IP = "127.0.0.1";// 10.19.35.30
+	static final String SERVER_IP = "39.107.94.231";// 10.19.35.30
 	static final int SERVER_PORT = 35275;
 
-	static final Proxy proxy = new DebugProxy(Side.SERVER);
+	static final Proxy proxy = new ClientProxy();
 	static final Core core = new Core();
 
 	// 所有运行的任务队列
@@ -38,7 +37,6 @@ public class Core {
 		try {
 			Logger.log.impart("当前平台：" + Platform.platform);
 			ResourceManagement.instance.init();
-			Logger.log.warn("test");
 			proxy.init();
 			proxy.launch();
 			// 启动核心

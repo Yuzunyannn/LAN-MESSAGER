@@ -79,7 +79,7 @@ public class MemberButton extends JButton {
 					// 产生选择事件
 					EventsBridge.frontendEventHandle.post(new EventShow(toolId, memberName));
 					// count=0;
-					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("debug"),"test"));
+					//EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("debug"),"test"));
 				}
 			}
 		};
@@ -103,10 +103,10 @@ public class MemberButton extends JButton {
 		int width = super.getWidth();
 		int height = super.getHeight();
 		if(isChat){
-			g.setColor(Theme.COLOR2.darker());
+			g.setColor(Theme.COLOR3.darker());
 		}
 		else{
-			g.setColor(Theme.COLOR2);
+			g.setColor(Theme.COLOR3);
 		}
 		g.fillRect(0, 0, width, height);
 		int x = 200, y = 23;
@@ -168,7 +168,7 @@ class UButtonMouse extends MouseAdapter {
 		super();
 		popmenu = new JPopupMenu();
 		item = new JMenuItem[str.length];
-		Border border = BorderFactory.createLineBorder(Theme.COLOR7);
+		Border border = BorderFactory.createLineBorder(Theme.COLOR5);
 		ItemMonitor = actionListener;
 		for (int i = 0; i < item.length; i++) {
 			item[i] = new JMenuItem(str[i]);

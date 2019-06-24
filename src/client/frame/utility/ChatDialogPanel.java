@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -25,7 +27,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 	private int height = 0;
 	public String lastTime;
 	public boolean firstTime = false;
-	
+
 	private LayoutManager chatDialogLayout = new LayoutManager() {
 
 		@Override
@@ -84,12 +86,12 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 				scrollBar.setValue(scrollBar.getMaximum());
 			}
 		});
+		this.setBackground(Theme.COLOR2);
 		this.panel.setOpaque(true);
-		this.panel.setBackground(Theme.COLOR1);
+		this.panel.setBackground(Theme.COLOR2);
+		this.setBorder(BorderFactory.createLineBorder(Theme.COLOR6, 1));
+		this.panel.setBorder(null);
 	}
-	
-	
-
 
 	/** 添加一个对话气泡 */
 	public void addBubble(boolean isMySelf, String info, String name, BubbleType type, String time) {
@@ -130,11 +132,12 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 //		} else {
 //			chatBubble.setBorder(BorderFactory.createLineBorder(Color.red, 3));
 //		}
-		//chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(), addHeight);
+		// chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(),
+		// addHeight);
 		chatBubble.setBounds(0, this.height, this.panel.getWidth(), addHeight);
 		this.height = this.height + addHeight;
 		// panel.setSize(panel.getWidth(), panel.getHeight() + chatBubble.getHeight());
-		
+
 		if (this.height > panel.getHeight()) {
 			panel.setPreferredSize(
 					new Dimension(panel.getWidth() - this.scrollBar.getWidth(), panel.getHeight() + addHeight));

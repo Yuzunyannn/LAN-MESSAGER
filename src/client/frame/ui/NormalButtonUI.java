@@ -20,7 +20,7 @@ public class NormalButtonUI extends ButtonUI {
 		super.installUI(c);
 		c.setFont(new Font("黑体", 0, 16));// 这句设置字体，在运行前，会发白一下？
 		c.setBackground(Theme.COLOR1);
-		c.setBorder(BorderFactory.createLineBorder(Theme.COLOR2));
+		c.setBorder(BorderFactory.createLineBorder(Theme.COLOR6));
 		c.addMouseListener(mouseListenser);
 	}
 
@@ -35,7 +35,7 @@ public class NormalButtonUI extends ButtonUI {
 		int width = c.getWidth();
 		int height = c.getHeight();
 		if (!c.isEnabled()) {
-			g.setColor(Color.LIGHT_GRAY);
+			g.setColor(Theme.COLOR3.darker());
 			g.fillRect(0, 0, width, height);
 		} else {
 			// 按下
