@@ -10,7 +10,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import log.Logger;
-import network.Side;
 import platform.Platform;
 import resmgt.ResourceManagement;
 import story.ITickable;

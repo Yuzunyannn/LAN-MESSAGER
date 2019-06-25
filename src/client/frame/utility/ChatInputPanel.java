@@ -206,7 +206,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		this.add(button);
 		// 添加工具按钮
 		button = new JButton("工具");
-		button.setIcon(UserResource.getSysIcon("icon-tool", UserResource.HeadIconSize.SMALL));
+		//button.setIcon(UserResource.getSysIcon("icon-tool", UserResource.HeadIconSize.SMALL));
 		button.setFont(new Font("黑体", 0, 16));
 		button.setUI(new client.frame.ui.NormalButtonUI());
 		button.setSize(50, (int) (EDIT_MARGIN * 0.8f));

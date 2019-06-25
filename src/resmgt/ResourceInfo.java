@@ -7,30 +7,68 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import log.Logger;
+import nbt.NBTStream;
+import nbt.NBTTagCompound;
+
 public class ResourceInfo {
 
 	/** 资源的路径 */
 	private final URL url;
 
+	/** 资源类型 */
+	ResourceInfo.Type type = ResourceInfo.Type.NUKNOW;
+
 	public ResourceInfo(URL url) {
 		this.url = url;
-
 	}
 
-	/** Image型 */
-	private Image image = null;
+	/** 加载的数据 */
+	private Object obj = null;
 
 	/** 加载资源 */
 	public void load() {
 		try {
-			image = ImageIO.read(url);
+			obj = ImageIO.read(url);
 		} catch (IOException e) {
+		}
+		if (obj != null) {
+			this.type = ResourceInfo.Type.IMAGE;
+			return;
+		}
+		try {
+			obj = NBTStream.read(this.getFile());
+		} catch (IOException e) {
+		}
+		if (obj != null) {
+			this.type = ResourceInfo.Type.NBT;
+			return;
 		}
 	}
 
 	/** 释放资源 */
 	public void release() {
-		image = null;
+		obj = null;
+		type = ResourceInfo.Type.NUKNOW;
+	}
+
+	/** 保存 */
+	public void save() {
+		if (this.getType() == ResourceInfo.Type.NBT) {
+			File file = this.getFile();
+			try {
+				NBTStream.write(file, this.getNBT());
+			} catch (IOException e) {
+				Logger.log.warn("nbt数据保存失败！", e);
+			}
+		} else {
+			Logger.log.warn("不支持的保存");
+		}
+	}
+
+	/** 获取资源类型 */
+	public ResourceInfo.Type getType() {
+		return type;
 	}
 
 	/** 获取对应文件 */
@@ -43,20 +81,37 @@ public class ResourceInfo {
 		return url;
 	}
 
-	/** 获取image，如果该文件是img */
+	/** 获取image，如果该文件是IMAGE */
 	public Image getImage() {
-		return image;
+		if (this.getType() == ResourceInfo.Type.IMAGE)
+			return (Image) obj;
+		return null;
 	}
 
-	/** 设置加载的image ，让这个资源信息里有image */
-	public void setImage(Image img) {
-		image = img;
+	/** 获取nbt，如果该文件是NBT */
+	public NBTTagCompound getNBT() {
+		if (this.getType() == ResourceInfo.Type.NBT)
+			return (NBTTagCompound) obj;
+		return null;
+	}
+
+	/** 设置加载的资源 */
+	public void setData(Object obj) {
+		this.obj = obj;
+		if (this.obj instanceof Image)
+			this.type = ResourceInfo.Type.IMAGE;
+		else if (this.obj instanceof NBTTagCompound)
+			this.type = ResourceInfo.Type.NBT;
 	}
 
 	public ResourceInfo copy() {
 		ResourceInfo tmp = new ResourceInfo(this.url);
-		tmp.image = this.image;
+		tmp.obj = this.obj;
+		tmp.type = this.type;
 		return tmp;
 	}
 
+	public static enum Type {
+		NUKNOW, IMAGE, NBT
+	}
 }

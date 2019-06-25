@@ -43,7 +43,6 @@ public class ListScrollPanel extends JScrollPane {
 		p.setBackground(Theme.COLOR5);
 		content = p.getComponents();
 		this.add(p);
-
 		this.setViewportView(p);
 		// 设置垂直滚动条的显示: 一直显示
 		this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -168,21 +167,25 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	public void deductMember(String name) {
-
+		boolean done=false;
 		for (int i = p.getComponentCount(); i > 0; i--) {
 			MemberButton temp = (MemberButton) p.getComponent(i - 1);
 			if (temp.getMemberName().equals(name)) {
 				p.remove(i - 1);
 				height -= MemberButton.MEMBERBUTTON_HEIGHT;
 				content = p.getComponents();
+				done=true;
 				break;
 
 			} else
-				Logger.log.error(name + "查无此人");
-			int width = super.getWidth();
-			standardHeight(super.getPreferredSize());
-			p.setPreferredSize(new Dimension(width, height));
+				done=false;
+		
 		}
+		if(!done)
+			Logger.log.warn("查无此人");
+		int width = super.getWidth();
+		standardHeight(super.getPreferredSize());
+		p.setPreferredSize(new Dimension(width, height));
 	}
 
 	public void deleteAllMember() {
@@ -197,14 +200,7 @@ public class ListScrollPanel extends JScrollPane {
 		// System.out.println("count"+p.getComponentCount());
 	}
 
-	/**
-	 * 当用户点击memberbutton是触发
-	 */
-	public void onUserSelect(EventShow e) {
-		for (Component i : content) {
-			((MemberButton) i).isChoose(e.id);
-		}
-	}
+
 
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
@@ -250,20 +246,15 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		this.refresh();
 	}
-
 	@SubscribeEvent
-	public void onFreindOperator(EventFriendOperation e) {
-
-		/**
-		 * 添加好友应在添加search的panel中响应事件 if (e.type.equals(EventFriendOperation.ADDFRIEND))
-		 * 好友列表添加 EventsBridge.frontendEventHandle.post(new
-		 * EventChatOperation(e.username,EventChatOperation.ADDCHAT))
-		 */
-		if (e.type.equals(EventFriendOperation.DELETEFRIEND))
-			/**
-			 * 好友列表删除
-			 */
-			EventsBridge.frontendEventHandle.post(new EventChatOperation(e.username, EventChatOperation.DELETECHAT));
+	public void onShow(EventShow e) {
+		for (int i =0;i< content.length;i++) {
+			MemberButton tmp=(MemberButton)content[i];
+			if(tmp.getMemberName().equals(e.id))
+				tmp.isChoose(true);
+			else
+				tmp.isChoose(false);
+		}
 		this.refresh();
 	}
 
