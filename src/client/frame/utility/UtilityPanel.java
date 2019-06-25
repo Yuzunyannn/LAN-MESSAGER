@@ -129,7 +129,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 		}
 		panelInfo = newInfo;
 		currPanel = info.panel;
-		
+
 		info.tick = this.tick;
 		UtilityPanel.this.remove(0);
 		UtilityPanel.this.add(currPanel);
@@ -150,6 +150,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 			this.info = first + secend;
 			this.panel = panel;
 			this.cls = panel.getClass();
+			this.panel.firstCreate();
 		}
 
 		@Override
@@ -268,8 +269,8 @@ public class UtilityPanel extends JPanel implements ITickable {
 		if (!info.canUse()) {
 			info.reborn();
 		}
-		((ChatPanel)info.panel).onRevFile(e.getFileName(), e.getTempName());
-		((ChatPanel)info.panel).onRevFileProgress(e.getTempName(), e);
+		((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
+		((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
 	}
 
 }

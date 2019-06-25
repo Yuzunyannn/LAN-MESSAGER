@@ -43,6 +43,11 @@ public class ResourceManagement {
 		Logger.log.warn(str, e);
 	}
 
+	public static void mkdirTmp() {
+		File file = new File("./tmp");
+		file.mkdir();
+	}
+
 	/** 记录包内资源路径的map */
 	private final Map<String, ResourceInfo> resPack = new HashMap<String, ResourceInfo>();
 	/** 记录资源临时路径的map */
@@ -166,6 +171,7 @@ public class ResourceManagement {
 				load.loadFinish(ResourceManagement.this.loadTmpResource(realPath, virtualPath));
 			}
 		});
+		thread.start();
 	}
 
 	/** 加载临时资源 */
@@ -174,7 +180,7 @@ public class ResourceManagement {
 		realPath = realPath.replace('\\', '/');
 		if (resTmp.containsKey(virtualPath))
 			return resTmp.get(virtualPath);
-		File file = new File("tmp/" + realPath);
+		File file = new File("./tmp/" + realPath);
 		if (!file.exists())
 			return null;
 		ResourceInfo info;
@@ -189,6 +195,39 @@ public class ResourceManagement {
 		return info;
 	}
 
+	/** 加载或创建临时资源 */
+	public ResourceInfo loadOrCreateTmpResource(String realPath, String virtualPath) {
+		virtualPath = virtualPath.replace('\\', '/');
+		realPath = realPath.replace('\\', '/');
+		if (resTmp.containsKey(virtualPath))
+			return resTmp.get(virtualPath);
+		File file = new File("./tmp/" + realPath);
+		if (!file.exists()) {
+			int x = realPath.lastIndexOf('/');
+			if (x > 0) {
+				File folder = new File("./tmp/" + realPath.substring(0, x));
+				folder.mkdirs();
+			}
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				ResourceManagement.warn("创建数据文件失败！", e);
+				return null;
+			}
+		}
+		ResourceInfo info;
+		try {
+			info = new ResourceInfo(file.toURI().toURL());
+			info.load();
+			resTmp.put(virtualPath, info);
+		} catch (MalformedURLException e) {
+			ResourceManagement.warn("临时资源转化url时候出现异常！", e);
+			return null;
+		}
+		return info;
+	}
+
+	
 	/** 加载数据资源 */
 	public ResourceInfo loadDataResource(String path) {
 		path = path.replace('\\', '/');
@@ -210,7 +249,7 @@ public class ResourceManagement {
 	}
 
 	/** 创建一个数据文件 */
-	public ResourceInfo loadOorCreateDataResource(String path) {
+	public ResourceInfo loadOrCreateDataResource(String path) {
 		path = path.replace('\\', '/');
 		if (resTmp.containsKey(path))
 			return resTmp.get(path);

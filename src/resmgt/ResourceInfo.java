@@ -7,8 +7,9 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import nbt.NBTBase;
+import log.Logger;
 import nbt.NBTStream;
+import nbt.NBTTagCompound;
 
 public class ResourceInfo {
 
@@ -48,6 +49,21 @@ public class ResourceInfo {
 	/** 释放资源 */
 	public void release() {
 		obj = null;
+		type = ResourceInfo.Type.NUKNOW;
+	}
+
+	/** 保存 */
+	public void save() {
+		if (this.getType() == ResourceInfo.Type.NBT) {
+			File file = this.getFile();
+			try {
+				NBTStream.write(file, this.getNBT());
+			} catch (IOException e) {
+				Logger.log.warn("nbt数据保存失败！", e);
+			}
+		} else {
+			Logger.log.warn("不支持的保存");
+		}
 	}
 
 	/** 获取资源类型 */
@@ -72,12 +88,19 @@ public class ResourceInfo {
 		return null;
 	}
 
+	/** 获取nbt，如果该文件是NBT */
+	public NBTTagCompound getNBT() {
+		if (this.getType() == ResourceInfo.Type.NBT)
+			return (NBTTagCompound) obj;
+		return null;
+	}
+
 	/** 设置加载的资源 */
 	public void setData(Object obj) {
 		this.obj = obj;
 		if (this.obj instanceof Image)
 			this.type = ResourceInfo.Type.IMAGE;
-		else if (this.obj instanceof NBTBase)
+		else if (this.obj instanceof NBTTagCompound)
 			this.type = ResourceInfo.Type.NBT;
 	}
 

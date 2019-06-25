@@ -8,11 +8,15 @@ import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import client.event.EventSendInputWords;
 import client.event.EventsBridge;
 import client.frame.Theme;
+import client.record.Record;
+import client.record.RecordManagement;
+import client.record.RecordValue;
 import client.user.UserClient;
 import client.word.Word;
 import nbt.NBTTagCompound;
@@ -166,6 +170,29 @@ public class ChatPanel extends JPanelUtility {
 		chatTo = UOnline.getInstance().getUser(chatToUsername);
 	}
 
+	@Override
+	public void firstCreate() {
+		Record rec = RecordManagement.getRecord(chatTo);
+		List<RecordValue> rs = rec.getRecordValues(rec.getLastDayOff());
+		int n = Math.min(rs.size(), 5);
+		LinkedList<RecordValue> show = new LinkedList<RecordValue>();
+		for (int i = 0; i < n; i++) {
+			show.add(rs.get(rs.size() - 1 - i));
+		}
+		while (!show.isEmpty()) {
+			RecordValue v = show.getLast();
+			show.removeLast();
+			if (v.whos.equals(chatTo)) {
+				chatDialogPanel.addBubble(false, v.word.toString(), chatTo.getUserName(), BubbleType.WORD,
+						v.word.getTime(), "");
+			} else {
+				chatDialogPanel.addBubble(true, v.word.toString(), UserClient.getClientUsername(), BubbleType.WORD,
+						v.word.getTime(), "");
+			}
+		}
+
+	}
+
 	/** 时间差大于5分钟则显示时间线 */
 	public void timeLapse(String nowDate, String lastDate) {
 		if (chatDialogPanel.firstTime) {
@@ -236,6 +263,8 @@ public class ChatPanel extends JPanelUtility {
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words) {
+			Record rec = RecordManagement.getRecord(chatTo);
+			rec.addNew(w, UserClient.getClientUser());
 			BubbleType type = checkType(w.id);
 			if (type == BubbleType.FILE) {
 				continue;
@@ -250,6 +279,8 @@ public class ChatPanel extends JPanelUtility {
 
 	/** 当点击收到消息的时候调用 */
 	public void onRecvMsg(Word word) {
+		Record rec = RecordManagement.getRecord(chatTo);
+		rec.addNew(word, chatTo);
 		BubbleType type = checkType(word.id);
 		Date date = new Date();
 		timeLapse(date.toString(), chatDialogPanel.lastTime);
