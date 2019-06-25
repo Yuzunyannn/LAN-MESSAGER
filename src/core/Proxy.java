@@ -86,7 +86,7 @@ public class Proxy {
 		RecvDealMessage.registerMessage("file_send", UMFileSendToUser.class);
 		RecvDealMessage.registerMessage("user_search", MUSSearch.class);
 	}
-
+	//注册一个story
 	private static void registerAllStory() {
 		Story.registerStory("fileSender", StoryFileSender.class);
 	}

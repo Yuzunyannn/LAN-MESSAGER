@@ -62,10 +62,6 @@ public class MUSSearch extends MessageUser {
 			}
 		String searchline=nbt.getString("searchline");	
 			Core.task(new USearch(searchline, from));
-
-			
-
-
 	}
 
 }

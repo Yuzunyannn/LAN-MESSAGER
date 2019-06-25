@@ -39,14 +39,10 @@ public class SearchPanel extends JPanel {
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
-			// TODO 自动生成的方法存根
-
 		}
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-			// TODO 自动生成的方法存根
-
 		}
 
 	};

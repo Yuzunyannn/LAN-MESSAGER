@@ -4,7 +4,7 @@ import event.Event;
 
 public class EventFile extends Event {
 
-	/** 接受文件的文件的stoty */
+	/** 接受文件的文件的story */
 	protected final StoryFileSender story;
 
 	public EventFile(boolean canCancel, boolean canStop, StoryFileSender story) {
