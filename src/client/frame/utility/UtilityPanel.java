@@ -23,6 +23,8 @@ import event.SubscribeEvent;
 import log.Logger;
 import nbt.NBTTagCompound;
 import story.ITickable;
+import transfer.EventFileRecv;
+import transfer.EventFileSend;
 import user.User;
 
 /** 界面右边的区域 聊天区域 操作区域 */
@@ -127,6 +129,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 		}
 		panelInfo = newInfo;
 		currPanel = info.panel;
+		
 		info.tick = this.tick;
 		UtilityPanel.this.remove(0);
 		UtilityPanel.this.add(currPanel);
@@ -247,6 +250,26 @@ public class UtilityPanel extends JPanel implements ITickable {
 		System.out.println("Pic event got!");
 		((ChatPanel) this.currPanel).onSendPics(e.picName, e.type);
 
+	}
+
+	/** 文件发送UI更新 */
+	@SubscribeEvent
+	public void sendFile(EventFileSend.Start e) {
+		System.out.println("sendFile Updating!");
+		((ChatPanel) this.currPanel).onSendFile(e.getFileName(), e.getTempName());
+		((ChatPanel) this.currPanel).onSendFileProgress(e.getTempName(), e);
+	}
+
+	/** 文件接收UI更新 */
+	@SubscribeEvent
+	public void revFile(EventFileRecv.Start e) {
+		// System.out.println("revFileProgress Updating!");
+		PanelInfo info = this.getChatPanelInfo(e.getFrom().getUserName());
+		if (!info.canUse()) {
+			info.reborn();
+		}
+		((ChatPanel)info.panel).onRevFile(e.getFileName(), e.getTempName());
+		((ChatPanel)info.panel).onRevFileProgress(e.getTempName(), e);
 	}
 
 }
