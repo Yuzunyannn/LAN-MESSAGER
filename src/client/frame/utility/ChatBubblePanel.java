@@ -167,7 +167,6 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 			} else {
 				this.messageStatus = new JLabel("未读");
 			}
-
 			this.messageStatus.setOpaque(false);
 			this.messageStatus.setForeground(Theme.COLOR2);
 			this.add(messageStatus);

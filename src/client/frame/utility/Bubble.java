@@ -86,7 +86,7 @@ public class Bubble extends JPanel {
 		return words;
 	}
 
-	public BubbleType checkFileType(String name) {
+	static public BubbleType checkFileType(String name) {
 		if (name.length() <= 4) {
 			return BubbleType.NULL;
 		}

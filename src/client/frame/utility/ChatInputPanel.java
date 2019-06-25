@@ -13,9 +13,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -35,16 +39,19 @@ import client.event.EventDebugInfoOuting;
 import client.event.EventRecv;
 import client.event.EventsBridge;
 import client.frame.Theme;
+import client.frame.selection.SelectFrame;
 import client.word.Word;
 import core.Core;
 import log.Logger;
 import nbt.INBTSerializable;
 import nbt.NBTTagList;
+import resmgt.UserResource;
 import user.UOnline;
 
 public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagList> {
 
 	private static final long serialVersionUID = 1L;
+	private static boolean test = false;
 
 	/** 输入框的上下边距 */
 	public static final int EDIT_MARGIN = 35;
@@ -173,6 +180,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		// 初始化memes
 		memeFrame = new MemeFrame("Test Area");
 		// 添加发送按钮
+		
 		JButton button = new JButton("发送");
 		button.setFont(new Font("黑体", 0, 16));// 这句设置字体，在运行前，会发白一下？
 		button.setUI(new client.frame.ui.NormalButtonUI());
@@ -198,6 +206,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		this.add(button);
 		// 添加工具按钮
 		button = new JButton("工具");
+		button.setIcon(UserResource.getSysIcon("icon-tool", UserResource.HeadIconSize.SMALL));
 		button.setFont(new Font("黑体", 0, 16));
 		button.setUI(new client.frame.ui.NormalButtonUI());
 		button.setSize(50, (int) (EDIT_MARGIN * 0.8f));
@@ -220,40 +229,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 				memeFrame.setLocation(e.getX() - memeFrame.getWidth(), e.getY() - memeFrame.getHeight());
 				memeFrame.setLocationRelativeTo(null);
 				memeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				memeFrame.addMouseListener(new MouseListener() {
-
-					@Override
-					public void mouseReleased(MouseEvent e) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void mousePressed(MouseEvent e) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void mouseExited(MouseEvent e) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void mouseEntered(MouseEvent e) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println(e.getX() + "," + e.getY());
-					}
-				});
 				memeFrame.setVisible(true);
-				System.out.println("memeFrame");
 			}
 		});
 		this.add(button);

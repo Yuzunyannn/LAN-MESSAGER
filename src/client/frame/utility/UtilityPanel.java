@@ -253,8 +253,13 @@ public class UtilityPanel extends JPanel implements ITickable {
 		if (!info.canUse()) {
 			info.reborn();
 		}
-		((ChatPanel)info.panel).onRevFile(e.getFileName(), e.getTempName());
-		((ChatPanel)info.panel).onRevFileProgress(e.getTempName(), e);
+		if (Bubble.checkFileType(e.getFileName()) == BubbleType.FILE) {
+			((ChatPanel)info.panel).onRevFile(e.getFileName(), e.getTempName());
+			((ChatPanel)info.panel).onRevFileProgress(e.getTempName(), e);
+		} else if (Bubble.checkFileType(e.getFileName()) == BubbleType.PICTURE) {
+			
+		}
+		
 	}
 
 }
