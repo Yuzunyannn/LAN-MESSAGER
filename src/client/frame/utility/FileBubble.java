@@ -1,10 +1,16 @@
 package client.frame.utility;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+
+import log.Logger;
+import transfer.EventFile;
 
 public class FileBubble extends Bubble {
 	/**
@@ -19,18 +25,31 @@ public class FileBubble extends Bubble {
 
 		@Override
 		public void mousePressed(java.awt.event.MouseEvent e) {
-			if (this.hasClicked) {
-				progress.setVisible(false);
-				hasClicked = false;
-				//e.getComponent().getParent().revalidate();
-				System.out.println("removed");
+			if (progress.getType() == TransferType.DOWNLOAD) {
+				if (progress.getE() == null) {
+					
+				} else {
+					try {
+						Desktop.getDesktop().open(new File("./tmp/" + progress.getE().getTempName()));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						Logger.log.warn("打开下载文件失败");
+					}
+				}
 			} else {
-				progress.setVisible(true);
-				//e.getComponent().getParent().revalidate();
-				hasClicked = true;
-				System.out.println("added");
+				if (this.hasClicked) {
+					progress.setVisible(false);
+					hasClicked = false;
+					//e.getComponent().getParent().revalidate();
+					System.out.println("removed");
+				} else {
+					progress.setVisible(true);
+					//e.getComponent().getParent().revalidate();
+					hasClicked = true;
+					System.out.println("added");
+				}
 			}
-
 		};
 	};
 
@@ -44,9 +63,9 @@ public class FileBubble extends Bubble {
 			fileButton.setBorderPainted(false);
 			this.add(fileButton, BorderLayout.EAST);
 			if (isMySelf) {
-				progress = new ProgressPanel(100, TransferType.UPLOAD);
+				progress = new ProgressPanel(TransferType.UPLOAD);
 			} else {
-				progress = new ProgressPanel(100, TransferType.DOWNLOAD);
+				progress = new ProgressPanel(TransferType.DOWNLOAD);
 			}			
 			progress.setSize(this.getSize());
 			this.add(progress, BorderLayout.SOUTH);
@@ -54,10 +73,11 @@ public class FileBubble extends Bubble {
 		} else {
 			System.out.println("暂不支持图标显示的文件类型");
 		}
-//		if (name.indexOf(".doc") != -1 || name.indexOf(".txt") != -1 || name.indexOf(".docx") != -1) {
-//			
-//		} 
-
 	}
+	
+	public void toggleProgressBar(EventFile e) {
+		this.progress.toggleProgress(e);
+	}
+
 
 }

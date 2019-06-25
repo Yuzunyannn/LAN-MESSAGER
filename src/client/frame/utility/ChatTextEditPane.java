@@ -204,7 +204,7 @@ public class ChatTextEditPane extends JTextPane implements INBTSerializable<NBTT
 
 		static public final ImageIcon nuknowFileIcon;
 		static {
-			nuknowFileIcon = new ImageIcon(ResourceManagement.instance.getResource("img/unkonw_file.png").getImage());
+			nuknowFileIcon = new ImageIcon(ResourceManagement.instance.getPackResource("img/unkonw_file.png").getImage());
 			nuknowFileIcon.setImage(nuknowFileIcon.getImage().getScaledInstance(
 					32 * nuknowFileIcon.getIconWidth() / nuknowFileIcon.getIconHeight(), 32, Image.SCALE_DEFAULT));
 

@@ -15,11 +15,13 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
@@ -157,6 +159,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		this.setLayout(layout);
 		// 文件拖拽
 		textEdit.setTransferHandler(new TransferHandlerFile(textEdit.getTransferHandler()));
+		// 设置边框
+		this.setBorder(BorderFactory.createLineBorder(Theme.COLOR6));
 		// 添加文字编辑区域
 		JScrollPane scroll = new JScrollPane(textEdit);
 		JScrollBar bar = new JScrollBar();
@@ -288,7 +292,17 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 			words = textEdit.getValue();
 			if (words.isEmpty())
 				return;
-			textEdit.clear();
+			else {
+				for (Word word : words) {
+					if (word.id == Word.STRING) {
+						if (word.toString().length()>1232) {
+							JOptionPane.showMessageDialog(this.getParent().getParent(), "输入字符数量超出限制");
+							return;
+						}
+					}
+				}
+				textEdit.clear();
+			}
 			parent.onSendMsg(words);
 		} catch (BadLocationException e1) {
 			log.Logger.log.warn("读取消息输入框内容出现异常：", e1);

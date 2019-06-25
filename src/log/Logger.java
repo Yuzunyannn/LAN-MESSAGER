@@ -136,7 +136,8 @@ public class Logger {
 
 	/** 输出一条警告信息 */
 	public void warn(String str, Throwable e) {
-		this.warn(str + ":" + e.getMessage());
+		str = "[warn]" + str + ":" + e.getMessage();
+		this.print(str, Thread.currentThread().getStackTrace(), 2);
 		this.print(e);
 	}
 
@@ -148,7 +149,8 @@ public class Logger {
 
 	/** 输出一条错误信息 */
 	public void error(String str, Throwable e) {
-		this.error(str + ":" + e.getMessage());
+		str = "[error]" + str + ":" + e.getMessage();
+		this.print(str, Thread.currentThread().getStackTrace(), 2);
 		this.print(e);
 	}
 }

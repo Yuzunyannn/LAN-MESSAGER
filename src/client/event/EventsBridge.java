@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import client.user.UserClient;
 import event.EventBusTask;
 import event.IEventBus;
+import event.SubscribeEvent;
 import log.Logger;
 import transfer.FileSenderManager;
 import transfer.message.UMFileSendToUser;
@@ -51,21 +52,25 @@ public class EventsBridge {
 //		EventsBridge.frontendEventHandle.post(new EventSearchRequest(sul));
 //	}
 	// 转发事件
+	@SubscribeEvent
 	public static void retransmissionRecv(transfer.EventFileRecv.Start e) {
 		EventsBridge.frontendEventHandle.post(e);
 	}
 
 	// 转发事件
+	@SubscribeEvent
 	public static void retransmissionRecv(transfer.EventFileRecv.Finish e) {
 		EventsBridge.frontendEventHandle.post(e);
 	}
 
 	// 转发事件
+	@SubscribeEvent
 	public static void retransmissionSend(transfer.EventFileSend.Start e) {
 		EventsBridge.frontendEventHandle.post(e);
 	}
 
 	// 转发事件
+	@SubscribeEvent
 	public static void retransmissionRev(transfer.EventFileSend.Finish e) {
 		EventsBridge.frontendEventHandle.post(e);
 	}

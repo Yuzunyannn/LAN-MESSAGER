@@ -4,7 +4,7 @@ import event.Event;
 
 public class EventFile extends Event {
 
-	/** 接受文件的文件的stoty */
+	/** 接受文件的文件的story */
 	protected final StoryFileSender story;
 
 	public EventFile(boolean canCancel, boolean canStop, StoryFileSender story) {
@@ -25,5 +25,10 @@ public class EventFile extends Event {
 	/** 获取文件大小 */
 	public long getFileSize() {
 		return story.fileSize;
+	}
+	
+	/**获取临时文件名*/
+	public String getTempName() {
+		return story.want.getName();
 	}
 }

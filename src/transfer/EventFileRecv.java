@@ -1,5 +1,7 @@
 package transfer;
 
+import user.User;
+
 /** 接受文件事件 */
 public class EventFileRecv extends EventFile {
 
@@ -19,4 +21,8 @@ public class EventFileRecv extends EventFile {
 		}
 	}
 
+	//获取发送方
+	public User getFrom() {
+		return this.story.daddy;
+	}
 }

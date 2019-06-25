@@ -11,7 +11,7 @@ import java.util.Properties;
 public class Database {
 
 	/** 数据库地址 */
-	static public final String CONNECT_URL = "jdbc:mysql://localhost:3306/LANMSG?serverTimezone=UTC";
+	static public final String CONNECT_URL = "jdbc:mysql://localhost:3306/luserdata?serverTimezone=UTC";
 	/** 数据库登录信息 */
 	static private Properties loginInfo = null;
 	/** 数据库驱动 */
@@ -49,7 +49,7 @@ public class Database {
 	 * @throws SQLException
 	 */
 
-	static Connection connect() throws SQLException {
+	static public Connection connect() throws SQLException {
 		return driver.connect(CONNECT_URL, loginInfo);
 	}
 }
