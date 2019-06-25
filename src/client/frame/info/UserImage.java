@@ -16,7 +16,7 @@ public class UserImage extends JPanel {
 		Dimension imgsize = new Dimension(80, 80);
 		label.setSize(imgsize);
 		this.setSize(imgsize);
-		this.setLocation(10, 5);
+		this.setLocation(20, 30);
 		// this.setMaximumSize(imgsize);
 	}
 }

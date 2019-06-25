@@ -14,6 +14,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import client.event.EventIPC;
 import client.event.EventSearch;
@@ -25,7 +26,8 @@ import log.Logger;
 
 public class SearchPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private TextField search;
+	private JTextField search;
+	public static final int SEARCH_FIELD_LENGTH=80;
 	public final String INFO = "单行输入,回车键搜索";
 	boolean entry=false;
 	private KeyListener keyListener = new KeyListener() {
@@ -53,10 +55,10 @@ public class SearchPanel extends JPanel {
 
 	public SearchPanel() {
 		this.setLayout(null);
-		this.setMinimumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, 30));
-		this.setMaximumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, 30));
+		this.setMinimumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, SEARCH_FIELD_LENGTH));
+		this.setMaximumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, SEARCH_FIELD_LENGTH));
 		this.setBackground(Theme.COLOR5);
-		search = new TextField();
+		search = new RTextField();
 		search.setFont(Theme.FONT3);
 		search.setFocusable(entry);
 		//鼠标点击事件
@@ -94,7 +96,7 @@ public class SearchPanel extends JPanel {
 		});
 		
 		JButton b1 = new JButton();
-		JButton set = new JButton();
+		JButton b2 = new JButton();
 		SearchPanel stmp=this;
 		MouseAdapter mb=new MouseAdapter() {
 
@@ -107,16 +109,17 @@ public class SearchPanel extends JPanel {
 		b1.addMouseListener(mb);
 		search.addKeyListener(keyListener);
 		search.setForeground(Color.GRAY);
-		search.setSize(160, 20);
-		search.setLocation(5, 8);
+		search.setSize(190, 36);
+		search.setLocation(10, 20);
 		search.setText(INFO);
 		search.addFocusListener(new DefaultFocusListener(INFO, search));
-		b1.setSize(20, 20);
-		b1.setLocation(180, 8);
-		set.setSize(20, 20);
-		set.setLocation(220, 8);
+		int buttonsize=30;
+		b1.setSize(buttonsize,buttonsize);
+		b1.setLocation(220, 25);
+		b2.setSize(buttonsize, buttonsize);
+		b2.setLocation(260, 25);
 		this.add(b1);
-		this.add(set);
+		this.add(b2);
 		this.add(search);
 
 	}
@@ -135,9 +138,9 @@ public class SearchPanel extends JPanel {
 
 class DefaultFocusListener implements FocusListener {
 	private String info;
-	private TextField textfield;
+	private JTextField textfield;
 
-	public DefaultFocusListener(String info, TextField textfield) {
+	public DefaultFocusListener(String info, JTextField textfield) {
 		this.info = info;
 		this.textfield = textfield;
 
