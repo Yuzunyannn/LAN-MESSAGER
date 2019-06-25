@@ -9,6 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import client.event.EventChatOperation;
+import client.event.EventFriendOperation;
 import client.event.EventIPC;
 import client.event.EventSearchRequest;
 import client.event.EventShow;
@@ -50,6 +51,11 @@ public class InfoPanel extends JPanel {
 		state = EventIPC.FRIENDS;
 		userField.setPreferredSize(new Dimension(0, UserPanel.USERLENGTH));
 		searchField.setPreferredSize(new Dimension(0, SearchPanel.SEARCH_FIELD_LENGTH));
+		//好友测试用
+		ul.add(new UserClient("lyl"));
+		ul.add(new UserClient("ycy"));
+		ul.add(new UserClient("ssj"));
+		ul.add(new UserClient("myk"));
 	}
 	//事件注册
 	public void initEvent(IEventBus bus) {
@@ -107,6 +113,44 @@ public class InfoPanel extends JPanel {
 			
 			}
 		this.refresh();
+	}
+	/**好友操作事件的响应*/
+	@SubscribeEvent
+	public void onFriendOperation(EventFriendOperation e) {
+		boolean have=false;
+		switch(e.type) {
+		case EventFriendOperation.ADDFRIEND:{
+			for(UserClient tmp:ul)
+				if(tmp.userName.equals(e.username)) {
+					have=true;
+					Logger.log.warn("该好友已经是你的好友");
+					break;
+					}
+				else have=false;
+			if(!have)
+			ul.add(new UserClient(e.username));
+			break;
+		}
+		case	EventFriendOperation.DELETEFRIEND:{
+			for(UserClient tmp:ul)
+				if(tmp.userName.equals(e.username)) {
+					ul.remove(tmp);
+					have=true;
+					break;
+					}
+				else have=false;
+			if(!have) {
+				Logger.log.impart("并无此好友，删除失败");
+			}
+			//测试输出ul
+			System.out.print(" 好友列表  ：");
+			for(UserClient tmp:ul) {
+				System.out.print("  "+tmp.userName);
+				
+			}
+			System.out.println();
+		}
+		}
 	}
 	@SubscribeEvent
 	public void onSearchRequest(EventSearchRequest e) {
@@ -180,7 +224,7 @@ public class InfoPanel extends JPanel {
 				break;
 			case EventIPC.SEARCH:
 				searchMemberField.deleteAllMember();
-				searchField.searchInit();
+//				searchField.searchInit();
 				Logger.log.warn("进入搜索盘后焦点失去，无法获得焦点");
 				break;
 		}

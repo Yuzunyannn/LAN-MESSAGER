@@ -9,7 +9,12 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 
+import client.event.EventFriendOperation;
+import client.event.EventShow;
+import client.event.EventsBridge;
 import client.frame.Theme;
+import client.frame.utility.UtilityPanel;
+import log.Logger;
 
 public class SearchButton extends MemberButton {
 	private static final long serialVersionUID = 1L;
@@ -25,7 +30,7 @@ public class SearchButton extends MemberButton {
 		member.setLocation(0, 20);
 		member.setFont(Theme.FONT2);
 		this.removeMouseListener(mouse);
-		ActionListener searchItemListener=new SearchMenuItemMonitor();
+		ActionListener searchItemListener=new SearchMenuItemMonitor(this.getMemberName());
 		mouse= new UButtonMouse (SEARCHITEMSTR , searchItemListener) {
 			@Override 
 			public void mousePressed(MouseEvent e) {
@@ -47,16 +52,21 @@ public class SearchButton extends MemberButton {
 
 }
 class SearchMenuItemMonitor implements ActionListener{
-
+	private String buttonId;
+	private String toolId=UtilityPanel.TOOLID_CHATING;
+	public SearchMenuItemMonitor(String bid) {
+		buttonId=bid;
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String[] str =SearchButton.SEARCHITEMSTR;
 		String temp = ((JMenuItem) e.getSource()).getText();
 		if(temp.equals(str[0])) {
-			System.out.println(str[0]);
+			EventsBridge.frontendEventHandle.post(new EventShow(buttonId, toolId));
+			Logger.log.warn("UtilityPanel部分需要完成一个显示用户信息盘，此处暂时用聊天盘");
 		}
 		else if(temp.equals(str[1])) {
-			System.out.println(str[1]);
+			EventsBridge.frontendEventHandle.post(new EventFriendOperation(buttonId, EventFriendOperation.ADDFRIEND));
 		}
 	}
 	

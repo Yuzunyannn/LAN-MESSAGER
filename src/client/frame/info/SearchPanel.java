@@ -103,7 +103,10 @@ public class SearchPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				EventsBridge.frontendEventHandle.post(new EventIPC(EventIPC.FRIENDS));
-				 stmp.searchInit();
+//				 stmp.searchInit();
+				//测试
+				Logger.log.impart("点击按钮切换时的测试");
+				search.setBackground(Theme.COLOR4);
 			}
 		};
 		b1.addMouseListener(mb);
@@ -115,9 +118,9 @@ public class SearchPanel extends JPanel {
 		search.addFocusListener(new DefaultFocusListener(INFO, search));
 		int buttonsize=30;
 		b1.setSize(buttonsize,buttonsize);
-		b1.setLocation(220, 25);
+		b1.setLocation(220, 23);
 		b2.setSize(buttonsize, buttonsize);
-		b2.setLocation(260, 25);
+		b2.setLocation(260, 23);
 		this.add(b1);
 		this.add(b2);
 		this.add(search);
@@ -151,7 +154,9 @@ class DefaultFocusListener implements FocusListener {
 		String temp = textfield.getText();
 		if (temp.equals(info)) {
 			textfield.setText(null);
+			textfield.setBackground(Theme.COLOR0);
 			textfield.setForeground(Color.BLACK);
+			
 
 		}
 	}

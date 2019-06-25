@@ -19,7 +19,8 @@ public class Theme {
 	public static Color COLOR5 = new Color(0x6f6e6e);
 	/** 边框色 */
 	public static Color COLOR6 = new Color(0xd5d1d1);
-
+	/**搜索框内部颜色*/
+	public static Color COLOR7 = new Color(0x979696);
 	/** 用户名字体 冬青黑体 粗 45号 */
 	public static Font FONT0 = new Font("冬青黑体", Font.BOLD, 45);
 	/** 对话字体 冬青黑体 细 14号 */
