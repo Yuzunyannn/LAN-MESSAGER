@@ -20,8 +20,8 @@ public class Theme {
 	/** 边框色 */
 	public static Color COLOR6 = new Color(0xd5d1d1);
 
-	/** 用户名字体 冬青黑体 粗 30号 */
-	public static Font FONT0 = new Font("冬青黑体", Font.BOLD, 30);
+	/** 用户名字体 冬青黑体 粗 45号 */
+	public static Font FONT0 = new Font("冬青黑体", Font.BOLD, 45);
 	/** 对话字体 冬青黑体 细 14号 */
 	public static Font FONT1 = new Font("冬青黑体", Font.PLAIN, 14);
 	/** 联系人名字体 冬青黑体 粗 24号 */
@@ -30,4 +30,5 @@ public class Theme {
 	public static Font FONT3 = new Font("冬青黑体", Font.PLAIN, 12);
 	/** 左侧弹出菜单字体 宋体 粗 12号 */
 	public static Font FONT4 = new Font("宋体", Font.BOLD, 14);
+	
 }

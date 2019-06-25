@@ -17,6 +17,7 @@ import client.frame.Theme;
 import client.user.UserClient;
 import event.IEventBus;
 import event.SubscribeEvent;
+import log.Logger;
 import user.User;
 import user.message.MUSSearch;
 
@@ -29,7 +30,7 @@ public class InfoPanel extends JPanel {
 	private ListScrollPanel searchMemberField;
 	//上方搜索面板
 	private SearchPanel searchField;
-	//？
+	//用户信息面板
 	private UserPanel userField;
 	//当前状态
 	private int state;
@@ -47,8 +48,8 @@ public class InfoPanel extends JPanel {
 		this.add(searchField);
 		this.add(memberField);
 		state = EventIPC.FRIENDS;
-		userField.setPreferredSize(new Dimension(0, 80));
-		searchField.setPreferredSize(new Dimension(0, 50));
+		userField.setPreferredSize(new Dimension(0, UserPanel.USERLENGTH));
+		searchField.setPreferredSize(new Dimension(0, SearchPanel.SEARCH_FIELD_LENGTH));
 	}
 	//事件注册
 	public void initEvent(IEventBus bus) {
@@ -169,7 +170,8 @@ public class InfoPanel extends JPanel {
 	
 	/**
 	 * 状态转换时，新面板执行操作
-	 * @param state_a 原面板状态*/
+	 * @param state_a 原面板状态
+	 */
 	public void APanelChange(int state_a)
 	{
 		switch(state_a)
@@ -179,6 +181,7 @@ public class InfoPanel extends JPanel {
 			case EventIPC.SEARCH:
 				searchMemberField.deleteAllMember();
 				searchField.searchInit();
+				Logger.log.warn("进入搜索盘后焦点失去，无法获得焦点");
 				break;
 		}
 	}

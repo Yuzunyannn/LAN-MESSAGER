@@ -60,7 +60,7 @@ public class MemberButton extends JButton {
 		JLabel member = new JLabel(name);
 		this.setLayout(null);
 		member.setSize(150, 30);
-		member.setLocation(0, 20);
+		member.setLocation(90, 20);
 		member.setFont(Theme.FONT2);
 		this.add(member);
 		Dimension size = new Dimension(MainFrame.INFO_RIGION_WIDTH, MEMBERBUTTON_HEIGHT);
