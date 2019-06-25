@@ -185,18 +185,7 @@ public class InfoPanel extends JPanel {
 		
 	}
 	
-	/**
-	 * 用户点击按钮时触发
-	 * 当状态为好友列表管理时，进行一些按钮的重绘
-	 */
-	@SubscribeEvent
-	public void onUserSelect(EventShow e) 
-	{
-		if(state==EventIPC.FRIENDS)
-		{
-			this.memberField.onUserSelect(e);
-		}
-	}
+
 	
 	/**
 	 * 状态转换时，原面板执行操作

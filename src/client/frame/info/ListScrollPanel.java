@@ -200,14 +200,7 @@ public class ListScrollPanel extends JScrollPane {
 		// System.out.println("count"+p.getComponentCount());
 	}
 
-	/**
-	 * 当用户点击memberbutton是触发
-	 */
-	public void onUserSelect(EventShow e) {
-		for (Component i : content) {
-			((MemberButton) i).isChoose(e.id);
-		}
-	}
+
 
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
@@ -253,7 +246,17 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		this.refresh();
 	}
-
+	@SubscribeEvent
+	public void onShow(EventShow e) {
+		for (int i =0;i< content.length;i++) {
+			MemberButton tmp=(MemberButton)content[i];
+			if(tmp.getMemberName().equals(e.id))
+				tmp.isChoose(true);
+			else
+				tmp.isChoose(false);
+		}
+		this.refresh();
+	}
 
 	public void initEvent(IEventBus bus) {
 		bus.register(this);
