@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -103,7 +104,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 	}
 
 	/** 获取聊天PaneLInfo */
-	private PanelInfo getChatPanelInfo(String username) {
+	public PanelInfo getChatPanelInfo(String username) {
 		String newInfo = UtilityPanel.TOOLID_CHATING + username;
 		PanelInfo info;
 		if (panels.containsKey(newInfo)) {
@@ -113,16 +114,6 @@ public class UtilityPanel extends JPanel implements ITickable {
 			panels.put(info.info, info);
 		}
 		return info;
-	}
-
-	/** 接受到消息 */
-	public void recvString(User from, String str) {
-		PanelInfo info = this.getChatPanelInfo(from.getUserName());
-		if (!info.canUse()) {
-			info.reborn();
-		}
-		info.tick = this.tick;
-		((ChatPanel) info.panel).onRecvMsg(new WordString(str));
 	}
 
 	/** 切换聊天界面 */
@@ -197,6 +188,30 @@ public class UtilityPanel extends JPanel implements ITickable {
 
 	}
 
+//----------------------------------use----------------------------------
+	/** 接受到消息 */
+	public void recvString(User from, String str) {
+		PanelInfo info = this.getChatPanelInfo(from.getUserName());
+		if (!info.canUse()) {
+			info.reborn();
+		}
+		info.tick = this.tick;
+		((ChatPanel) info.panel).onRecvMsg(new WordString(str));
+	}
+
+	/** 发送消息给多个用户 */
+	public void sendWordToUsers(List<User> users, Word word) {
+		if (word.id != Word.STRING) {
+			Logger.log.warn("目前多人发消息只支持文字");
+			return;
+		}
+		for (User user : users) {
+			EventsBridge.sendString(word.getValue(), user);
+		}
+	}
+
+// ----------------------------------event----------------------------------
+
 	// 处理切换事件
 	@SubscribeEvent
 	public void changeChat(EventShow e) {
@@ -216,7 +231,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 			if (w.id == Word.FILE) {
 				EventsBridge.sendFile(((WordFile) w).getFile(), e.toUser);
 			} else {
-				EventsBridge.sendString(w.toString(), e.toUser);
+				EventsBridge.sendString(w.getValue(), e.toUser);
 			}
 		}
 	}
@@ -225,15 +240,13 @@ public class UtilityPanel extends JPanel implements ITickable {
 	public void debug(client.event.EventDebugInfoOuting e) {
 		e.debufInfos.add("UtilityPanel(" + tick + ")当前板子的id为:" + panelInfo);
 	}
-	
+
 	/** 发送图片or表情 */
 	@SubscribeEvent
 	public void sendPicture(client.event.EventSendPicture e) {
 		System.out.println("Pic event got!");
-		
-		((ChatPanel)this.currPanel).onSendPics(e.picName, e.type);
+		((ChatPanel) this.currPanel).onSendPics(e.picName, e.type);
 
 	}
-	
-	
+
 }

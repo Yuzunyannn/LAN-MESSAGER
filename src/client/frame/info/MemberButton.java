@@ -44,9 +44,9 @@ public class MemberButton extends JButton {
 	private boolean isChat;
 	//图片资源
 	public static ImageIcon icon_open = new ImageIcon(
-			ResourceManagement.instance.getResource("img/envelope_open.png").getImage());
+			ResourceManagement.instance.getPackResource("img/envelope_open.png").getImage());
 	public static ImageIcon icon_closed = new ImageIcon(
-			ResourceManagement.instance.getResource("img/envelope_closed.png").getImage());
+			ResourceManagement.instance.getPackResource("img/envelope_closed.png").getImage());
 	public MemberButton() {
 
 	}

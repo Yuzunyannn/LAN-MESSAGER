@@ -169,18 +169,6 @@ public class ChatPanel extends JPanelUtility {
 		}
 	}
 
-	/** 当点击发送时候调用 */
-	public void onSendMsg(List<Word> words) {
-		for (Word w : words) {
-			BubbleType type = checkType(w.id);
-			Date date = new Date();
-			timeLapse(date.toString(), chatDialogPanel.lastTime);
-			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString());
-		}
-		this.revalidate();
-		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
-	}
-
 	public void onSendPics(String name, BubbleType type) {
 		Date date = new Date();
 		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString());
@@ -202,6 +190,18 @@ public class ChatPanel extends JPanelUtility {
 			break;
 		}
 		return type;
+	}
+
+	/** 当点击发送时候调用 */
+	public void onSendMsg(List<Word> words) {
+		for (Word w : words) {
+			BubbleType type = checkType(w.id);
+			Date date = new Date();
+			timeLapse(date.toString(), chatDialogPanel.lastTime);
+			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString());
+		}
+		this.revalidate();
+		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
 	}
 
 	/** 当点击收到消息的时候调用 */

@@ -43,10 +43,12 @@ public class ResourceManagement {
 		Logger.log.warn(str, e);
 	}
 
-	/** 记录资源路径的map */
-	private final Map<String, ResourceInfo> res = new HashMap<String, ResourceInfo>();
+	/** 记录包内资源路径的map */
+	private final Map<String, ResourceInfo> resPack = new HashMap<String, ResourceInfo>();
 	/** 记录资源临时路径的map */
 	private final Map<String, ResourceInfo> resTmp = new HashMap<String, ResourceInfo>();
+	/** 记录数据资源路径的map */
+	private final Map<String, ResourceInfo> resData = new HashMap<String, ResourceInfo>();
 	/** 当前运行程序的url */
 	URL url = ClassLoader.getSystemResource("resources");
 
@@ -90,7 +92,7 @@ public class ResourceManagement {
 			path = path.substring(path.indexOf("resources") + "resources".length() + 1);
 			path = path.replace('\\', '/');
 			try {
-				res.put(path, new ResourceInfo(file.toURI().toURL()));
+				resPack.put(path, new ResourceInfo(file.toURI().toURL()));
 			} catch (MalformedURLException e) {
 				ResourceManagement.warn("资源转化url时候出现异常！", e);
 			}
@@ -110,24 +112,24 @@ public class ResourceManagement {
 				String path = name;
 				path = path.substring(path.indexOf("resources") + "resources".length() + 1);
 				path = path.replace('\\', '/');
-				res.put(path, new ResourceInfo(this.getClass().getResource('/' + name)));
+				resPack.put(path, new ResourceInfo(this.getClass().getResource('/' + name)));
 			}
 		}
 	}
 
 	/** 初始化 */
 	public void init() {
-		for (Entry<String, ResourceInfo> entry : res.entrySet()) {
+		for (Entry<String, ResourceInfo> entry : resPack.entrySet()) {
 			entry.getValue().load();
 			ResourceManagement.impart("资源加载成功：" + entry.getKey());
 		}
 	}
 
 	/** 获取资源信息，路径从resources包下开始，如img/1.png */
-	public ResourceInfo getResource(String path) {
+	public ResourceInfo getPackResource(String path) {
 		path = path.replace('\\', '/');
-		if (res.containsKey(path))
-			return res.get(path);
+		if (resPack.containsKey(path))
+			return resPack.get(path);
 		return null;
 	}
 
@@ -137,6 +139,33 @@ public class ResourceManagement {
 		if (resTmp.containsKey(path))
 			return resTmp.get(path);
 		return null;
+	}
+
+	/** 获取资源信息，data文件夹内数据 */
+	public ResourceInfo getDataResource(String path) {
+		path = path.replace('\\', '/');
+		if (resData.containsKey(path))
+			return resData.get(path);
+		return null;
+	}
+
+	/** 复制已有资源到tmp */
+	public ResourceInfo loadTmpResource(ResourceInfo resourceInfo, String virtualPath) {
+		if (resTmp.containsKey(virtualPath))
+			return resTmp.get(virtualPath);
+		resourceInfo = resourceInfo.copy();
+		resTmp.put(virtualPath, resourceInfo);
+		return resourceInfo;
+	}
+
+	/** 加载临时资源，加载完后回调 ，注意线程同步 */
+	public void loadTmpResource(String realPath, String virtualPath, IWaitLoad load) {
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				load.loadFinish(ResourceManagement.this.loadTmpResource(realPath, virtualPath));
+			}
+		});
 	}
 
 	/** 加载临时资源 */
@@ -160,12 +189,54 @@ public class ResourceManagement {
 		return info;
 	}
 
-	/** 复制已有资源到tmp */
-	public ResourceInfo loadTmpResource(ResourceInfo resourceInfo, String virtualPath) {
-		if (resTmp.containsKey(virtualPath))
-			return resTmp.get(virtualPath);
-		resourceInfo = resourceInfo.copy();
-		resTmp.put(virtualPath, resourceInfo);
-		return resourceInfo;
+	/** 加载数据资源 */
+	public ResourceInfo loadDataResource(String path) {
+		path = path.replace('\\', '/');
+		if (resTmp.containsKey(path))
+			return resTmp.get(path);
+		File file = new File("./data/" + path);
+		if (!file.exists())
+			return null;
+		ResourceInfo info;
+		try {
+			info = new ResourceInfo(file.toURI().toURL());
+			info.load();
+			resTmp.put(path, info);
+		} catch (MalformedURLException e) {
+			ResourceManagement.warn("数据资源转化url时候出现异常！", e);
+			return null;
+		}
+		return info;
+	}
+
+	/** 创建一个数据文件 */
+	public ResourceInfo loadOorCreateDataResource(String path) {
+		path = path.replace('\\', '/');
+		if (resTmp.containsKey(path))
+			return resTmp.get(path);
+		File file = new File("./data/" + path);
+		if (!file.exists()) {
+			int x = path.lastIndexOf('/');
+			if (x > 0) {
+				File folder = new File("./data/" + path.substring(0, x));
+				folder.mkdirs();
+			}
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				ResourceManagement.warn("创建数据文件失败！", e);
+				return null;
+			}
+		}
+		ResourceInfo info;
+		try {
+			info = new ResourceInfo(file.toURI().toURL());
+			info.load();
+			resTmp.put(path, info);
+		} catch (MalformedURLException e) {
+			ResourceManagement.warn("数据资源转化url时候出现异常！", e);
+			return null;
+		}
+		return info;
 	}
 }

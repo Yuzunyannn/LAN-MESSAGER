@@ -46,4 +46,15 @@ abstract public class User {
 	public boolean isOnline() {
 		return true;
 	}
+
+	/** 是否是特殊虚拟用户 */
+	public boolean isSpecial() {
+		return userName.charAt(0) == '#';
+	}
+
+	/** 获取特殊虚拟用户 */
+	public UserSpecial getSpecialUser() {
+		return new UserSpecial(this);
+	}
+
 }
