@@ -17,13 +17,17 @@ import user.User;
 public class MUSSearch extends MessageUser {
 	public MUSSearch() {
 	}
+	/**
+	 * @param name 发起请求的用户的名字*/
 	public MUSSearch(String name) {
 		nbt.setString("searchline", name);
 	}
-	public MUSSearch(ArrayList<User> user,String searchline) {
+	/**
+	 * @param ul */
+	public MUSSearch(ArrayList<User> ul,String searchline) {
 
 		NBTTagList list = new NBTTagList();
-		for (User str : user)
+		for (User str : ul)
 			list.appendTag(str.getUserName());
 		NBTTagCompound nbt1 = new NBTTagCompound();
 		nbt1.setTag("searchList", list);
