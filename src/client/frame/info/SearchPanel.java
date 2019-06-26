@@ -65,7 +65,8 @@ public class SearchPanel extends JPanel {
 		{
 
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
+				
 				search.setFocusable(entry);
 			}
 
@@ -100,9 +101,9 @@ public class SearchPanel extends JPanel {
 		MouseAdapter mb=new MouseAdapter() {
 
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				EventsBridge.frontendEventHandle.post(new EventIPC(EventIPC.FRIENDS));
-//				 stmp.searchInit();
+				stmp.searchInit();
 				//测试
 				Logger.log.impart("点击按钮切换时的测试");
 				search.setBackground(Theme.COLOR4);
@@ -128,9 +129,10 @@ public class SearchPanel extends JPanel {
 	public void searchInit() {
 		search.setForeground(Color.GRAY);
 		search.setText(INFO);
+		this.setBackground(Theme.COLOR5);
 		entry=false;
 		search.setFocusable(entry);
-		Logger.log.warn("搜索框文字大小存在异常！");
+		
 	}
 	public void initEvent(IEventBus bus) {
 		bus.register(this);
