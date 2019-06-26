@@ -10,6 +10,14 @@ import java.util.Random;
 
 import event.EventBusSynchronized;
 import event.IEventBus;
+import event.SubscribeEvent;
+import log.Logger;
+import nbt.NBTBase;
+import nbt.NBTTagCompound;
+import resmgt.ResourceInfo;
+import resmgt.ResourceManagement;
+import server.event.EventHour;
+import util.FileHelper;
 
 public class FileSenderManager {
 
@@ -53,6 +61,51 @@ public class FileSenderManager {
 				return true;
 		}
 		return false;
+	}
+
+	static public void serverFinishRecv(File file) {
+		String date = FileHelper.getDateString();
+		ResourceInfo info = ResourceManagement.instance.loadOrCreateTmpResource("file_" + date, "file_" + date);
+		NBTTagCompound nbt = info.getNBT();
+		if (nbt == null) {
+			info.setData(new NBTTagCompound());
+			nbt = info.getNBT();
+		}
+		nbt.setBoolean(file.getName(), true);
+		info.save();
+	}
+
+	@SubscribeEvent
+	public static void onHourChange(EventHour e) {
+		if (e.newDay()) {
+			Logger.log.impart("新的一天到来了！File文件管理正在运行！");
+			FileSenderManager.clearOnce();
+		}
+	}
+
+	static public void clearOnce() {
+		String date = FileHelper.getDateString(-5);
+		ResourceInfo info = ResourceManagement.instance.loadTmpResource("file_" + date, "file_" + date);
+		if (info != null) {
+			if (!info.isLoaded())
+				info.load();
+			if (info.getType() != ResourceInfo.Type.NBT) {
+				Logger.log.warn("读取到的File记录临时文件数据的数据类型错误！");
+				return;
+			}
+			NBTTagCompound nbt = info.getNBT();
+			for (Entry<String, NBTBase> entry : nbt) {
+				String str = entry.getKey();
+				File file = new File("./tmp" + str);
+				if (file.exists()) {
+					if (file.delete() == false) {
+						Logger.log.warn("临时文件(" + file.getName() + ")清理失败！");
+					}
+				}
+			}
+		}
+		info.release();
+		info.getFile().delete();
 	}
 
 }

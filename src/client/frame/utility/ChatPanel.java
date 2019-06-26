@@ -238,7 +238,7 @@ public class ChatPanel extends JPanelUtility {
 				storyID);
 		this.revalidate();
 	}
-	
+
 	/** 接收图片UI更新 */
 	public void onRevPic(String name, String storyID) {
 		Date date = new Date();
@@ -287,13 +287,13 @@ public class ChatPanel extends JPanelUtility {
 	}
 
 	/** 当点击收到消息的时候调用 */
-	public void onRecvMsg(Word word) {
+	public void onRecvMsg(User user, Word word) {
 		Record rec = RecordManagement.getRecord(chatTo);
 		rec.addNew(word, chatTo);
 		BubbleType type = checkType(word.id);
 		Date date = new Date();
 		timeLapse(date.toString(), chatDialogPanel.lastTime);
-		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName(), type, date.toString(), "");
+		chatDialogPanel.addBubble(false, word.toString(), user.getUserName(), type, date.toString(), "");
 
 	}
 

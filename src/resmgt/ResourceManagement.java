@@ -227,7 +227,26 @@ public class ResourceManagement {
 		return info;
 	}
 
-	
+	/** 移除tmp */
+	public ResourceInfo removeTmpResource(String virtualPath) {
+		virtualPath = virtualPath.replace('\\', '/');
+		if (resTmp.containsKey(virtualPath)) {
+			ResourceInfo info = resTmp.get(virtualPath);
+			resTmp.remove(virtualPath);
+			return info;
+		}
+		return null;
+	}
+
+	/** 是否有数据 */
+	public boolean hasDataResource(String path) {
+		path = path.replace('\\', '/');
+		if (resTmp.containsKey(path))
+			return true;
+		File file = new File("./data/" + path);
+		return file.exists();
+	}
+
 	/** 加载数据资源 */
 	public ResourceInfo loadDataResource(String path) {
 		path = path.replace('\\', '/');

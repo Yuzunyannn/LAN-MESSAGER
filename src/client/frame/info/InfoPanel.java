@@ -215,6 +215,7 @@ public class InfoPanel extends JPanel {
 		switch(state_a)
 		{
 			case EventIPC.FRIENDS:
+				memberField.ChatStateClear();
 				break;
 			case EventIPC.SEARCH:
 				searchMemberField.deleteAllMember();

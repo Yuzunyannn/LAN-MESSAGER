@@ -47,6 +47,11 @@ abstract public class User {
 		return true;
 	}
 
+	/** 是否存在 */
+	public boolean isExist() {
+		return true;
+	}
+
 	/** 是否是特殊虚拟用户 */
 	public boolean isSpecial() {
 		return userName.charAt(0) == '#';

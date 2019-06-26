@@ -22,10 +22,6 @@ abstract public class MessageUser implements IMessage {
 		this.nbt.setString("user", user.getUserName());
 	}
 
-	public MessageUser(String username) {
-		this.nbt.setString("user", username);
-	}
-
 	public NBTTagCompound getNBT() {
 		return nbt;
 	}

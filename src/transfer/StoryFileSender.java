@@ -263,6 +263,7 @@ public class StoryFileSender extends Story {
 	private void finishRecv() {
 		if (this.isServer()) {
 			Logger.log.impart(this, "服务器临时文件：“", want.getName(), "”已全部接受完成！");
+			FileSenderManager.serverFinishRecv(want);
 		} else {
 			Logger.log.impart(this, "文件“", want.getName(), "”已全部接受完成！");
 		}
