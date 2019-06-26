@@ -79,7 +79,11 @@ public class Story implements ITickable {
 		story.addMember(users);
 	}
 
-	/** 创建一个story */
+	/** 创建一个story 
+	 * @param storyInstanceId story的表示id
+	 *        storyId 使用giveStoryId()为新创建的story实例分配id
+	 *        nbt ？
+	 *        side运行在哪一端*/
 	static public Story newStory(String storyInstanceId, String storyId, NBTTagCompound nbt, Side side) {
 		if (storyInstanceId == null || storyInstanceId.isEmpty()) {
 			Logger.log.warn("传入的实例化id，为空！");

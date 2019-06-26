@@ -46,6 +46,11 @@ public class ResourceInfo {
 		}
 	}
 
+	/** 是否加载有资源 */
+	public boolean isLoaded() {
+		return obj != null;
+	}
+
 	/** 释放资源 */
 	public void release() {
 		obj = null;

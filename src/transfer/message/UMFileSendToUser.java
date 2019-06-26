@@ -1,6 +1,7 @@
 package transfer.message;
 
 import core.Core;
+import log.Logger;
 import nbt.NBTTagCompound;
 import network.Side;
 import story.Story;
@@ -27,6 +28,10 @@ public class UMFileSendToUser extends MessageUser {
 
 	@Override
 	protected void executeServer(User from, User to, NBTTagCompound nbt) {
+		if (to.isSpecial()) {
+			Logger.log.warn("发送文件目前不支持群发送！" + to.getUserName());
+			return;
+		}
 		Core.task(new Runnable() {
 			@Override
 			public void run() {

@@ -20,14 +20,19 @@ public class MUSString extends MessageUser {
 		nbt.setString("str", str);
 	}
 
-	public MUSString(String user, String str) {
+	public MUSString(User user, UserSpecial sp, String str) {
 		super(user);
 		nbt.setString("str", str);
+		nbt.setString("sp", sp.specialName);
 	}
 
 	@Override
 	protected void executeClient(User from, NBTTagCompound nbt) {
-		EventsBridge.recvString(from, nbt.getString("str"));
+		if (nbt.hasKey("sp")) {
+			UserSpecial sp = new UserSpecial(nbt.getString("sp"));
+			EventsBridge.recvString(from, sp, nbt.getString("str"));
+		} else
+			EventsBridge.recvString(from, nbt.getString("str"));
 	}
 
 	@Override

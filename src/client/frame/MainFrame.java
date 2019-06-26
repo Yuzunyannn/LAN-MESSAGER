@@ -47,7 +47,7 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public Dimension preferredLayoutSize(Container arg0) {
-			return new Dimension(1280, 720);
+			return new Dimension(1000, 628);
 		}
 
 		@Override
@@ -97,6 +97,11 @@ public class MainFrame extends JFrame {
 
 	public InfoPanel getInfoPanel() {
 		return infoPanel;
+	}
+	
+	public void setUserName(String name) 
+	{
+		infoPanel.setUserName(name);
 	}
 
 	/** 初始化窗体大小和位置 */

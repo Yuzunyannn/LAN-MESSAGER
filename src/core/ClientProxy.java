@@ -79,7 +79,10 @@ public class ClientProxy extends Proxy implements Runnable {
 		if (e.username.equals(sendUsername)) {
 			if (!e.info.equals(Network.VALIDATION)) {
 				Logger.log.impart(e.username + "登录失败！");
-				logFrame.setHint("用户名或密码错误！");
+				if (e.info.equals("online"))
+					logFrame.setHint("该用户已在线！");
+				else
+					logFrame.setHint("用户名或密码错误！");
 				return;
 			}
 			Logger.log.impart(e.username + "登录成功！");
@@ -87,6 +90,7 @@ public class ClientProxy extends Proxy implements Runnable {
 			UserClient.sendToServer(new MUGULRequest(UOnline.getInstance().getUser(e.username)));
 			UserClient.toServer.setName(e.username);
 			logFrame.setVisible(false);
+			frame.setUserName(UOnline.getInstance().getUser(e.username).getUserName());
 			frame.setVisible(true);
 		} else {
 			Logger.log.warn("登录失败，传送回的用户名和发送的不符！" + e.username);

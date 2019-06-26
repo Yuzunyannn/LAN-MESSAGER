@@ -35,19 +35,13 @@ public class SearchPanel extends JPanel {
 			int key = e.getKeyCode();
 			if (key == '\n')
 				EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
-//			String temp=search.getText();
-
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
-			// TODO 自动生成的方法存根
-
 		}
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-			// TODO 自动生成的方法存根
-
 		}
 
 	};
@@ -60,13 +54,16 @@ public class SearchPanel extends JPanel {
 		search = new RTextField();
 		search.setFont(Theme.FONT3);
 		search.setFocusable(entry);
-		//鼠标点击事件
+
+		//搜索栏鼠标点击事件
 		search.addMouseListener(new MouseAdapter() 
 		{
 
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
+				
 				search.setFocusable(entry);
+				search.requestFocus();
 			}
 
 			@Override
@@ -100,9 +97,9 @@ public class SearchPanel extends JPanel {
 		MouseAdapter mb=new MouseAdapter() {
 
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				EventsBridge.frontendEventHandle.post(new EventIPC(EventIPC.FRIENDS));
-//				 stmp.searchInit();
+				stmp.searchInit();
 				//测试
 				Logger.log.impart("点击按钮切换时的测试");
 				search.setBackground(Theme.COLOR4);
@@ -128,9 +125,10 @@ public class SearchPanel extends JPanel {
 	public void searchInit() {
 		search.setForeground(Color.GRAY);
 		search.setText(INFO);
+		this.setBackground(Theme.COLOR5);
 		entry=false;
 		search.setFocusable(entry);
-		Logger.log.warn("搜索框文字大小存在异常！");
+		
 	}
 	public void initEvent(IEventBus bus) {
 		bus.register(this);

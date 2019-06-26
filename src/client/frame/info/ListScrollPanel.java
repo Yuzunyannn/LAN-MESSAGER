@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
+import client.event.EventIPC;
 import client.event.EventRecv.EventRecvString;
 import client.event.EventSearchRequest;
 import client.event.EventShow;
@@ -237,7 +238,23 @@ public class ListScrollPanel extends JScrollPane {
 		this.revalidate();
 		this.repaint();
 	}
-
+	/**好友盘专属的函数
+	 * 好友聊天状态全部还原*/
+	public void ChatStateClear() {
+		if(state==FRIENDPANEL) {
+		content=p.getComponents();
+		for(Component i:content) {
+			((MemberButton) i).isChoose(false);
+			
+		}
+		p.removeAll();
+		for(Component i:content) {
+			p.add(i);
+		}
+		this.refresh();
+		}
+		else return;
+	}
 	/** 事件处理 */
 	@SubscribeEvent
 	public void onSearchRequest(EventSearchRequest e) {
@@ -246,6 +263,7 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		this.refresh();
 	}
+
 	@SubscribeEvent
 	public void onShow(EventShow e) {
 		for (int i =0;i< content.length;i++) {

@@ -13,18 +13,18 @@ import client.frame.Theme;
 public class UserPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int USERLENGTH=140;
-	private String name = "Tatsuu";
+//	private String name = "Tatsuu";
 	private SearchPanel sp;
 	private UserImage img;
-
+	private JLabel username;
 	public UserPanel() {
 		this.setLayout(null);
 		this.setBackground(Theme.COLOR4);
 		img = new UserImage();
 		this.add(img);
-		JLabel username = new JLabel();
+		username = new JLabel();
 		username.setForeground(Theme.COLOR0);
-		username.setText(name);
+		username.setText("");
 		username.setFont(Theme.FONT0);
 		this.add(username);
 		username.setSize(150, 50);
@@ -35,11 +35,13 @@ public class UserPanel extends JPanel {
 	}
 
 	public String getName() {
-		return name;
+		return username.getText();
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		username.setText(name);
+		this.repaint();
+		this.revalidate();
 	}
 
 	public SearchPanel getSp() {

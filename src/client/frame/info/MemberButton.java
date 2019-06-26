@@ -111,6 +111,11 @@ public class MemberButton extends JButton {
 		this.memberName = memberName;
 	}
 
+	public void refresh() {
+		this.revalidate();
+		this.repaint();
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -147,6 +152,7 @@ public class MemberButton extends JButton {
 		isChat=choose;
 		if(!choose)
 		this.setBackground(Theme.COLOR3);
+
 	}
 	
 	/**
@@ -160,10 +166,6 @@ public class MemberButton extends JButton {
 			count++;
 			envelope = false;
 		}
-	}
-	public void refresh() {
-		this.revalidate();
-		this.repaint();
 	}
 }
 

@@ -43,5 +43,4 @@ public class UOnline {
 	public User userOffline(String username) {
 		return null;
 	}
-
 }

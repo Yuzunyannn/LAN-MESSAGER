@@ -23,12 +23,12 @@ public class SearchButton extends MemberButton {
 		super(name);
 		this.setMemberName(name);
 		SearchButton temp=this;
-		JLabel member = new JLabel(name);
+//		JLabel member = new JLabel(name);
 		this.setLayout(null);
-		this.add(member);
-		member.setSize(150, 30);
-		member.setLocation(0, 20);
-		member.setFont(Theme.FONT2);
+//		this.add(member);
+//		member.setSize(150, 30);
+//		member.setLocation(0, 20);
+//		member.setFont(Theme.FONT2);
 		this.removeMouseListener(mouse);
 		ActionListener searchItemListener=new SearchMenuItemMonitor(this.getMemberName());
 		mouse= new UButtonMouse (SEARCHITEMSTR , searchItemListener) {
