@@ -123,15 +123,6 @@ public class ProgressPanel extends JPanel implements ActionListener, ChangeListe
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public void setVisible(boolean aFlag) {
-		// TODO Auto-generated method stub
-		super.setVisible(aFlag);
-		if (aFlag) {
-
-		}
-	}
-
 }
 
 enum TransferType {

@@ -37,5 +37,9 @@ public class UserResource {
 	static public ImageIcon getHeadIcon(String username, HeadIconSize size) {
 		return new ImageIcon(ResourceManagement.instance.getTmpResource("headicon/debug_" + size).getImage());
 	}
-
+	
+//	/** 获取系统图标 */
+//	static public ImageIcon getSysIcon(String iconPath, HeadIconSize size) {
+//		return new ImageIcon(ResourceManagement.instance.getResource(iconPath + size).getImage());
+//	}
 }

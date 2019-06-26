@@ -72,7 +72,6 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		super(new JPanel());
 		panel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
 		panel.setSize(this.getWidth() - this.scrollBar.getWidth(), this.getHeight());
-		System.out.println("3/:" + this.panel.getWidth());
 		panel.setLayout(this.chatDialogLayout);
 		panel.setVisible(true);
 		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
@@ -122,29 +121,6 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		this.lastTime = time;
 		chatBubble = new ChatBubblePanel(isMySelf, info, name, type, time, BCPID);
 		int addHeight = chatBubble.getHeight();
-//		switch (type) {
-//		case WORD:
-//			addHeight = (info.length() / 50) * 30 + 60;
-//			break;
-//		case FILE:
-//			addHeight = 80;
-//			break;
-//		case EXTENSION:
-//			addHeight = 200;
-//			break;
-//		case LINE:
-//			addHeight = 50;
-//			break;
-//		case TIME:
-//			addHeight = 40;
-//			break;
-//		case PICTURE:
-//		case MEME:
-//			addHeight = 120;
-//			break;
-//		default:
-//			break;
-//		}
 		// testArea
 //		if (isMySelf) {
 //			chatBubble.setBorder(BorderFactory.createLineBorder(Theme.COLOR6, 3));

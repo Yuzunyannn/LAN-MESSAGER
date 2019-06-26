@@ -238,6 +238,15 @@ public class ChatPanel extends JPanelUtility {
 				storyID);
 		this.revalidate();
 	}
+	
+	/** 接收图片UI更新 */
+	public void onRevPic(String name, String storyID) {
+		Date date = new Date();
+		chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, date.toString(), "");
+		chatDialogPanel.addBubble(false, name, UserClient.getClientUsername(), BubbleType.PICTURE, date.toString(),
+				storyID);
+		this.revalidate();
+	}
 
 	/** 接收文件进度UI更新 */
 	public void onRevFileProgress(String storyID, EventFileRecv.Start e) {
