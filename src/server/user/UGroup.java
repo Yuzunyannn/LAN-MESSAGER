@@ -1,5 +1,6 @@
 package server.user;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -12,6 +13,7 @@ import user.UOnline;
 import user.User;
 import user.UserSpecial;
 import user.message.MUSString;
+import user.message.MessageGroupInfo;
 
 public class UGroup {
 
@@ -35,22 +37,14 @@ public class UGroup {
 		ResourceInfo info = ResourceManagement.instance.loadOrCreateDataResource("groups/" + groupId);
 		info.setData(nbt);
 		info.save();
+		UGroup.tellUser(new UserSpecial("#" + groupId), from);
 	}
 
 	static public void msgToGruop(User from, UserSpecial sp, String str) {
 		String groupId = sp.getId();
-		ResourceInfo info = ResourceManagement.instance.loadDataResource("groups/" + groupId);
-		if (info == null) {
-			Logger.log.warn("不存在的群！" + groupId);
+		NBTTagCompound nbt = UGroup.getGroupNBT(groupId);
+		if (nbt == null)
 			return;
-		}
-		if (!info.isLoaded())
-			info.load();
-		NBTTagCompound nbt = info.getNBT();
-		if (nbt == null) {
-			Logger.log.warn("群的数据不存在！" + groupId);
-			return;
-		}
 		for (Entry<String, NBTBase> entry : nbt) {
 			NBTBase base = entry.getValue();
 			if (base.getId() == NBTBase.TAG_BYTE) {
@@ -60,6 +54,37 @@ public class UGroup {
 				user.sendMesage(new MUSString(from, sp, str));
 			}
 		}
+	}
+
+	static public void tellUser(UserSpecial sp, User to) {
+		String groupId = sp.getId();
+		NBTTagCompound nbt = UGroup.getGroupNBT(groupId);
+		if (nbt == null)
+			return;
+		List<User> users = new LinkedList<>();
+		for (Entry<String, NBTBase> entry : nbt) {
+			NBTBase base = entry.getValue();
+			if (base.getId() == NBTBase.TAG_BYTE) {
+				User user = UOnline.getInstance().getUser(entry.getKey());
+				users.add(user);
+			}
+		}
+		User boss = UOnline.getInstance().getUser(nbt.getString("boss"));
+		to.sendMesage(new MessageGroupInfo(sp, boss, users));
+	}
+
+	static private NBTTagCompound getGroupNBT(String groupId) {
+		ResourceInfo info = ResourceManagement.instance.loadDataResource("groups/" + groupId);
+		if (info == null) {
+			Logger.log.warn("不存在的群！" + groupId);
+			return null;
+		}
+		NBTTagCompound nbt = info.getNBT();
+		if (nbt == null) {
+			Logger.log.warn("群的数据不存在！" + groupId);
+			return null;
+		}
+		return nbt;
 	}
 
 	/** 随机获取一个组号 */
