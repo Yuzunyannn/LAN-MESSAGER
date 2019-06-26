@@ -87,6 +87,7 @@ public class ClientProxy extends Proxy implements Runnable {
 			UserClient.sendToServer(new MUGULRequest(UOnline.getInstance().getUser(e.username)));
 			UserClient.toServer.setName(e.username);
 			logFrame.setVisible(false);
+			frame.setUserName(UOnline.getInstance().getUser(e.username).getUserName());
 			frame.setVisible(true);
 		} else {
 			Logger.log.warn("登录失败，传送回的用户名和发送的不符！" + e.username);
