@@ -27,6 +27,7 @@ public class PictureBubble extends Bubble {
 		this.picButton.setBorderPainted(false);
 		this.setLayout(new BorderLayout());
 		this.add(this.picButton, BorderLayout.CENTER);
+		this.setSize(this.getWidth(), 100);
 	}
 
 }

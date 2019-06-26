@@ -26,4 +26,9 @@ public class EventFile extends Event {
 	public long getFileSize() {
 		return story.fileSize;
 	}
+	
+	/**获取临时文件名*/
+	public String getTempName() {
+		return story.want.getName();
+	}
 }

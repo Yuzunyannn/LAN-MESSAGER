@@ -1,6 +1,5 @@
 package client.frame.utility;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -17,17 +16,17 @@ import client.frame.Theme;
 import core.Core;
 import nbt.INBTSerializable;
 import nbt.NBTTagCompound;
-import user.User;
+import transfer.EventFile;
 
 public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBTTagCompound> {
 	private static final long serialVersionUID = 1L;
 	private ChatBubblePanel chatBubble;
 	private JPanel panel;
-	private User chatToUser;
 	private JScrollBar scrollBar = this.getVerticalScrollBar();
 	private int height = 0;
 	public String lastTime;
 	public boolean firstTime = false;
+	int countDialogNum = 0;
 
 	private LayoutManager chatDialogLayout = new LayoutManager() {
 
@@ -53,11 +52,11 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		public void layoutContainer(Container parent) {
 			// TODO Auto-generated method stub
 			Component[] cons = parent.getComponents();
-			int bubbleNum = 0;
+			//int bubbleNum = 0;
 			for (int i = 0; i < cons.length; i++) {
 				if (cons[i] instanceof ChatBubblePanel) {
 					cons[i].setSize(parent.getWidth(), cons[i].getHeight());
-					bubbleNum++;
+					//bubbleNum++;
 				}
 			}
 		}
@@ -69,9 +68,8 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		}
 	};
 
-	public ChatDialogPanel(User chatToUser) {
+	public ChatDialogPanel() {
 		super(new JPanel());
-		this.chatToUser = chatToUser;
 		panel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
 		panel.setSize(this.getWidth() - this.scrollBar.getWidth(), this.getHeight());
 		System.out.println("3/:" + this.panel.getWidth());
@@ -80,7 +78,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
 		this.setVisible(true);
 		// 开始区域
-		this.addBubble(false, "", "", BubbleType.LINE, "");
+		this.addBubble(false, "", "", BubbleType.LINE, "", "");
 		// 数据添加可能是在调用setValue之后发生，所以此处引入runnable
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -94,47 +92,68 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		this.panel.setBorder(null);
 	}
 
+	/** 更新此时下载文件的Bubble进度UI */
+	public void updateFileProgress(String ID, EventFile e) {
+		Component[] coms = this.panel.getComponents();
+		for (int i = 0; i < coms.length; i++) {
+			if (coms[i] instanceof ChatBubblePanel) {
+				String str = ((ChatBubblePanel) coms[i]).getCBPID();
+				if (str.indexOf(ID) != -1) {
+					((FileBubble) ((ChatBubblePanel) coms[i]).getDialog()).toggleProgressBar(e);
+				}
+			}
+		}
+	}
+
 	/** 添加一个对话气泡 */
-	public void addBubble(boolean isMySelf, String info, String name, BubbleType type, String time) {
+	public void addBubble(boolean isMySelf, String info, String name, BubbleType type, String time, String ID) {
 		// TODO Auto-generated method stub
 		if (type == BubbleType.NULL) {
 			System.out.println("添加气泡失败！类型为NULL");
 			return;
 		}
-		// panel.setSize(panel.getWidth(), panel.getHeight() + 20);
-		this.lastTime = time;
-		chatBubble = new ChatBubblePanel(isMySelf, info, name, type, time);
-		int addHeight = 0;
-		switch (type) {
-		case WORD:
-			addHeight = (info.length() / 50) * 30 + 60;
-			break;
-		case FILE:
-			addHeight = 80;
-			break;
-		case EXTENSION:
-			addHeight = 200;
-			break;
-		case LINE:
-			addHeight = 40;
-			break;
-		case TIME:
-			addHeight = 40;
-			break;
-		case PICTURE:
-		case MEME:
-			addHeight = 200;
-			break;
-		default:
-			break;
-		}
-		if (isMySelf) {
-			chatBubble.setBorder(BorderFactory.createLineBorder(Color.blue, 3));
+		this.countDialogNum++;
+		String BCPID = "";
+		if (ID == "") {
+			BCPID = String.valueOf(this.countDialogNum) + "_";
 		} else {
-			chatBubble.setBorder(BorderFactory.createLineBorder(Color.red, 3));
+			BCPID = String.valueOf(this.countDialogNum) + "_" + ID;
 		}
+		this.lastTime = time;
+		chatBubble = new ChatBubblePanel(isMySelf, info, name, type, time, BCPID);
+		int addHeight = chatBubble.getHeight();
+//		switch (type) {
+//		case WORD:
+//			addHeight = (info.length() / 50) * 30 + 60;
+//			break;
+//		case FILE:
+//			addHeight = 80;
+//			break;
+//		case EXTENSION:
+//			addHeight = 200;
+//			break;
+//		case LINE:
+//			addHeight = 50;
+//			break;
+//		case TIME:
+//			addHeight = 40;
+//			break;
+//		case PICTURE:
+//		case MEME:
+//			addHeight = 120;
+//			break;
+//		default:
+//			break;
+//		}
+		// testArea
+//		if (isMySelf) {
+//			chatBubble.setBorder(BorderFactory.createLineBorder(Theme.COLOR6, 3));
+//		} else {
+//			chatBubble.setBorder(BorderFactory.createLineBorder(Theme.COLOR4, 3));
+//		}
 		// chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(),
 		// addHeight);
+		
 		chatBubble.setBounds(0, this.height, this.panel.getWidth(), addHeight);
 		this.height = this.height + addHeight;
 		// panel.setSize(panel.getWidth(), panel.getHeight() + chatBubble.getHeight());
@@ -195,7 +214,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		}
 		for (Integer i = 0; i < count; i++) {
 			NBTTagCompound upperNBT = (NBTTagCompound) nbt.getTag(i.toString());
-			ChatBubblePanel bubble = new ChatBubblePanel(true, "", "", BubbleType.NULL, "");
+			ChatBubblePanel bubble = new ChatBubblePanel(true, "", "", BubbleType.NULL, "", "");
 			bubble.deserializeNBT(upperNBT);
 			this.panel.add(bubble);
 		}

@@ -17,7 +17,7 @@ import user.UOnline;
 
 public class Core {
 
-	static final String SERVER_IP = "39.107.94.231";// 10.19.35.30
+	static final String SERVER_IP = "39.107.94.231";// 39.107.94.231
 	static final int SERVER_PORT = 35275;
 
 	static final Proxy proxy = new ClientProxy();

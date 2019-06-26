@@ -44,9 +44,9 @@ public class MemberButton extends JButton {
 	private boolean isChat;
 	//图片资源
 	public static ImageIcon icon_open = new ImageIcon(
-			ResourceManagement.instance.getResource("img/envelope_open.png").getImage());
+			ResourceManagement.instance.getPackResource("img/envelope_open.png").getImage());
 	public static ImageIcon icon_closed = new ImageIcon(
-			ResourceManagement.instance.getResource("img/envelope_closed.png").getImage());
+			ResourceManagement.instance.getPackResource("img/envelope_closed.png").getImage());
 	public MemberButton() {
 
 	}
@@ -58,10 +58,12 @@ public class MemberButton extends JButton {
 		envelope = true;
 		isChat=false;
 		JLabel member = new JLabel(name);
+		MemberButton mtmp=this;
 		this.setLayout(null);
 		member.setSize(150, 30);
-		member.setLocation(0, 20);
+		member.setLocation(90, 20);
 		member.setFont(Theme.FONT2);
+		this.setBackground(Theme.COLOR3);
 		this.add(member);
 		Dimension size = new Dimension(MainFrame.INFO_RIGION_WIDTH, MEMBERBUTTON_HEIGHT);
 		this.setPreferredSize(size);
@@ -75,12 +77,24 @@ public class MemberButton extends JButton {
 			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
 				if (e.getButton() == MouseEvent.BUTTON1) {
-
+					isChat=true;
+					count=0;
 					// 产生选择事件
 					EventsBridge.frontendEventHandle.post(new EventShow(toolId, memberName));
 					// count=0;
 					//EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("debug"),"test"));
 				}
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if(!isChat)
+				mtmp.setBackground(Theme.COLOR8);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if(!isChat)
+				mtmp.setBackground(Theme.COLOR3);
 			}
 		};
 		this.addMouseListener(mouse);
@@ -107,12 +121,11 @@ public class MemberButton extends JButton {
 		super.paintComponent(g);
 		int width = super.getWidth();
 		int height = super.getHeight();
-		if(isChat){
+		if(isChat) 
 			g.setColor(Theme.COLOR3.darker());
-		}
-		else{
-			g.setColor(Theme.COLOR3);
-		}
+			
+		else
+			g.setColor(getBackground());
 		g.fillRect(0, 0, width, height);
 		int x = 200, y = 23;
 		if (envelope) {
@@ -135,20 +148,13 @@ public class MemberButton extends JButton {
 	}
 
 	/**更改聊天状态，返回是否为正在聊天*/
-	public boolean isChoose(String username) {
-		if(username==memberName)
-		{
-			isChat = true;
-			count = 0;
-		}
-		else
-		{
-			isChat = false;
-		}
-		this.refresh();
-		return isChat;
-	}
+	public void isChoose(boolean choose) {
+		isChat=choose;
+		if(!choose)
+		this.setBackground(Theme.COLOR3);
 
+	}
+	
 	/**
 	 * 收到消息后执行
 	 */
@@ -161,7 +167,6 @@ public class MemberButton extends JButton {
 			envelope = false;
 		}
 	}
-
 }
 
 class UButtonMouse extends MouseAdapter {

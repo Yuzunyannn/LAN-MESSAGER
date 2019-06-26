@@ -9,8 +9,8 @@ public class DebugProxy extends Proxy {
 	ClientProxy clientProxy = new ClientProxy();
 	ServerProxy serverProxy = new ServerProxy();
 
-	public DebugProxy(Side side) {
-		super(side);
+	public DebugProxy() {
+		super(Side.SERVER);
 	}
 
 	@Override

@@ -8,15 +8,21 @@ import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import client.event.EventSendInputWords;
 import client.event.EventsBridge;
 import client.frame.Theme;
+import client.record.Record;
+import client.record.RecordManagement;
+import client.record.RecordValue;
 import client.user.UserClient;
 import client.word.Word;
 import nbt.NBTTagCompound;
 import nbt.NBTTagList;
+import transfer.EventFileRecv;
+import transfer.EventFileSend;
 import user.UOnline;
 import user.User;
 
@@ -25,6 +31,9 @@ public class ChatPanel extends JPanelUtility {
 
 	/** 输入区域的大小 */
 	private int inputRegionHeight = 225;
+
+	/** 聊天对象信息显示区域大小 */
+	private int chatInfoRegionHeight = 80;
 
 	/** 聊天区域自定义布局 */
 	private LayoutManager layout = new LayoutManager() {
@@ -36,7 +45,7 @@ public class ChatPanel extends JPanelUtility {
 		@Override
 		public void layoutContainer(Container parent) {
 			Component[] cons = parent.getComponents();
-			Component input = cons[1];
+			Component input = cons[2];
 			int height = parent.getHeight();
 			int width = parent.getWidth();
 			if (inputRegionHeight > height / 2)
@@ -44,9 +53,13 @@ public class ChatPanel extends JPanelUtility {
 			input.setLocation(0, height - inputRegionHeight);
 			input.setSize(width, inputRegionHeight);
 
-			Component dialog = cons[0];
-			dialog.setLocation(0, 0);
-			dialog.setSize(width, height - inputRegionHeight - 1);
+			Component dialog = cons[1];
+			dialog.setLocation(0, chatInfoRegionHeight + 1);
+			dialog.setSize(width, height - inputRegionHeight - chatInfoRegionHeight - 1);
+
+			Component chatInfo = cons[0];
+			chatInfo.setLocation(0, 0);
+			chatInfo.setSize(width, chatInfoRegionHeight);
 		}
 
 		@Override
@@ -129,8 +142,8 @@ public class ChatPanel extends JPanelUtility {
 	};
 	/** 用户 */
 	private User chatTo;
-	/** 对话面板 */
-	private ChatDialogPanel chatDialogPanel = new ChatDialogPanel(chatTo);
+	private ChatInfoPanel chatInfoPanel;
+	private ChatDialogPanel chatDialogPanel = new ChatDialogPanel();
 	private ChatInputPanel inputPanel = new ChatInputPanel();
 
 	public ChatPanel() {
@@ -142,7 +155,9 @@ public class ChatPanel extends JPanelUtility {
 		this.setBackground(Theme.COLOR1);
 		// 设置默认布局
 		this.setLayout(layout);
-		// 添加输入和对话面板
+		// 添加信息、输入和对话面板
+		chatInfoPanel = new ChatInfoPanel(chatToUsername);
+		this.add(chatInfoPanel);
 		this.add(chatDialogPanel);
 		this.add(inputPanel);
 		// 添加鼠标监听者
@@ -155,37 +170,78 @@ public class ChatPanel extends JPanelUtility {
 		chatTo = UOnline.getInstance().getUser(chatToUsername);
 	}
 
+	@Override
+	public void firstCreate() {
+		Record rec = RecordManagement.getRecord(chatTo);
+		List<RecordValue> rs = rec.getRecordValues(rec.getLastDayOff());
+		int n = Math.min(rs.size(), 5);
+		LinkedList<RecordValue> show = new LinkedList<RecordValue>();
+		for (int i = 0; i < n; i++) {
+			show.add(rs.get(rs.size() - 1 - i));
+		}
+		while (!show.isEmpty()) {
+			RecordValue v = show.getLast();
+			show.removeLast();
+			if (v.whos.equals(chatTo)) {
+				chatDialogPanel.addBubble(false, v.word.toString(), chatTo.getUserName(), BubbleType.WORD,
+						v.word.getTime(), "");
+			} else {
+				chatDialogPanel.addBubble(true, v.word.toString(), UserClient.getClientUsername(), BubbleType.WORD,
+						v.word.getTime(), "");
+			}
+		}
+
+	}
+
 	/** 时间差大于5分钟则显示时间线 */
 	public void timeLapse(String nowDate, String lastDate) {
 		if (chatDialogPanel.firstTime) {
 			int now = Integer.parseInt(nowDate.substring(14, 15));
 			int last = Integer.parseInt(lastDate.substring(14, 15));
 			if ((now - last) >= 5) {
-				chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString());
+				chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString(), "");
 			}
 		} else {
 			chatDialogPanel.firstTime = true;
-			chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString());
+			chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString(), "");
 		}
 	}
 
-	/** 当点击发送时候调用 */
-	public void onSendMsg(List<Word> words) {
-		for (Word w : words) {
-			BubbleType type = checkType(w.id);
-			Date date = new Date();
-			timeLapse(date.toString(), chatDialogPanel.lastTime);
-			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString());
-		}
-		this.revalidate();
-		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
-	}
-
+	/** 发送图片的UI更新 */
 	public void onSendPics(String name, BubbleType type) {
 		Date date = new Date();
-		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString());
-		chatDialogPanel.addBubble(true, name, UserClient.getClientUsername(), type, date.toString());
+		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString(), "");
+		chatDialogPanel.addBubble(true, name, UserClient.getClientUsername(), type, date.toString(), "");
 		this.revalidate();
+	}
+
+	/** 发送文件UI更新 */
+	public void onSendFile(String name, String storyID) {
+		Date date = new Date();
+
+		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString(), "");
+		chatDialogPanel.addBubble(true, name, UserClient.getClientUsername(), BubbleType.FILE, date.toString(),
+				storyID);
+		this.revalidate();
+	}
+
+	/** 发送文件进度UI更新 */
+	public void onSendFileProgress(String storyID, EventFileSend.Start e) {
+		chatDialogPanel.updateFileProgress(storyID, e);
+	}
+
+	/** 接收文件UI更新 */
+	public void onRevFile(String name, String storyID) {
+		Date date = new Date();
+		chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, date.toString(), "");
+		chatDialogPanel.addBubble(false, name, UserClient.getClientUsername(), BubbleType.FILE, date.toString(),
+				storyID);
+		this.revalidate();
+	}
+
+	/** 接收文件进度UI更新 */
+	public void onRevFileProgress(String storyID, EventFileRecv.Start e) {
+		chatDialogPanel.updateFileProgress(storyID, e);
 	}
 
 	/** 检查发送和接收的消息类型 */
@@ -204,12 +260,31 @@ public class ChatPanel extends JPanelUtility {
 		return type;
 	}
 
+	/** 当点击发送时候调用 */
+	public void onSendMsg(List<Word> words) {
+		for (Word w : words) {
+			Record rec = RecordManagement.getRecord(chatTo);
+			rec.addNew(w, UserClient.getClientUser());
+			BubbleType type = checkType(w.id);
+			if (type == BubbleType.FILE) {
+				continue;
+			}
+			Date date = new Date();
+			timeLapse(date.toString(), chatDialogPanel.lastTime);
+			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString(), "");
+		}
+		this.revalidate();
+		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
+	}
+
 	/** 当点击收到消息的时候调用 */
 	public void onRecvMsg(Word word) {
+		Record rec = RecordManagement.getRecord(chatTo);
+		rec.addNew(word, chatTo);
 		BubbleType type = checkType(word.id);
 		Date date = new Date();
 		timeLapse(date.toString(), chatDialogPanel.lastTime);
-		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName(), type, date.toString());
+		chatDialogPanel.addBubble(false, word.toString(), chatTo.getUserName(), type, date.toString(), "");
 
 	}
 
@@ -227,6 +302,7 @@ public class ChatPanel extends JPanelUtility {
 		chatDialogPanel.deserializeNBT((NBTTagCompound) nbt.getTag("chat"));
 		inputPanel.deserializeNBT((NBTTagList) nbt.getTag("input"));
 		chatTo = UOnline.getInstance().getUser(nbt.getString("user"));
+		chatInfoPanel = new ChatInfoPanel(chatTo.getUserName());
 	}
 
 }
