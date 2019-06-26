@@ -73,7 +73,7 @@ public class ResourceInfo {
 
 	/** 获取对应文件 */
 	public File getFile() {
-		return new File(url.getFile());
+		return new File(url.getPath().replace("%20", " "));
 	}
 
 	/** 获取url */

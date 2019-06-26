@@ -204,7 +204,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 	}
 
 	/** 发送消息给多个用户 */
-	public void sendWordToUsers(List<User> users, Word word) {
+	public static void sendWordToUsers(List<User> users, Word word) {
 		if (word.id != Word.STRING) {
 			Logger.log.warn("目前多人发消息只支持文字");
 			return;
