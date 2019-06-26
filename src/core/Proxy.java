@@ -18,7 +18,9 @@ import transfer.message.UMFileSendToUser;
 import user.message.MUGULRequest;
 import user.message.MUSSearch;
 import user.message.MUSString;
+import user.message.MessageGroupCreate;
 import user.message.MessageLogin;
+import user.message.MessageUserStateChange;
 import util.ClassHelper;
 
 /** 代理类，区分客户端和服务器 */
@@ -85,6 +87,9 @@ public class Proxy {
 		RecvDealMessage.registerMessage("msmsend", MSNbtSend.class);
 		RecvDealMessage.registerMessage("file_send", UMFileSendToUser.class);
 		RecvDealMessage.registerMessage("user_search", MUSSearch.class);
+		RecvDealMessage.registerMessage("usate_change", MessageUserStateChange.class);
+		RecvDealMessage.registerMessage("ugroup_create", MessageGroupCreate.class);
+
 	}
 
 	private static void registerAllStory() {

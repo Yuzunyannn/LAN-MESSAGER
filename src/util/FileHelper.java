@@ -3,6 +3,7 @@ package util;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -28,5 +29,18 @@ public class FileHelper {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/** 获取文件使用的时间明 */
+	public static String getDateString() {
+		Calendar cal = Calendar.getInstance();
+		return cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.DATE);
+	}
+
+	/** 获取文件使用的时间明 */
+	public static String getDateString(int offDay) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, offDay);
+		return cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.DATE);
 	}
 }

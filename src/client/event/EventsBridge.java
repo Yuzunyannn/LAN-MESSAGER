@@ -11,6 +11,7 @@ import log.Logger;
 import transfer.FileSenderManager;
 import transfer.message.UMFileSendToUser;
 import user.User;
+import user.UserSpecial;
 import user.message.MUSString;
 
 /** 程序后台和界面交互(只有Client分前台和后台) [A]表示由A调用 */
@@ -26,6 +27,17 @@ public class EventsBridge {
 	/** [后台]当受到消息 */
 	public static void recvString(User from, String info) {
 		EventsBridge.frontendEventHandle.post(new EventRecv.EventRecvString(from, info));
+	}
+
+	/** [后台]当受到消息 */
+	public static void recvString(User from, UserSpecial sp, String info) {
+		EventsBridge.frontendEventHandle.post(new EventRecv.EventRecvString(from, sp, info));
+	}
+
+	/** [后台]用户上线或下线 */
+	public static void userLoginSate(User user, boolean isOnline) {
+		EventsBridge.frontendEventHandle
+				.post(new EventLogState(isOnline ? EventLogState.ONLINE : EventLogState.OFFLINE));
 	}
 
 	/** [前台] 发送字符串给其他用户 */
@@ -47,6 +59,7 @@ public class EventsBridge {
 	public static void recvUserList(ArrayList<User> ul) {
 		EventsBridge.frontendEventHandle.post(new EventULChange(ul, EventULChange.ADD));
 	}
+
 //	/**[后台]收到搜索结果*/
 //	public static void recvSearchRequest(ArrayList<User> sul) {
 //		EventsBridge.frontendEventHandle.post(new EventSearchRequest(sul));

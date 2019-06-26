@@ -79,7 +79,10 @@ public class ClientProxy extends Proxy implements Runnable {
 		if (e.username.equals(sendUsername)) {
 			if (!e.info.equals(Network.VALIDATION)) {
 				Logger.log.impart(e.username + "登录失败！");
-				logFrame.setHint("用户名或密码错误！");
+				if (e.info.equals("online"))
+					logFrame.setHint("该用户已在线！");
+				else
+					logFrame.setHint("用户名或密码错误！");
 				return;
 			}
 			Logger.log.impart(e.username + "登录成功！");

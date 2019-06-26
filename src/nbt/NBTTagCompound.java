@@ -5,12 +5,14 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class NBTTagCompound extends NBTBase {
+public class NBTTagCompound extends NBTBase implements java.lang.Iterable<Entry<String, NBTBase>> {
 
 	/** 数据图 */
 	private final Map<String, NBTBase> tagMap = new HashMap<String, NBTBase>();
@@ -289,6 +291,11 @@ public class NBTTagCompound extends NBTBase {
 
 	protected static String handleEscape(String str) {
 		return SIMPLE_VALUE.matcher(str).matches() ? str : NBTTagString.quoteAndEscape(str);
+	}
+
+	@Override
+	public Iterator<Entry<String, NBTBase>> iterator() {
+		return tagMap.entrySet().iterator();
 	}
 
 }
