@@ -92,7 +92,7 @@ public class Proxy {
 		RecvDealMessage.registerMessage("ugroup_create", MessageGroupCreate.class);
 		RecvDealMessage.registerMessage("ugroup_info", MessageGroupInfo.class);
 	}
-
+	//注册一个story
 	private static void registerAllStory() {
 		Story.registerStory("fileSender", StoryFileSender.class);
 	}

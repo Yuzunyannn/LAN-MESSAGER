@@ -35,19 +35,13 @@ public class SearchPanel extends JPanel {
 			int key = e.getKeyCode();
 			if (key == '\n')
 				EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
-//			String temp=search.getText();
-
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
-			// TODO 自动生成的方法存根
-
 		}
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-			// TODO 自动生成的方法存根
-
 		}
 
 	};
@@ -60,7 +54,8 @@ public class SearchPanel extends JPanel {
 		search = new RTextField();
 		search.setFont(Theme.FONT3);
 		search.setFocusable(entry);
-		//鼠标点击事件
+
+		//搜索栏鼠标点击事件
 		search.addMouseListener(new MouseAdapter() 
 		{
 
@@ -68,6 +63,7 @@ public class SearchPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				
 				search.setFocusable(entry);
+				search.requestFocus();
 			}
 
 			@Override

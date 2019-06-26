@@ -98,6 +98,11 @@ public class MainFrame extends JFrame {
 	public InfoPanel getInfoPanel() {
 		return infoPanel;
 	}
+	
+	public void setUserName(String name) 
+	{
+		infoPanel.setUserName(name);
+	}
 
 	/** 初始化窗体大小和位置 */
 	public void fixed() {

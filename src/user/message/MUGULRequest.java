@@ -21,7 +21,10 @@ public class MUGULRequest extends MessageUser {
 	public MUGULRequest(User user) {
 		super(user);
 	}
-
+	
+//	public MUGULRequest(User user,int size,int id) {
+//		super(user,size,id);
+//	}
 	@Override
 	protected void executeClient(User from, NBTTagCompound nbt) {
 		if (nbt.getTag("userlist").getId() == NBTBase.TAG_LIST) {
