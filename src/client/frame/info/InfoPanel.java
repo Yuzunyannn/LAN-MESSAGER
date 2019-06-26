@@ -48,6 +48,7 @@ public class InfoPanel extends JPanel {
 		this.add(userField);
 		this.add(searchField);
 		this.add(memberField);
+		this.setFocusable(true);
 		state = EventIPC.FRIENDS;
 		userField.setPreferredSize(new Dimension(0, UserPanel.USERLENGTH));
 		searchField.setPreferredSize(new Dimension(0, SearchPanel.SEARCH_FIELD_LENGTH));
@@ -186,6 +187,10 @@ public class InfoPanel extends JPanel {
 	}
 	
 
+	public void setUserName(String name) 
+	{
+		userField.setName(name);
+	}
 	
 	/**
 	 * 状态转换时，原面板执行操作

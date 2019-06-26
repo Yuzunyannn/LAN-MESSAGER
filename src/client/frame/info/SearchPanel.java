@@ -35,8 +35,6 @@ public class SearchPanel extends JPanel {
 			int key = e.getKeyCode();
 			if (key == '\n')
 				EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
-//			String temp=search.getText();
-
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
@@ -56,13 +54,15 @@ public class SearchPanel extends JPanel {
 		search = new RTextField();
 		search.setFont(Theme.FONT3);
 		search.setFocusable(entry);
-		//鼠标点击事件
+
+		//搜索栏鼠标点击事件
 		search.addMouseListener(new MouseAdapter() 
 		{
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				search.setFocusable(entry);
+				search.requestFocus();
 			}
 
 			@Override
@@ -98,7 +98,6 @@ public class SearchPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				EventsBridge.frontendEventHandle.post(new EventIPC(EventIPC.FRIENDS));
-//				 stmp.searchInit();
 				//测试
 				Logger.log.impart("点击按钮切换时的测试");
 				search.setBackground(Theme.COLOR4);
