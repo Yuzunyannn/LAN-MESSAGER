@@ -1,5 +1,7 @@
 package server.user;
 
+import java.util.Calendar;
+
 import event.EventBusSynchronized;
 import event.IEventBus;
 import event.SubscribeEvent;
@@ -9,11 +11,14 @@ import network.Network;
 import network.RecvDealMessage;
 import network.Side;
 import network.event.EventConnectionEnd;
+import server.event.EventHour;
+import story.ITickable;
 import user.UOnline;
 import user.User;
 import user.message.MessageLogin;
 
-public class UOnlineServer extends UOnline {
+public class UOnlineServer extends UOnline implements ITickable {
+
 	public final static IEventBus eventHandle = new EventBusSynchronized();
 
 	/** 用户掉线后，发送下线消息 */
@@ -34,6 +39,7 @@ public class UOnlineServer extends UOnline {
 	public void login(String username, String password, Connection con) {
 		if (this.isOnline(username)) {
 			Logger.log.warn("一个已经在线的用户再次发来登录报文！用户" + username);
+			RecvDealMessage.send(con, new MessageLogin(username, "online", Side.SERVER));
 			con.wake();
 			return;
 		}
@@ -73,5 +79,21 @@ public class UOnlineServer extends UOnline {
 		} else {
 			return new UserServer(username, null);
 		}
+	}
+
+	private long tick = 0;
+
+	@Override
+	public int update() {
+		this.tick++;
+		// 处理时间
+		if (tick % 20 == 0) {
+			Calendar cal = Calendar.getInstance();
+			int minute = cal.get(Calendar.MINUTE);
+			if (minute == 0) {
+				UOnlineServer.eventHandle.post(new EventHour(cal));
+			}
+		}
+		return ITickable.SUCCESS;
 	}
 }

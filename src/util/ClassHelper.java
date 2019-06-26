@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import log.Logger;
+
 public class ClassHelper {
 
 	/** 根据当前项目获取运行时url */
@@ -93,7 +95,11 @@ public class ClassHelper {
 						Class<?> cls = loader.loadClass(classPath);
 						clsList.add(cls);
 					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
+						Logger.log.warn("找不到指定类！:" + classPath);
+					} catch (NoClassDefFoundError e) {
+						Logger.log.warn("指定类无法被运行加载！:" + classPath);
+					} catch (UnsupportedClassVersionError e) {
+						Logger.log.warn("不支持的类的版本:" + classPath);
 					}
 				}
 			}

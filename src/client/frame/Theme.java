@@ -19,10 +19,12 @@ public class Theme {
 	public static Color COLOR5 = new Color(0x6f6e6e);
 	/** 边框色 */
 	public static Color COLOR6 = new Color(0xd5d1d1);
-	/**搜索框内部颜色*/
+	/** 搜索框内部颜色 */
 	public static Color COLOR7 = new Color(0x979696);
-	/**好友划过*/
+	/** 好友划过 */
 	public static Color COLOR8 = new Color(0xd6dbd3);
+	/** 提示字颜色 */
+	public static Color COLOR9 = Color.GRAY;
 	/** 用户名字体 冬青黑体 粗 45号 */
 	public static Font FONT0 = new Font("冬青黑体", Font.BOLD, 45);
 	/** 对话字体 冬青黑体 细 14号 */
@@ -33,5 +35,5 @@ public class Theme {
 	public static Font FONT3 = new Font("冬青黑体", Font.PLAIN, 12);
 	/** 左侧弹出菜单字体 宋体 粗 12号 */
 	public static Font FONT4 = new Font("宋体", Font.BOLD, 14);
-	
+
 }

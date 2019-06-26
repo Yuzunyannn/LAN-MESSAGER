@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import client.frame.Theme;
+import javafx.scene.control.ButtonBar.ButtonData;
 
 public class Bubble extends JPanel {
 
@@ -39,7 +40,7 @@ public class Bubble extends JPanel {
 //		if (h <30) {
 //			h = 40;
 //		}
-		h = lines*this.words.getFontMetrics(this.words.getFont()).getHeight();
+		h = lines * this.words.getFontMetrics(this.words.getFont()).getHeight();
 		this.words.setSize(new Dimension(300, h));
 		// System.out.println(this.words.getText());
 		this.rbutton = new RButton(this.words.getText());
@@ -89,6 +90,9 @@ public class Bubble extends JPanel {
 	static public BubbleType checkFileType(String name) {
 		if (name.length() <= 4) {
 			return BubbleType.NULL;
+		}
+		if (name.indexOf('.') < 0) {
+			return BubbleType.FILE;
 		}
 		String suffix = name.substring(name.length() - 5, name.length());
 		if (suffix.indexOf('.') == 0) {

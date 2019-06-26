@@ -2,7 +2,6 @@ package user.message;
 
 import java.util.ArrayList;
 
-import client.event.EventSearchRequest;
 import client.event.EventsBridge;
 import client.user.UserClient;
 import core.Core;
@@ -17,13 +16,17 @@ import user.User;
 public class MUSSearch extends MessageUser {
 	public MUSSearch() {
 	}
+	/**
+	 * @param name 发起请求的用户的名字*/
 	public MUSSearch(String name) {
 		nbt.setString("searchline", name);
 	}
-	public MUSSearch(ArrayList<User> user,String searchline) {
+	/**
+	 * @param ul */
+	public MUSSearch(ArrayList<User> ul,String searchline) {
 
 		NBTTagList list = new NBTTagList();
-		for (User str : user)
+		for (User str : ul)
 			list.appendTag(str.getUserName());
 		NBTTagCompound nbt1 = new NBTTagCompound();
 		nbt1.setTag("searchList", list);
@@ -42,7 +45,7 @@ public class MUSSearch extends MessageUser {
 					NBTTagString s = (NBTTagString) list.get(i);
 					ul.add(new UserClient(s.get()));
 				}
-				EventsBridge.frontendEventHandle.post(new EventSearchRequest( ul));
+				EventsBridge.searchRequest(ul);
 			} else
 				Logger.log.warn("获取搜索列表中的数据不是字符串型！");
 		} else
@@ -58,10 +61,6 @@ public class MUSSearch extends MessageUser {
 			}
 		String searchline=nbt.getString("searchline");	
 			Core.task(new USearch(searchline, from));
-
-			
-
-
 	}
 
 }

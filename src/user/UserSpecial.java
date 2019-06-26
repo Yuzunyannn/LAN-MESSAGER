@@ -1,7 +1,7 @@
 package user;
 
 public class UserSpecial {
-	final String specialName;
+	public final String specialName;
 
 	public UserSpecial(String specialName) {
 		this.specialName = specialName;
@@ -22,5 +22,10 @@ public class UserSpecial {
 			return UserSpecialType.GROUP;
 		}
 		return UserSpecialType.NONE;
+	}
+
+	/** 获取id段 */
+	public String getId() {
+		return specialName.substring(1);
 	}
 }

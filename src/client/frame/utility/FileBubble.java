@@ -55,7 +55,7 @@ public class FileBubble extends Bubble {
 
 	public FileBubble(String name, boolean isMySelf) {
 		super(name, BubbleType.FILE);
-		if (this.checkFileType(name) == BubbleType.FILE) {
+		if (Bubble.checkFileType(name) == BubbleType.FILE) {
 			imageIcon = new ImageIcon("src/resources/img/icons/" + "icon-document.jpg");
 			imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));
 			fileButton = new JButton();

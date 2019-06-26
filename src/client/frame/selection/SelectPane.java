@@ -1,20 +1,12 @@
 package client.frame.selection;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridBagLayoutInfo;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.LayoutManager;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -23,10 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
-import javax.swing.ScrollPaneLayout;
-
 import client.frame.Theme;
-import client.frame.ui.ScrollBarUI;
+import resmgt.UserResource;
 
 
 
@@ -38,13 +28,14 @@ public class SelectPane extends JScrollPane {
 	private JPanel panel;
 	private JScrollBar scrollBar = this.getVerticalScrollBar();
 
-	public SelectPane(List<String> users) {
+	public SelectPane(List<String> users, int type) {
 		// TODO Auto-generated constructor stub
 		super(new JPanel());
 		panel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
 		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
 		JPanel tmp;
 		JCheckBox checkBox;
+		JButton button;
 		JLabel label;
 		this.panel.setLayout(new GridBagLayout());
 		GridBagConstraints con = new GridBagConstraints();
@@ -59,9 +50,15 @@ public class SelectPane extends JScrollPane {
 			tmp = new JPanel();
 			tmp.setLayout(new BorderLayout());
 			label = new JLabel(string);
-			checkBox = createCheckBox(string);
+			if (type == SelectFrame.VIEW) {
+				button = new JButton();
+				button.setIcon(UserResource.getHeadIcon(string, UserResource.HeadIconSize.SMALL));
+				tmp.add(button, BorderLayout.EAST);
+			} else if (type == SelectFrame.CHOOSE) {
+				checkBox = createCheckBox(string);
+				tmp.add(checkBox, BorderLayout.EAST);
+			}
 			tmp.add(label, BorderLayout.WEST);
-			tmp.add(checkBox, BorderLayout.EAST);
 			tmp.setBorder(BorderFactory.createLineBorder(Theme.COLOR6));
 			panel.add(tmp, con);
 			row++;

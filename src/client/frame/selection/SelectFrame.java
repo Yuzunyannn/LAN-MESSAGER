@@ -19,11 +19,13 @@ public class SelectFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int confirmHeight = 40;
 	private SelectPane selectPane;
-	private ConfirmPane confirmPane;
+	
 	static private List<String> selectedList = new ArrayList<String>();
 	static private boolean choosable = false;
+	public static final int CHOOSE = 0;
+	public static final int VIEW = 1;
+	
 	private LayoutManager layout = new LayoutManager() {
 
 		@Override
@@ -51,13 +53,9 @@ public class SelectFrame extends JFrame {
 			int height = parent.getHeight();
 			int width = parent.getWidth();
 
-			Component confirmArea = cons[1];
-			confirmArea.setLocation(0, height - confirmHeight);
-			confirmArea.setSize(width, height - confirmHeight - 1);
-
 			Component selectList = cons[0];
 			selectList.setLocation(0, 0);
-			selectList.setSize(width, height - confirmHeight);
+			selectList.setSize(width, height);
 		}
 
 		@Override
@@ -66,19 +64,22 @@ public class SelectFrame extends JFrame {
 
 		}
 	};
+	
+	public SelectPane getSelectPane() {
+		return selectPane;
+	}
 
-	public SelectFrame(List<String> users, String title) {
+	public SelectFrame(List<String> users, String title, int type) {
 		// TODO Auto-generated constructor stub
 		this.setTitle(title);
 		this.setSize(400, 500);
+		this.setResizable(false);
 		this.setAlwaysOnTop(true);
 		this.setContentPane(new JPanel());
-		this.getContentPane().setLayout(this.layout);
 		choosable = false;
-		selectPane = new SelectPane(users);
-		confirmPane = new ConfirmPane();
+		selectPane = new SelectPane(users, type);
 		this.getContentPane().add(selectPane);
-		this.getContentPane().add(confirmPane);
+		this.getContentPane().setLayout(layout);
 		// 居中显示窗体
 		int width = Toolkit.getDefaultToolkit().getScreenSize().width;
 		int height = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -94,6 +95,7 @@ public class SelectFrame extends JFrame {
 			public void windowLostFocus(WindowEvent e) {
 				// TODO Auto-generated method stub
 				selectedList.clear();
+				SendGroupFrame.setSendText("");
 				dispose();
 			}
 
@@ -121,3 +123,4 @@ public class SelectFrame extends JFrame {
 		SelectFrame.choosable = choosable;
 	}
 }
+

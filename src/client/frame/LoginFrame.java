@@ -78,12 +78,17 @@ public class LoginFrame extends JFrame {
 		this.setLayout(layout);
 		// 颜色
 		this.getContentPane().setBackground(Theme.COLOR0);
+
 		// 账号框
 		userNameText = new JTextField("myk");
+
 		userNameText.setBorder(BorderFactory.createLineBorder(Theme.COLOR6));
 		this.add(userNameText);
+
 		// 密码框
 		password = new JPasswordField("yyy");
+
+
 		password.setBorder(BorderFactory.createLineBorder(Theme.COLOR6));
 		this.add(password);
 		// 信息提示

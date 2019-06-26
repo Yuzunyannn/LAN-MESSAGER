@@ -34,7 +34,7 @@ public class SearchButton extends MemberButton {
 		mouse= new UButtonMouse (SEARCHITEMSTR , searchItemListener) {
 			@Override 
 			public void mousePressed(MouseEvent e) {
-				System.out.println(temp.getMemberName());
+				System.out.println(temp.getMemberName()+""+temp.isFocusOwner());
 			}
 		};
 		this.addMouseListener(mouse);

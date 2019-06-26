@@ -26,6 +26,7 @@ import story.ITickable;
 import transfer.EventFileRecv;
 import transfer.EventFileSend;
 import user.User;
+import user.UserSpecial;
 
 /** 界面右边的区域 聊天区域 操作区域 */
 public class UtilityPanel extends JPanel implements ITickable {
@@ -194,17 +195,22 @@ public class UtilityPanel extends JPanel implements ITickable {
 
 //----------------------------------use----------------------------------
 	/** 接受到消息 */
-	public void recvString(User from, String str) {
-		PanelInfo info = this.getChatPanelInfo(from.getUserName());
+	public void recvString(User from, UserSpecial sp, String str) {
+		PanelInfo info;
+		if (sp == null)
+			info = this.getChatPanelInfo(from.getUserName());
+		else {
+			info = this.getChatPanelInfo(sp.specialName);
+		}
 		if (!info.canUse()) {
 			info.reborn();
 		}
 		info.tick = this.tick;
-		((ChatPanel) info.panel).onRecvMsg(new WordString(str));
+		((ChatPanel) info.panel).onRecvMsg(from, new WordString(str));
 	}
 
 	/** 发送消息给多个用户 */
-	public void sendWordToUsers(List<User> users, Word word) {
+	public static void sendWordToUsers(List<User> users, Word word) {
 		if (word.id != Word.STRING) {
 			Logger.log.warn("目前多人发消息只支持文字");
 			return;
@@ -226,7 +232,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 
 	@SubscribeEvent
 	public void recvString(client.event.EventRecv.EventRecvString e) {
-		this.recvString(e.from, e.str);
+		this.recvString(e.from, e.sp, e.str);
 	}
 
 	@SubscribeEvent
@@ -270,10 +276,10 @@ public class UtilityPanel extends JPanel implements ITickable {
 			info.reborn();
 		}
 		if (Bubble.checkFileType(e.getFileName()) == BubbleType.FILE) {
-			((ChatPanel)info.panel).onRevFile(e.getFileName(), e.getTempName());
-			((ChatPanel)info.panel).onRevFileProgress(e.getTempName(), e);
+			((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
+			((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
 		} else if (Bubble.checkFileType(e.getFileName()) == BubbleType.PICTURE) {
-			
+
 		}
 	}
 

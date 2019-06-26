@@ -180,7 +180,6 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		// 初始化memes
 		memeFrame = new MemeFrame("Test Area");
 		// 添加发送按钮
-		
 		JButton button = new JButton("发送");
 		button.setFont(new Font("黑体", 0, 16));// 这句设置字体，在运行前，会发白一下？
 		button.setUI(new client.frame.ui.NormalButtonUI());
@@ -193,9 +192,10 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		});
 		this.add(button);
 		// 添加快捷按钮
-		button = new JButton("快捷");
+		button = new JButton();
+		button.setIcon(UserResource.getSysIcon("icon-reply"));
 		button.setFont(new Font("黑体", 0, 16));
-		button.setUI(new client.frame.ui.NormalButtonUI());
+		//button.setUI(new client.frame.ui.NormalButtonUI());
 		button.setSize(50, (int) (EDIT_MARGIN * 0.8f));
 		button.addMouseListener(new MouseAdapter() {
 			@Override
@@ -203,13 +203,18 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 				quickMenu.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
+		button.setBorderPainted(false);
+		button.setBackground(null);
+		button.setOpaque(false);
 		this.add(button);
 		// 添加工具按钮
-		button = new JButton("工具");
-		//button.setIcon(UserResource.getSysIcon("icon-tool", UserResource.HeadIconSize.SMALL));
+		button = new JButton();
+		button.setIcon(UserResource.getSysIcon("icon-tool"));
 		button.setFont(new Font("黑体", 0, 16));
-		button.setUI(new client.frame.ui.NormalButtonUI());
 		button.setSize(50, (int) (EDIT_MARGIN * 0.8f));
+		button.setBorderPainted(false);
+		button.setBackground(null);
+		button.setOpaque(false);
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -218,9 +223,9 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		});
 		this.add(button);
 		// 添加表情按钮
-		button = new JButton("表情");
+		button = new JButton();
+		button.setIcon(UserResource.getSysIcon("icon-emoji"));
 		button.setFont(new Font("黑体", 0, 16));
-		button.setUI(new client.frame.ui.NormalButtonUI());
 		button.setSize(50, (int) (EDIT_MARGIN * 0.8f));
 		button.addMouseListener(new MouseAdapter() {
 			@Override
@@ -232,6 +237,9 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 				memeFrame.setVisible(true);
 			}
 		});
+		button.setBorderPainted(false);
+		button.setBackground(null);
+		button.setOpaque(false);
 		this.add(button);
 		// 快捷回复的弹出菜单
 		quickMenu = new JPopupMenu();

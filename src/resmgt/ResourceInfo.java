@@ -46,6 +46,11 @@ public class ResourceInfo {
 		}
 	}
 
+	/** 是否加载有资源 */
+	public boolean isLoaded() {
+		return obj != null;
+	}
+
 	/** 释放资源 */
 	public void release() {
 		obj = null;
@@ -73,7 +78,7 @@ public class ResourceInfo {
 
 	/** 获取对应文件 */
 	public File getFile() {
-		return new File(url.getFile());
+		return new File(url.getPath().replace("%20", " "));
 	}
 
 	/** 获取url */
