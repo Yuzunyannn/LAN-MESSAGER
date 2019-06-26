@@ -50,8 +50,7 @@ public class Proxy {
 				try {
 					fields = cls.getDeclaredFields();
 				} catch (NoClassDefFoundError e) {
-					System.out.println("当前搜寻类：" + cls);
-					e.printStackTrace();
+					Logger.log.warn("指定类的变量无法被运行加载:" + cls);
 					continue;
 				}
 				for (Field field : fields) {
@@ -63,9 +62,9 @@ public class Proxy {
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			Logger.log.error("反射类，初始化时出现问题！", e);
-			Core.shutdownWithError();
+			Logger.log.error("请注意！！！！");
 		}
 		// 注册消息
 		Proxy.registerAllMesage();
@@ -92,7 +91,8 @@ public class Proxy {
 		RecvDealMessage.registerMessage("ugroup_create", MessageGroupCreate.class);
 		RecvDealMessage.registerMessage("ugroup_info", MessageGroupInfo.class);
 	}
-	//注册一个story
+
+	// 注册一个story
 	private static void registerAllStory() {
 		Story.registerStory("fileSender", StoryFileSender.class);
 	}

@@ -3,7 +3,6 @@ package user.message;
 import java.util.LinkedList;
 import java.util.List;
 
-import client.event.EventGroupInfoGet;
 import client.event.EventsBridge;
 import core.Core;
 import log.Logger;
@@ -56,7 +55,7 @@ public class MessageGroupInfo extends MessageUser implements Runnable {
 			list.add(UOnline.getInstance().getUser(str.get()));
 		}
 		UserSpecial sp = new UserSpecial(nbt.getString("sp"));
-		EventsBridge.frontendEventHandle.post(new EventGroupInfoGet(boss, list, sp));
+		EventsBridge.groupInfoGet(boss, list, sp);
 	}
 
 	User from;

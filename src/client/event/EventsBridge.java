@@ -2,6 +2,7 @@ package client.event;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import client.user.UserClient;
 import event.EventBusTask;
@@ -66,10 +67,16 @@ public class EventsBridge {
 		UserClient.sendToServer(group);
 	}
 
-//	/**[后台]收到搜索结果*/
-//	public static void recvSearchRequest(ArrayList<User> sul) {
-//		EventsBridge.frontendEventHandle.post(new EventSearchRequest(sul));
-//	}
+	/** 搜索响应 */
+	public static void searchRequest(List<User> ul) {
+		EventsBridge.frontendEventHandle.post(new EventSearchRequest(ul));
+	}
+
+	/** 收到群的信息消息 */
+	public static void groupInfoGet(User boss, List<User> list, UserSpecial sp) {
+		EventsBridge.frontendEventHandle.post(new EventGroupInfoGet(boss, list, sp));
+	}
+
 	// 转发事件
 	@SubscribeEvent
 	public static void retransmissionRecv(transfer.EventFileRecv.Start e) {

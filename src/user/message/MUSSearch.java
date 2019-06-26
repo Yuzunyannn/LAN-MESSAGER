@@ -2,7 +2,6 @@ package user.message;
 
 import java.util.ArrayList;
 
-import client.event.EventSearchRequest;
 import client.event.EventsBridge;
 import client.user.UserClient;
 import core.Core;
@@ -46,7 +45,7 @@ public class MUSSearch extends MessageUser {
 					NBTTagString s = (NBTTagString) list.get(i);
 					ul.add(new UserClient(s.get()));
 				}
-				EventsBridge.frontendEventHandle.post(new EventSearchRequest( ul));
+				EventsBridge.searchRequest(ul);
 			} else
 				Logger.log.warn("获取搜索列表中的数据不是字符串型！");
 		} else
