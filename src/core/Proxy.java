@@ -19,6 +19,7 @@ import user.message.MUGULRequest;
 import user.message.MUSSearch;
 import user.message.MUSString;
 import user.message.MessageGroupCreate;
+import user.message.MessageGroupInfo;
 import user.message.MessageLogin;
 import user.message.MessageUserStateChange;
 import util.ClassHelper;
@@ -89,7 +90,7 @@ public class Proxy {
 		RecvDealMessage.registerMessage("user_search", MUSSearch.class);
 		RecvDealMessage.registerMessage("usate_change", MessageUserStateChange.class);
 		RecvDealMessage.registerMessage("ugroup_create", MessageGroupCreate.class);
-
+		RecvDealMessage.registerMessage("ugroup_info", MessageGroupInfo.class);
 	}
 	//注册一个story
 	private static void registerAllStory() {
