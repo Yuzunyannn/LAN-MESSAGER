@@ -10,11 +10,14 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import client.event.EventsBridge;
 import client.frame.Theme;
 import client.frame.utility.UtilityPanel;
 import client.word.WordString;
+import event.Event;
 import user.UOnline;
 import user.User;
+import user.message.MessageGroupCreate;
 
 public class ConfirmPane extends JPanel {
 
@@ -56,7 +59,14 @@ public class ConfirmPane extends JPanel {
 					UtilityPanel.sendWordToUsers(users, ws);
 				}
 				if (getParent().getParent().getParent().getParent() instanceof SelectGroupFrame && SelectFrame.getChoosable()) {
-				
+					List<User> users = new ArrayList<User>();
+					List<String> userList = new ArrayList<String>();
+					userList = SelectFrame.getSelectedList();
+					for (String string : userList) {
+						users.add(UOnline.getInstance().getUser(string));
+					}
+					MessageGroupCreate GroupMessage = new MessageGroupCreate(users);
+					EventsBridge.groupCreateRequest(GroupMessage);
 				}
 				((SelectFrame) getParent().getParent().getParent().getParent()).dispose();
 			} else if (e.getSource() == cancel) {

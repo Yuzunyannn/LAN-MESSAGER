@@ -25,6 +25,14 @@ public class MessageGroupCreate extends MessageUser implements Runnable {
 		}
 		this.nbt.setTag("list", list);
 	}
+	
+	public MessageGroupCreate(List<User> users) {
+		NBTTagList list = new NBTTagList();
+		for (User user : users) {
+			list.appendTag(user.getUserName());
+		}
+		this.nbt.setTag("list", list);
+	}
 
 	@Override
 	protected void executeClient(User from, NBTTagCompound nbt) {

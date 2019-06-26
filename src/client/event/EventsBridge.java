@@ -13,6 +13,7 @@ import transfer.message.UMFileSendToUser;
 import user.User;
 import user.UserSpecial;
 import user.message.MUSString;
+import user.message.MessageGroupCreate;
 
 /** 程序后台和界面交互(只有Client分前台和后台) [A]表示由A调用 */
 public class EventsBridge {
@@ -58,6 +59,11 @@ public class EventsBridge {
 	/** [后台]当收到用户列表 */
 	public static void recvUserList(ArrayList<User> ul) {
 		EventsBridge.frontendEventHandle.post(new EventULChange(ul, EventULChange.ADD));
+	}
+
+	/** 发送建立群组消息 */
+	public static void groupCreateRequest(MessageGroupCreate group) {
+		UserClient.sendToServer(group);
 	}
 
 //	/**[后台]收到搜索结果*/
