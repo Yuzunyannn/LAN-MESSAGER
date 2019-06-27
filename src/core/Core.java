@@ -10,6 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import log.Logger;
+import network.Side;
 import platform.Platform;
 import resmgt.ResourceManagement;
 import story.ITickable;
@@ -17,10 +18,11 @@ import user.UOnline;
 
 public class Core {
 
-	static final String SERVER_IP = "39.107.94.231";// 39.107.94.231
+	static final String SERVER_IP = "127.0.0.1";// 39.107.94.231
 	static final int SERVER_PORT = 35275;
 
-	static final Proxy proxy = new ClientProxy();
+//	static final Proxy proxy = new ClientProxy();
+	static final Proxy proxy = new DebugProxy();
 	static final Core core = new Core();
 
 	// 所有运行的任务队列

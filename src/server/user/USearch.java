@@ -1,8 +1,6 @@
 package server.user;
 
 import java.util.ArrayList;
-
-import client.user.UserClient;
 import log.Logger;
 import user.UOnline;
 import user.User;
@@ -32,7 +30,7 @@ public class USearch implements Runnable {
 		if (str.length == 0)
 			return false;
 		for (int i = 0; i < str.length; i++)
-			list.add((User) new UserClient(str[i]));
+			list.add(UOnline.getInstance().getUser(str[i]));
 		MUSSearch msgsearch = new MUSSearch(list, name);
 		user.sendMesage(msgsearch);
 		return true;
