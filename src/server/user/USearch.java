@@ -1,8 +1,6 @@
 package server.user;
 
 import java.util.ArrayList;
-
-import client.user.UserClient;
 import log.Logger;
 import user.UOnline;
 import user.User;

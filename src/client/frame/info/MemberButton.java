@@ -82,7 +82,7 @@ public class MemberButton extends JButton {
 					// 产生选择事件
 					EventsBridge.frontendEventHandle.post(new EventShow(toolId, memberName));
 					// count=0;
-					//EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("debug"),"test"));
+//					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("sdsds"),"test"));
 				}
 				
 			}
