@@ -21,11 +21,10 @@ import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventShow;
 import client.event.EventsBridge;
-import client.event.EventRecv.EventRecvString;
 import client.frame.MainFrame;
 import client.frame.Theme;
 import client.frame.utility.UtilityPanel;
-import client.user.UserClient;
+import core.Adminsters;
 import log.Logger;
 import resmgt.ResourceManagement;
 
@@ -42,26 +41,29 @@ public class MemberButton extends JButton {
 	private boolean envelope;
 	// 是否正在与该用户聊天
 	private boolean isChat;
-	//图片资源
+	// 图片资源
 	public static ImageIcon icon_open = new ImageIcon(
 			ResourceManagement.instance.getPackResource("img/envelope_open.png").getImage());
 	public static ImageIcon icon_closed = new ImageIcon(
 			ResourceManagement.instance.getPackResource("img/envelope_closed.png").getImage());
+
 	public MemberButton() {
 
 	}
 
 	public MemberButton(String name) {
-		toolId=UtilityPanel.TOOLID_CHATING;
+		toolId = UtilityPanel.TOOLID_CHATING;
 		memberName = name;
 		count = 0;
 		envelope = true;
-		isChat=false;
+		isChat = false;
+		// 发布测试
+		name = Adminsters.userToInfo(name);
 		JLabel member = new JLabel(name);
-		MemberButton mtmp=this;
+		MemberButton mtmp = this;
 		this.setLayout(null);
-		member.setSize(150, 30);
-		member.setLocation(90, 20);
+		member.setSize(175, 30);
+		member.setLocation(20, 20);// 90,20
 		member.setFont(Theme.FONT2);
 		this.setBackground(Theme.COLOR3);
 		this.add(member);
@@ -71,38 +73,42 @@ public class MemberButton extends JButton {
 		this.setMaximumSize(size);
 		this.setContentAreaFilled(false);
 		ActionListener memberItemListener = new MemberMenuItemMonitor();
-		//右键菜单的监听器
+		// 右键菜单的监听器
 		mouse = new UButtonMouse(MEMBERITEMSTR, memberItemListener) {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// 产生选择事件
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					isChat=true;
-					count=0;
+					isChat = true;
+					count = 0;
 					// 产生选择事件
 					EventsBridge.frontendEventHandle.post(new EventShow(toolId, memberName));
 					// count=0;
 //					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("sdsds"),"test"));
 				}
-				
+
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if(!isChat)
-				mtmp.setBackground(Theme.COLOR8);
+				if (!isChat)
+					mtmp.setBackground(Theme.COLOR8);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if(!isChat)
-				mtmp.setBackground(Theme.COLOR3);
+				if (!isChat)
+					mtmp.setBackground(Theme.COLOR3);
 			}
 		};
 		this.addMouseListener(mouse);
 
 	}
+
 	public void setToolId(String tid) {
-		toolId=tid;
+		toolId = tid;
 	}
+
 	public String getMemberName() {
 		return memberName;
 	}
@@ -115,15 +121,15 @@ public class MemberButton extends JButton {
 		this.revalidate();
 		this.repaint();
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		int width = super.getWidth();
 		int height = super.getHeight();
-		if(isChat) 
+		if (isChat)
 			g.setColor(Theme.COLOR3.darker());
-			
+
 		else
 			g.setColor(getBackground());
 		g.fillRect(0, 0, width, height);
@@ -147,14 +153,14 @@ public class MemberButton extends JButton {
 		}
 	}
 
-	/**更改聊天状态，返回是否为正在聊天*/
+	/** 更改聊天状态，返回是否为正在聊天 */
 	public void isChoose(boolean choose) {
-		isChat=choose;
-		if(!choose)
-		this.setBackground(Theme.COLOR3);
+		isChat = choose;
+		if (!choose)
+			this.setBackground(Theme.COLOR3);
 
 	}
-	
+
 	/**
 	 * 收到消息后执行
 	 */
@@ -208,7 +214,8 @@ class UButtonMouse extends MouseAdapter {
 				}
 				popmenu.show(e.getComponent(), e.getX(), e.getY());
 			}
-		System.out.println("右键点击");}
+			System.out.println("右键点击");
+		}
 
 	}
 }

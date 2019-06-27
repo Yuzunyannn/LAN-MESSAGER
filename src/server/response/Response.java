@@ -24,7 +24,7 @@ public class Response implements Runnable {
 
 	public boolean query() {
 		ArrayList<String> listU = new ArrayList<String>();
-		listU.add("yuzuyannn");
+		listU.add("yuzunyannn");
 		listU.add("Bevis");
 		listU.add("tatsuu");
 		listU.add("dispute");
@@ -33,6 +33,8 @@ public class Response implements Runnable {
 		for (User user : users) {
 			if (n > 20)
 				break;
+			if (user.equals(this.user))
+				continue;
 			listU.add(user.getUserName());
 			n++;
 		}
