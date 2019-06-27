@@ -9,6 +9,8 @@ import javax.swing.JOptionPane;
 import client.event.EventsBridge;
 import client.frame.LoginFrame;
 import client.frame.MainFrame;
+import client.record.RecordLogInfo;
+import client.record.RecordManagement;
 import client.user.UOnlineClient;
 import client.user.UserClient;
 import event.SubscribeEvent;
@@ -90,7 +92,8 @@ public class ClientProxy extends Proxy implements Runnable {
 			}
 			String username = logFrame.getUserName();
 			if (username == null || username.isEmpty()) {
-				Logger.log.impart("请输入用户名");
+				logFrame.setLoginButtonEnable(true);
+				logFrame.setHint("请输入用户名！");
 				return;
 			}
 			sendUsername = username;
@@ -115,6 +118,10 @@ public class ClientProxy extends Proxy implements Runnable {
 				return;
 			}
 			Logger.log.impart(e.username + "登录成功！");
+			RecordLogInfo lInfo = new RecordLogInfo();
+			lInfo.password = logFrame.getPassword();
+			lInfo.username = logFrame.getUserName();
+			RecordManagement.setLogInfo(lInfo);
 			// 登录成功
 			UserClient.sendToServer(new MUGULRequest(UOnline.getInstance().getUser(e.username)));
 			UserClient.toServer.setName(e.username);

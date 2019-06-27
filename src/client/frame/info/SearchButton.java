@@ -1,12 +1,10 @@
 package client.frame.info;
 
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 
 import client.event.EventFriendOperation;
@@ -18,11 +16,12 @@ import log.Logger;
 
 public class SearchButton extends MemberButton {
 	private static final long serialVersionUID = 1L;
-	public static final String SEARCHITEMSTR[]= {"查看信息","添加好友"};
+	public static final String SEARCHITEMSTR[] = { "查看信息", "添加好友" };
+
 	public SearchButton(String name) {
 		super(name);
 		this.setMemberName(name);
-		SearchButton temp=this;
+		SearchButton temp = this;
 //		JLabel member = new JLabel(name);
 		this.setLayout(null);
 //		this.add(member);
@@ -30,15 +29,16 @@ public class SearchButton extends MemberButton {
 //		member.setLocation(0, 20);
 //		member.setFont(Theme.FONT2);
 		this.removeMouseListener(mouse);
-		ActionListener searchItemListener=new SearchMenuItemMonitor(this.getMemberName());
-		mouse= new UButtonMouse (SEARCHITEMSTR , searchItemListener) {
-			@Override 
+		ActionListener searchItemListener = new SearchMenuItemMonitor(this.getMemberName());
+		mouse = new UButtonMouse(SEARCHITEMSTR, searchItemListener) {
+			@Override
 			public void mousePressed(MouseEvent e) {
-				System.out.println(temp.getMemberName()+""+temp.isFocusOwner());
+				System.out.println(temp.getMemberName() + "" + temp.isFocusOwner());
 			}
 		};
 		this.addMouseListener(mouse);
 	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -49,23 +49,25 @@ public class SearchButton extends MemberButton {
 	}
 
 }
-class SearchMenuItemMonitor implements ActionListener{
+
+class SearchMenuItemMonitor implements ActionListener {
 	private String buttonId;
-	private String toolId=UtilityPanel.TOOLID_CHATING;
+	private String toolId = UtilityPanel.TOOLID_CHATING;
+
 	public SearchMenuItemMonitor(String bid) {
-		buttonId=bid;
+		buttonId = bid;
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String[] str =SearchButton.SEARCHITEMSTR;
+		String[] str = SearchButton.SEARCHITEMSTR;
 		String temp = ((JMenuItem) e.getSource()).getText();
-		if(temp.equals(str[0])) {
+		if (temp.equals(str[0])) {
 			EventsBridge.frontendEventHandle.post(new EventShow(buttonId, toolId));
 			Logger.log.warn("UtilityPanel部分需要完成一个显示用户信息盘，此处暂时用聊天盘");
-		}
-		else if(temp.equals(str[1])) {
+		} else if (temp.equals(str[1])) {
 			EventsBridge.frontendEventHandle.post(new EventFriendOperation(buttonId, EventFriendOperation.ADDFRIEND));
 		}
 	}
-	
+
 }

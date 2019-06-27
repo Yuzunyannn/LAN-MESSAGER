@@ -22,7 +22,8 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 	private static final long serialVersionUID = 1L;
 	private ChatBubblePanel chatBubble;
 	private JPanel panel;
-	private JScrollBar scrollBar = this.getVerticalScrollBar();
+	private JScrollBar scrollBarV = this.getVerticalScrollBar();
+	private JScrollBar scrollBarH = this.getHorizontalScrollBar();
 	private int height = 0;
 	public String lastTime;
 	public boolean firstTime = false;
@@ -52,7 +53,8 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		public void layoutContainer(Container parent) {
 			// TODO Auto-generated method stub
 			Component[] cons = parent.getComponents();
-			//int bubbleNum = 0;
+			parent.setSize(parent.getParent().getWidth(), parent.getHeight());
+			scrollBarH.setVisible(false);
 			for (int i = 0; i < cons.length; i++) {
 				if (cons[i] instanceof ChatBubblePanel) {
 					cons[i].setSize(parent.getWidth(), cons[i].getHeight());
@@ -71,17 +73,17 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 	public ChatDialogPanel() {
 		super(new JPanel());
 		panel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
-		panel.setSize(this.getWidth() - this.scrollBar.getWidth(), this.getHeight());
+		panel.setSize(this.getWidth() - this.scrollBarV.getWidth(), this.getHeight());
 		panel.setLayout(this.chatDialogLayout);
 		panel.setVisible(true);
-		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
+		scrollBarV.setUI(new client.frame.ui.ScrollBarUI());
 		this.setVisible(true);
 		// 开始区域
 		this.addBubble(false, "", "", BubbleType.LINE, "", "");
 		// 数据添加可能是在调用setValue之后发生，所以此处引入runnable
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				scrollBar.setValue(scrollBar.getMaximum());
+				scrollBarV.setValue(scrollBarV.getMaximum());
 			}
 		});
 		this.setBackground(Theme.COLOR2);
@@ -113,7 +115,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		}
 		this.countDialogNum++;
 		String BCPID = "";
-		if (ID == "") {
+		if (ID.equals("")) {
 			BCPID = String.valueOf(this.countDialogNum) + "_";
 		} else {
 			BCPID = String.valueOf(this.countDialogNum) + "_" + ID;
@@ -124,28 +126,30 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		// testArea
 //		if (isMySelf) {
 //			chatBubble.setBorder(BorderFactory.createLineBorder(Theme.COLOR6, 3));
-//		} else {
+//		} else {      
 //			chatBubble.setBorder(BorderFactory.createLineBorder(Theme.COLOR4, 3));
 //		}
-		// chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(),
-		// addHeight);
+		 chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(),
+		 addHeight);
 		
 		chatBubble.setBounds(0, this.height, this.panel.getWidth(), addHeight);
 		this.height = this.height + addHeight;
 		// panel.setSize(panel.getWidth(), panel.getHeight() + chatBubble.getHeight());
-
+		panel.add(chatBubble);
 		if (this.height > panel.getHeight()) {
 			panel.setPreferredSize(
-					new Dimension(panel.getWidth() - this.scrollBar.getWidth(), panel.getHeight() + addHeight));
+					new Dimension(panel.getWidth() - this.scrollBarV.getWidth(), panel.getHeight() + addHeight));
 			panel.setSize(panel.getWidth(), panel.getHeight() + addHeight);
 		}
-		panel.add(chatBubble);
 		panel.revalidate();
+		this.revalidate();
+		this.repaint();
+		panel.repaint();
 		Core.task(new Runnable() {
 			public void run() {
-				scrollBar.setValue(scrollBar.getMaximum());
-				scrollBar.revalidate();
-				scrollBar.repaint();
+				scrollBarV.setValue(scrollBarV.getMaximum());
+				scrollBarV.revalidate();
+				scrollBarV.repaint();
 			}
 		}, 50);
 	}
@@ -196,7 +200,7 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		}
 		Core.task(new Runnable() {
 			public void run() {
-				scrollBar.setValue(nbt.getInteger("ScrollValue"));
+				scrollBarV.setValue(nbt.getInteger("ScrollValue"));
 			}
 		}, 20);
 		this.revalidate();

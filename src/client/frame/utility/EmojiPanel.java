@@ -14,8 +14,10 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
+import client.event.EventSendInputWords;
 import client.event.EventSendPicture;
-import client.event.EventsBridge;;
+import client.event.EventsBridge;
+import resmgt.UserResource;;
 
 public class EmojiPanel extends JScrollPane {
 
@@ -26,24 +28,22 @@ public class EmojiPanel extends JScrollPane {
 	private JPanel contentPanel;
 	private JScrollBar scrollBar = this.getHorizontalScrollBar();
 	
-	public EmojiPanel() {
+	public EmojiPanel(String toUser) {
 		// TODO Auto-generated constructor stub
 		super(new JPanel());
 		this.contentPanel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
-		this.contentPanel.setLayout(new GridLayout(6,6));
-		for (int i = 0; i < 36; i++) {
+		this.contentPanel.setLayout(new GridLayout(3,3));
+		for (int i = 0; i < 9; i++) {
 			JButton btn = new JButton();
 			btn.setBackground(Color.white);
-			ImageIcon imageIcon = new ImageIcon("src/resources/img/memes/1.jpg");
-			imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));
-			btn.setIcon(imageIcon);
+			btn.setIcon(UserResource.getMeme("meme-1"));
 			btn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 					if (e.getSource() instanceof JButton) {
 						System.out.println("SUCCESS");
-						EventsBridge.frontendEventHandle.post(new EventSendPicture("1.jpg", BubbleType.MEME));
+						EventsBridge.frontendEventHandle.post(new EventSendPicture("1.jpg", BubbleType.MEME, toUser) );
 						getParent().getParent().getParent().setVisible(false);
 					} else {
 						System.out.println("Fail");

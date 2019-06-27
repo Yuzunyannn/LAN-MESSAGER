@@ -33,9 +33,9 @@ public class MemeFrame extends JFrame {
 //		this.setAlwaysOnTop(true);
 //	}
 
-	public MemeFrame(String title) throws HeadlessException {
+	public MemeFrame(String title, String toUser) throws HeadlessException {
 		super(title);
-		this.emojiPanel = new EmojiPanel();
+		this.emojiPanel = new EmojiPanel(toUser);
 		this.setContentPane(this.emojiPanel);
 		setUndecorated(true);
 		MouseHandler ml = new MouseHandler();

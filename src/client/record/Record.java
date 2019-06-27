@@ -46,13 +46,9 @@ public class Record {
 		this.user = user;
 		ResourceManagement.mkdirTmp();
 		String root = this.getRoot();
-		ResourceInfo rinfo = ResourceManagement.instance.loadOrCreateTmpResource(root + "/info",
+		ResourceInfo rinfo = ResourceManagement.instance.loadOrCreateTmpNBT(root + "/info",
 				this.user.getUserName() + "/info");
 		data = rinfo.getNBT();
-		if (data == null) {
-			data = new NBTTagCompound();
-			rinfo.setData(data);
-		}
 	}
 
 	RecInfo getWords(int year, int month, int day) {

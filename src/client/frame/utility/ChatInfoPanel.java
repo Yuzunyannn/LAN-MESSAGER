@@ -3,7 +3,6 @@ package client.frame.utility;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,8 +11,6 @@ import javax.swing.JPanel;
 
 import client.frame.Theme;
 import client.frame.info.SubjectInfoFrame;
-import client.frame.selection.SelectFrame;
-import client.frame.selection.SendGroupFrame;
 import core.Adminsters;
 import resmgt.UserResource;
 
@@ -40,14 +37,7 @@ public class ChatInfoPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("Pressed!");
 				infoFrame.updateInfo(chatToUserName);
-				java.util.List<String> users = new ArrayList<String>();
-				for (int i = 0; i < 20; i++) {
-					users.add("lyl");
-				}
-				SelectFrame frame = new SendGroupFrame(users, "ssj");
-				frame.setVisible(true);
 
 			}
 		});

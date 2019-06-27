@@ -11,7 +11,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import log.Logger;
-import network.Side;
 import platform.Platform;
 import resmgt.ResourceManagement;
 import story.ITickable;
@@ -21,10 +20,10 @@ import user.message.MessageEmergency;
 
 public class Core {
 
+
 //	static final String SERVER_IP = "127.0.0.1";// 
 	static final String SERVER_IP="39.107.94.231";
 	static final int SERVER_PORT = 35275;
-
 	static final Proxy proxy = new ClientProxy();
 //	static final Proxy proxy = new DebugProxy();
 	static final Core core = new Core();
@@ -163,7 +162,7 @@ public class Core {
 		if (proxy.side.isServer()) {
 			Collection<User> cUers = UOnline.getInstance().getOnlineUsers();
 			for (User user : cUers) {
-				user.sendMesage(new MessageEmergency("服务器崩溃！请联系管理员！"));
+				user.sendMesage(new MessageEmergency("服务器崩溃！请联系管理员！bjshenshijun@emails.bjut.edu.cn"));
 			}
 		}
 		Logger.log.error("系统由于严重错误关闭！");

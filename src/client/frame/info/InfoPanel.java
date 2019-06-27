@@ -13,7 +13,6 @@ import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventIPC;
 import client.event.EventSearchRequest;
-import client.event.EventShow;
 import client.event.EventULChange;
 import client.event.EventsBridge;
 import client.frame.Theme;
