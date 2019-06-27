@@ -124,11 +124,11 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		chatBubble = new ChatBubblePanel(isMySelf, info, name, type, time, BCPID);
 		int addHeight = chatBubble.getHeight();
 		// testArea
-		if (isMySelf) {
-			chatBubble.setBorder(BorderFactory.createLineBorder(Theme.COLOR6, 3));
-		} else {      
-			chatBubble.setBorder(BorderFactory.createLineBorder(Theme.COLOR4, 3));
-		}
+//		if (isMySelf) {
+//			chatBubble.setBorder(BorderFactory.createLineBorder(Theme.COLOR6, 3));
+//		} else {      
+//			chatBubble.setBorder(BorderFactory.createLineBorder(Theme.COLOR4, 3));
+//		}
 		 chatBubble.setBounds(0, this.panel.getHeight(), this.panel.getWidth(),
 		 addHeight);
 		
