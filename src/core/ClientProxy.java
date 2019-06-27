@@ -4,6 +4,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import client.event.EventsBridge;
 import client.frame.LoginFrame;
 import client.frame.MainFrame;
@@ -49,6 +51,7 @@ public class ClientProxy extends Proxy implements Runnable {
 		frame.initEvent(EventsBridge.frontendEventHandle);
 		EventsBridge.frontendEventHandle.register(this);
 		FileSenderManager.eventHandle.register(EventsBridge.class);
+		Network.eventHandle.register(UOnlineClient.class);
 	}
 
 	@Override
@@ -72,31 +75,6 @@ public class ClientProxy extends Proxy implements Runnable {
 
 	/** 发送的用户名 */
 	private String sendUsername;
-
-	@SubscribeEvent
-	public void onLogin(client.event.EventLogin e) {
-		logFrame.setLoginButtonEnable(true);
-		if (e.username.equals(sendUsername)) {
-			if (!e.info.equals(Network.VALIDATION)) {
-				Logger.log.impart(e.username + "登录失败！");
-				if (e.info.equals("online"))
-					logFrame.setHint("该用户已在线！");
-				else
-					logFrame.setHint("用户名或密码错误！");
-				return;
-			}
-			Logger.log.impart(e.username + "登录成功！");
-			// 登录成功
-			UserClient.sendToServer(new MUGULRequest(UOnline.getInstance().getUser(e.username)));
-			UserClient.toServer.setName(e.username);
-			logFrame.setVisible(false);
-			frame.setUserName(UOnline.getInstance().getUser(e.username).getUserName());
-			frame.setVisible(true);
-		} else {
-			Logger.log.warn("登录失败，传送回的用户名和发送的不符！" + e.username);
-			logFrame.setHint("登陆失败！");
-		}
-	}
 
 	@Override
 	public void run() {
@@ -122,5 +100,44 @@ public class ClientProxy extends Proxy implements Runnable {
 			logFrame.setHint("无法连接到服务器！");
 			Logger.log.warn("连接服务器出现异常！", e1);
 		}
+	}
+
+	@SubscribeEvent
+	public void onLogin(client.event.EventLogin e) {
+		logFrame.setLoginButtonEnable(true);
+		if (e.username.equals(sendUsername)) {
+			if (!e.info.equals(Network.VALIDATION)) {
+				Logger.log.impart(e.username + "登录失败！");
+				if (e.info.equals("online"))
+					logFrame.setHint("该用户已在线！");
+				else
+					logFrame.setHint("用户名或密码无效！");
+				return;
+			}
+			Logger.log.impart(e.username + "登录成功！");
+			// 登录成功
+			UserClient.sendToServer(new MUGULRequest(UOnline.getInstance().getUser(e.username)));
+			UserClient.toServer.setName(e.username);
+			logFrame.setVisible(false);
+			frame.setUserName(UOnline.getInstance().getUser(e.username).getUserName());
+			frame.setVisible(true);
+		} else {
+			Logger.log.warn("登录失败，传送回的用户名和发送的不符！" + e.username);
+			logFrame.setHint("登陆失败！");
+		}
+	}
+
+	@SubscribeEvent
+	public void onLogout(client.event.EventLogout e) {
+		if (UserClient.toServer.isClosed())
+			UserClient.toServer = null;
+		logFrame.setHint("");
+		logFrame.setVisible(true);
+		frame.setVisible(false);
+	}
+
+	@SubscribeEvent
+	public void emergency(client.event.EventEmergency e) {
+		JOptionPane.showMessageDialog(null, e.info, "服务端异常", JOptionPane.ERROR_MESSAGE);
 	}
 }

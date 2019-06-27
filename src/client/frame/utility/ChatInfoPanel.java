@@ -1,9 +1,8 @@
 package client.frame.utility;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,8 +11,7 @@ import javax.swing.JPanel;
 
 import client.frame.Theme;
 import client.frame.info.SubjectInfoFrame;
-import client.frame.selection.SelectFrame;
-import client.frame.selection.SelectGroupFrame;
+import core.Adminsters;
 import resmgt.UserResource;
 
 public class ChatInfoPanel extends JPanel {
@@ -29,49 +27,17 @@ public class ChatInfoPanel extends JPanel {
 
 	public ChatInfoPanel(String chatTo) {
 		// TODO Auto-generated constructor stub
-		this.chatToUserName = chatTo;
+		this.chatToUserName = Adminsters.userToInfo(chatTo);
 		this.setBackground(Theme.COLOR0);
 		this.setLayout(new BorderLayout());
-		this.userName.setText(this.chatToUserName);
+		this.userName.setText("  " + this.chatToUserName);
 		this.userName.setFont(Theme.FONT2);
 		this.userButton = new JButton();
-		this.userButton.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
+		this.userButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("Pressed!");
 				infoFrame.updateInfo(chatToUserName);
-				java.util.List<String> users = new ArrayList<String>();
-				for (int i = 0; i < 20; i++) {
-					users.add("lyl");
-				}
-				SelectFrame frame = new SelectGroupFrame(users, "ssj");
-				frame.setVisible(true);
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 		});

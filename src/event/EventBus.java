@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import core.Core;
 import log.Logger;
 
 public class EventBus implements IEventBus, IEventExceptionHandle {
@@ -124,5 +125,8 @@ public class EventBus implements IEventBus, IEventExceptionHandle {
 		Logger.log.warn("在传递事件的时候出现异常的事件：" + event);
 		Logger.log.warn("在传递事件的时候出现异常的函数：" + eventHandle.method);
 		Logger.log.warn("在传递事件的时候出现异常的EventBus：" + eventBus);
+		if (e instanceof Error) {
+			Core.shutdownWithError();
+		}
 	}
 }

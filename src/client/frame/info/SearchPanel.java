@@ -61,7 +61,6 @@ public class SearchPanel extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
 				search.setFocusable(entry);
 				search.requestFocus();
 			}
@@ -81,12 +80,13 @@ public class SearchPanel extends JPanel {
 			public void focusLost(FocusEvent e) {
 			//失去焦点执行的代码
 				boolean a=search.isFocusOwner();
-				System.out.println(a+"search失去焦点");
+				System.out.println(a+"search失去焦点"+entry);
+				search.setFocusable(false);
 			}
 			public void focusGained(FocusEvent e) {
 			//获得焦点执行的代码
 				boolean a=search.isFocusOwner();
-				System.out.println(a+"search获得焦点");
+				System.out.println(a+"search获得焦点"+entry);
 				EventsBridge.frontendEventHandle.post(new EventIPC(EventIPC.SEARCH));
 			}
 		});

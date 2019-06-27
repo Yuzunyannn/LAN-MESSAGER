@@ -1,15 +1,17 @@
 package server.user;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-import client.user.UserClient;
 import log.Logger;
+import user.SearchHelper;
 import user.UOnline;
 import user.User;
 import user.message.MUSSearch;
 
 public class USearch implements Runnable {
-	private ArrayList<User> list = new ArrayList<User>();
+	private LinkedList<User> list = new LinkedList<User>();
 	private String name;
 	private User user;
 
@@ -28,12 +30,14 @@ public class USearch implements Runnable {
 	};
 
 	private boolean search(String name) {
-		String str[] = { "1234", "123", "12", "1" };
-		if (str.length == 0)
+		SearchHelper sh=new SearchHelper();
+		list=(LinkedList<User>)sh.search(UOnline.getInstance().getOnlineUsers(), name);
+		if (list.isEmpty())
+		{
+			System.out.println("search helper 没有搜到结果");
 			return false;
-		for (int i = 0; i < str.length; i++)
-			list.add((User) new UserClient(str[i]));
-		MUSSearch msgsearch = new MUSSearch(list, name);
+		}
+		MUSSearch msgsearch = new MUSSearch(new ArrayList(list), name);
 		user.sendMesage(msgsearch);
 		return true;
 

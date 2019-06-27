@@ -14,6 +14,7 @@ import client.event.EventIPC;
 import client.event.EventSearchRequest;
 import client.event.EventShow;
 import client.event.EventULChange;
+import client.event.EventsBridge;
 import client.frame.Theme;
 import client.user.UserClient;
 import event.IEventBus;
@@ -129,7 +130,11 @@ public class InfoPanel extends JPanel {
 					}
 				else have=false;
 			if(!have)
-			ul.add(new UserClient(e.username));
+			{
+				ul.add(new UserClient(e.username));
+				EventsBridge.frontendEventHandle.post(new EventChatOperation(e.username,EventChatOperation.ADDCHAT));
+			}
+			
 			break;
 		}
 		case	EventFriendOperation.DELETEFRIEND:{

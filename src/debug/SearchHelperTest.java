@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import client.search.SearchHelper;
+import user.SearchHelper;
 
 class SearchHelperTest {
 
