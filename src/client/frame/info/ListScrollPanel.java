@@ -201,7 +201,36 @@ public class ListScrollPanel extends JScrollPane {
 		// System.out.println("count"+p.getComponentCount());
 	}
 
+	@SubscribeEvent
+	public void onCountFile(transfer.EventFileRecv.Start e) 
+	{
+		boolean have = false;
+		for (Component i : content)
+			if (((MemberButton) i).getMemberName().equals(e.getFrom().getUserName())) {
+				have = true;
+				break;
+			} else
+				have = false;
+		if (!have) {
+			EventsBridge.frontendEventHandle
+					.post(new EventChatOperation(e.getFrom().getUserName(), EventChatOperation.ADDCHAT, state));
+			}
 
+		for (int i = 0; i < content.length; i++)
+			if (((MemberButton) content[i]).getMemberName().equals(e.getFrom().getUserName())) {
+				((MemberButton) content[i]).RecvMessage();
+				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
+						+ ((MemberButton) content[i]).count);
+				setTop(((MemberButton) content[i]).getMemberName());
+				System.out.println(((MemberButton) content[i]).getMemberName() + ((MemberButton) content[i]).count);
+			}
+		p.removeAll();
+		for (Component i : content) {
+			p.add(i);
+		}
+		content = p.getComponents();
+		this.refresh();
+	}
 
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {

@@ -1,5 +1,6 @@
 package client.frame.utility;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +33,7 @@ public class EmojiPanel extends JScrollPane {
 		this.contentPanel.setLayout(new GridLayout(6,6));
 		for (int i = 0; i < 36; i++) {
 			JButton btn = new JButton();
+			btn.setBackground(Color.white);
 			ImageIcon imageIcon = new ImageIcon("src/resources/img/memes/1.jpg");
 			imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));
 			btn.setIcon(imageIcon);

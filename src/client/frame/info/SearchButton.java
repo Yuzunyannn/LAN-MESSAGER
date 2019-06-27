@@ -45,9 +45,7 @@ public class SearchButton extends MemberButton {
 		g.setColor(Theme.COLOR2);
 		int width = super.getWidth();
 		int height = super.getHeight();
-		
 		g.fillRect(0, 0, width, height);
-	
 	}
 
 }

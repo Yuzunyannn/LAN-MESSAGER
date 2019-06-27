@@ -12,17 +12,20 @@ public class EventChatOperation extends Event {
 	public final String optype;
 	public final String username;
 	public final String recvpanel;
-
+	public final int count;
+	/**右键添加时用的*/
 	public EventChatOperation(String username, String optype) {
 		this.optype = optype;
 		this.username = username;
 		recvpanel = ListScrollPanel.FRIENDPANEL;
+		this.count=0;
 
 	}
-
+/**收到消息用*/
 	public EventChatOperation(String username, String optype, String recvPanel) {
 		this.optype = optype;
 		this.username = username;
 		this.recvpanel = recvPanel;
+		this.count=1;
 	}
 }

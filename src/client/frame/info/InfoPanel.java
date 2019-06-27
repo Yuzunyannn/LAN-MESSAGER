@@ -3,6 +3,7 @@ package client.frame.info;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
@@ -111,8 +112,7 @@ public class InfoPanel extends JPanel {
 			if(e.recvpanel.equals(ListScrollPanel.FRIENDPANEL)) {
 			memberField.addNewMember(e.username);
 			memberField.setTop(e.username, 1);
-			}
-			
+			}			
 			}
 		this.refresh();
 	}
@@ -181,11 +181,25 @@ public class InfoPanel extends JPanel {
 	@SubscribeEvent
 	public void onULChange(client.event.EventULChange e) {
 		memberField.deleteAllMember();
+		HashSet s=new HashSet();
 		for (EventULChange.ChangeInfo info : e.infos) {
 			if ((info.flags & EventULChange.ADD) != 0)
-				addMember(info.user.userName);
+			{
+				if(!s.contains(info.user.userName))
+				{
+					addMember(info.user.userName);
+					s.add(info.user.userName);
+				}
+			}
 			else if ((info.flags & EventULChange.REMOVE) != 0)
-				removeMember(info.user.userName);
+			{
+				if(s.contains(info.user.userName))
+				{
+					removeMember(info.user.userName);
+					s.remove(info.user.userName);
+				}
+			}
+				
 		}
 		this.refresh();
 		

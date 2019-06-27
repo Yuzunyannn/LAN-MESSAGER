@@ -26,15 +26,21 @@ import log.Logger;
 public class SearchPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField search;
+	private SearchPanel sptmp=this;
 	public static final int SEARCH_FIELD_LENGTH=80;
 	public final String INFO = "单行输入,回车键搜索";
 	boolean entry=false;
+	private String lastSearch="";
 	private KeyListener keyListener = new KeyListener() {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int key = e.getKeyCode();
 			if (key == '\n')
+			{
 				EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
+			
+			}
+				
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
