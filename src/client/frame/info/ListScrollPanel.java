@@ -9,8 +9,6 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import client.event.EventChatOperation;
-import client.event.EventFriendOperation;
-import client.event.EventIPC;
 import client.event.EventRecv.EventRecvString;
 import client.event.EventSearchRequest;
 import client.event.EventShow;
@@ -19,6 +17,7 @@ import client.frame.Theme;
 import event.IEventBus;
 import event.SubscribeEvent;
 import log.Logger;
+import user.User;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
@@ -142,9 +141,9 @@ public class ListScrollPanel extends JScrollPane {
 		this.height = height;
 	}
 
-	public void addNewMember(String name, Boolean isSearch) {
+	public void addNewMember(User name, Boolean isSearch) {
 		if (isSearch) {
-			p.add(new SearchButton(name));
+			p.add(new SearchButton(name.getUserName()));
 			content = p.getComponents();
 			height += MemberButton.MEMBERBUTTON_HEIGHT;
 			int width = super.getWidth();
@@ -154,35 +153,33 @@ public class ListScrollPanel extends JScrollPane {
 			addNewMember(name);
 	}
 
-	public void addNewMember(String name) {
-		p.add(new MemberButton(name));
+	public void addNewMember(User user) {
+		if (InfoPanel.userSet.contains(user))
+			return;
+		InfoPanel.userSet.add(user);
+		p.add(new MemberButton(user.getUserName()));
 
 		content = p.getComponents();
 		height += MemberButton.MEMBERBUTTON_HEIGHT;
 		int width = super.getWidth();
 		standardHeight(super.getPreferredSize());
-		/* 测试信息 */
-		// System.out.println("scroll"+super.getPreferredSize().height);
-		// System.out.println("height"+this.height);
 		p.setPreferredSize(new Dimension(width, height));
 	}
 
-	public void deductMember(String name) {
-		boolean done=false;
+	public void deductMember(User user) {
+		boolean done = false;
 		for (int i = p.getComponentCount(); i > 0; i--) {
 			MemberButton temp = (MemberButton) p.getComponent(i - 1);
-			if (temp.getMemberName().equals(name)) {
+			if (temp.getMemberName().equals(user.getUserName())) {
 				p.remove(i - 1);
 				height -= MemberButton.MEMBERBUTTON_HEIGHT;
 				content = p.getComponents();
-				done=true;
+				done = true;
 				break;
-
 			} else
-				done=false;
-		
+				done = false;
 		}
-		if(!done)
+		if (!done)
 			Logger.log.warn("查无此人");
 		int width = super.getWidth();
 		standardHeight(super.getPreferredSize());
@@ -202,8 +199,7 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	@SubscribeEvent
-	public void onCountFile(transfer.EventFileRecv.Start e) 
-	{
+	public void onCountFile(transfer.EventFileRecv.Start e) {
 		boolean have = false;
 		for (Component i : content)
 			if (((MemberButton) i).getMemberName().equals(e.getFrom().getUserName())) {
@@ -214,7 +210,7 @@ public class ListScrollPanel extends JScrollPane {
 		if (!have) {
 			EventsBridge.frontendEventHandle
 					.post(new EventChatOperation(e.getFrom().getUserName(), EventChatOperation.ADDCHAT, state));
-			}
+		}
 
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.getFrom().getUserName())) {
@@ -267,23 +263,26 @@ public class ListScrollPanel extends JScrollPane {
 		this.revalidate();
 		this.repaint();
 	}
-	/**好友盘专属的函数
-	 * 好友聊天状态全部还原*/
+
+	/**
+	 * 好友盘专属的函数 好友聊天状态全部还原
+	 */
 	public void ChatStateClear() {
-		if(state==FRIENDPANEL) {
-		content=p.getComponents();
-		for(Component i:content) {
-			((MemberButton) i).isChoose(false);
-			
-		}
-		p.removeAll();
-		for(Component i:content) {
-			p.add(i);
-		}
-		this.refresh();
-		}
-		else return;
+		if (state == FRIENDPANEL) {
+			content = p.getComponents();
+			for (Component i : content) {
+				((MemberButton) i).isChoose(false);
+
+			}
+			p.removeAll();
+			for (Component i : content) {
+				p.add(i);
+			}
+			this.refresh();
+		} else
+			return;
 	}
+
 	/** 事件处理 */
 	@SubscribeEvent
 	public void onSearchRequest(EventSearchRequest e) {
@@ -295,9 +294,9 @@ public class ListScrollPanel extends JScrollPane {
 
 	@SubscribeEvent
 	public void onShow(EventShow e) {
-		for (int i =0;i< content.length;i++) {
-			MemberButton tmp=(MemberButton)content[i];
-			if(tmp.getMemberName().equals(e.id))
+		for (int i = 0; i < content.length; i++) {
+			MemberButton tmp = (MemberButton) content[i];
+			if (tmp.getMemberName().equals(e.id))
 				tmp.isChoose(true);
 			else
 				tmp.isChoose(false);

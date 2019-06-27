@@ -91,6 +91,10 @@ public class Connection implements Runnable {
 				String excType = e.getMessage();
 				if (excType.equals("Socket closed"))
 					break;
+				if (excType.equals("Connection reset")) {
+					Logger.log.warn(this.toString() + "socket链接被重置！");
+					break;
+				}
 				Logger.log.warn(this.toString() + "出现socket错误", e);
 				break;
 			} catch (EOFException e) {
@@ -154,7 +158,10 @@ public class Connection implements Runnable {
 
 	@Override
 	public String toString() {
-		return "[连接" + this.getInetAddress() + "]";
+		if (name == null || name.isEmpty()) {
+			return "[连接" + this.getInetAddress() + "]";
+		}
+		return "[连接" + this.getInetAddress() + ":" + name + "]";
 	}
 
 	public String getName() {

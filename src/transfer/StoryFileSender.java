@@ -342,6 +342,7 @@ public class StoryFileSender extends Story {
 		for (UserFileInfo info : usersFileInfoList) {
 			if (info.user.equals(user)) {
 				info.clientOk = true;
+				return;
 			}
 		}
 		Logger.log.warn(this + "出现了一个非法用户(" + user + ")试图加入文件接受！");

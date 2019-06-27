@@ -136,8 +136,7 @@ public class ClientProxy extends Proxy implements Runnable {
 
 	@SubscribeEvent
 	public void onLogout(client.event.EventLogout e) {
-		if (UserClient.toServer.isClosed())
-			UserClient.toServer = null;
+		UserClient.toServer = null;
 		logFrame.setHint("");
 		logFrame.setVisible(true);
 		frame.setVisible(false);
