@@ -33,7 +33,7 @@ public class ChatPanel extends JPanelUtility {
 	private static Pattern regularRule = Pattern.compile("\\{/0x(\\d+)/\\}");
 
 	/** 输入区域的大小 */
-	private int inputRegionHeight = 225;
+	private int inputRegionHeight = 170;
 
 	/** 聊天对象信息显示区域大小 */
 	private int chatInfoRegionHeight = 80;
