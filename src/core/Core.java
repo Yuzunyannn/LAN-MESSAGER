@@ -25,6 +25,7 @@ public class Core {
 
 //	static final Proxy proxy = new ClientProxy();
 	static final Proxy proxy = new ClientProxy();
+
 	static final Core core = new Core();
 
 	// 所有运行的任务队列

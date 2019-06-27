@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import client.event.EventSendInputWords;
 import client.event.EventsBridge;
@@ -28,9 +29,11 @@ import user.User;
 
 public class ChatPanel extends JPanelUtility {
 	private static final long serialVersionUID = 1L;
+	
+	private static Pattern regularRule = Pattern.compile("\\{/0x(\\d+)/\\}");
 
 	/** 输入区域的大小 */
-	private int inputRegionHeight = 225;
+	private int inputRegionHeight = 170;
 
 	/** 聊天对象信息显示区域大小 */
 	private int chatInfoRegionHeight = 80;
@@ -149,6 +152,10 @@ public class ChatPanel extends JPanelUtility {
 	public ChatPanel() {
 		this("");
 	}
+	
+	public User getChatTo() {
+		return chatTo;
+	}
 
 	public ChatPanel(String chatToUsername) {
 		// 默认颜色
@@ -218,7 +225,6 @@ public class ChatPanel extends JPanelUtility {
 	/** 发送文件UI更新 */
 	public void onSendFile(String name, String storyID) {
 		Date date = new Date();
-
 		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString(), "");
 		chatDialogPanel.addBubble(true, name, UserClient.getClientUsername(), BubbleType.FILE, date.toString(),
 				storyID);
@@ -291,10 +297,27 @@ public class ChatPanel extends JPanelUtility {
 		Record rec = RecordManagement.getRecord(chatTo);
 		rec.addNew(word, chatTo);
 		BubbleType type = checkType(word.id);
+		java.util.regex.Matcher m =  regularRule.matcher(word.getValue());
 		Date date = new Date();
 		timeLapse(date.toString(), chatDialogPanel.lastTime);
-		chatDialogPanel.addBubble(false, word.toString(), user.getUserName(), type, date.toString(), "");
-
+		boolean found = false;
+		
+		while (m.find()) {
+			found = true;
+			String id = m.group(1);
+			System.out.print(id);
+			chatDialogPanel.addBubble(false, id + ".jpg", user.getUserName(), BubbleType.MEME, date.toString(), "");
+		}
+		if (found) {
+			String[] texts = regularRule.split(word.getValue());
+			if (texts != null) {
+				for (int i = 0; i < texts.length; i++) {
+					chatDialogPanel.addBubble(false, texts[i], user.getUserName(), type, date.toString(), "");
+				}
+			}
+		}else {
+			chatDialogPanel.addBubble(false, word.toString(), user.getUserName(), type, date.toString(), "");
+		}
 	}
 
 	@Override

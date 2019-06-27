@@ -4,12 +4,14 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JPanel;
 
+import client.event.EventSendInputWords;
 import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
@@ -25,6 +27,7 @@ import nbt.NBTTagCompound;
 import story.ITickable;
 import transfer.EventFileRecv;
 import transfer.EventFileSend;
+import user.UOnline;
 import user.User;
 import user.UserSpecial;
 
@@ -255,6 +258,14 @@ public class UtilityPanel extends JPanel implements ITickable {
 	@SubscribeEvent
 	public void sendPicture(client.event.EventSendPicture e) {
 		System.out.println("Pic event got!");
+		if (e.type == BubbleType.MEME) {
+			List<Word> words = new LinkedList<Word>();
+			Word word = new WordString("{/0x" + e.picName.substring(0,e.picName.length()-4) + "/}");
+			System.out.println(word.getValue());
+			words.add(word);
+			User user = UOnline.getInstance().getUser(e.toUser);
+			EventsBridge.frontendEventHandle.post(new EventSendInputWords(words,user));
+		}
 		((ChatPanel) this.currPanel).onSendPics(e.picName, e.type);
 
 	}
@@ -275,12 +286,12 @@ public class UtilityPanel extends JPanel implements ITickable {
 		if (!info.canUse()) {
 			info.reborn();
 		}
-		if (Bubble.checkFileType(e.getFileName()) == BubbleType.FILE) {
+		//if (Bubble.checkFileType(e.getFileName()) == BubbleType.FILE) {
 			((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
 			((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
-		} else if (Bubble.checkFileType(e.getFileName()) == BubbleType.PICTURE) {
+		//} else if (Bubble.checkFileType(e.getFileName()) == BubbleType.PICTURE) {
 
-		}
+		//}
 	}
 
 }

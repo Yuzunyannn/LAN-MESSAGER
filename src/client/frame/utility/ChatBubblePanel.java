@@ -62,11 +62,13 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 				this.userName = localName;
 			}
 			initalUI(info);
-			System.out.println(this.dialog.getH());
+			//System.out.println(this.dialog.getH());
 			if (type == BubbleType.WORD) {
 				this.setSize(this.getWidth(), this.dialog.getH() + 40);
 			} else if (type == BubbleType.FILE){
 				this.setSize(this.getWidth(), 80);
+			} else if (type == BubbleType.MEME) {
+				this.setSize(this.getWidth(), 140);
 			}
 			
 			if (type == BubbleType.NULL) {

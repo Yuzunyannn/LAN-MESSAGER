@@ -88,9 +88,6 @@ public class Bubble extends JPanel {
 	}
 
 	static public BubbleType checkFileType(String name) {
-		if (name.length() <= 4) {
-			return BubbleType.NULL;
-		}
 		if (name.indexOf('.') < 0) {
 			return BubbleType.FILE;
 		}
@@ -99,17 +96,9 @@ public class Bubble extends JPanel {
 			switch (suffix) {
 			case ".jpeg":
 				return BubbleType.PICTURE;
-			case ".docx":
-			case ".pptx":
-			case ".pdf":
-			case ".c":
-			case ".h":
-			case ".java":
-			case ".cpp":
-			case ".hpp":
-				return BubbleType.FILE;
 			default:
-				break;
+				return BubbleType.FILE;
+			
 			}
 		} else {
 			suffix = name.substring(name.length() - 4, name.length());
