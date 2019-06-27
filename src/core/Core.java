@@ -1,6 +1,7 @@
 package core;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Timer;
@@ -15,6 +16,8 @@ import platform.Platform;
 import resmgt.ResourceManagement;
 import story.ITickable;
 import user.UOnline;
+import user.User;
+import user.message.MessageEmergency;
 
 public class Core {
 
@@ -156,6 +159,12 @@ public class Core {
 
 	/** 因为错误导致程序关闭时候 */
 	public synchronized static void shutdownWithError() {
+		if (proxy.side.isServer()) {
+			Collection<User> cUers = UOnline.getInstance().getOnlineUsers();
+			for (User user : cUers) {
+				user.sendMesage(new MessageEmergency("服务器崩溃！请联系管理员！"));
+			}
+		}
 		Logger.log.error("系统由于严重错误关闭！");
 		System.exit(-1);
 	}

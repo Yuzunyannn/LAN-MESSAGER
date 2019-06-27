@@ -1,5 +1,6 @@
 package user;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,11 @@ public class UOnline {
 	/** 是否在线 */
 	public boolean isOnline(String username) {
 		return users.containsKey(username);
+	}
+
+	/** 获取在线用户 */
+	public Collection<User> getOnlineUsers() {
+		return users.values();
 	}
 
 	/** 登录一个用户 */

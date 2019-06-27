@@ -37,6 +37,7 @@ public class UGroup {
 		ResourceInfo info = ResourceManagement.instance.loadOrCreateDataResource("groups/" + groupId);
 		info.setData(nbt);
 		info.save();
+		Logger.log.impart("群" + groupId + "创建成功！");
 		UGroup.tellUser(new UserSpecial("#" + groupId), from);
 	}
 
