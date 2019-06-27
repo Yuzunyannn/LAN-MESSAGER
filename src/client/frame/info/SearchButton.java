@@ -33,9 +33,18 @@ public class SearchButton extends MemberButton {
 		mouse = new UButtonMouse(SEARCHITEMSTR, searchItemListener) {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				System.out.println(temp.getMemberName() + "" + temp.isFocusOwner());
+				 if (e.getButton() == MouseEvent.BUTTON3) {
+					if (e.isPopupTrigger()) {
+					username = ((MemberButton) e.getSource()).getMemberName();
+					for (int i = 0; i < item.length; i++) {
+						item[i].setActionCommand(username);
+						popmenu.add(item[i]);
+					}
+					popmenu.show(e.getComponent(), e.getX(), e.getY());
+				}
 			}
-		};
+			}
+			};
 		this.addMouseListener(mouse);
 	}
 

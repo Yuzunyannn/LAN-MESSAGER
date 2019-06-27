@@ -85,6 +85,16 @@ public class MemberButton extends JButton {
 					EventsBridge.frontendEventHandle.post(new EventShow(toolId, memberName));
 					// count=0;
 //					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("sdsds"),"test"));
+				} else if (e.getButton() == MouseEvent.BUTTON3) {
+						if (e.isPopupTrigger()) {
+						username = ((MemberButton) e.getSource()).getMemberName();
+						for (int i = 0; i < item.length; i++) {
+							item[i].setActionCommand(username);
+							popmenu.add(item[i]);
+						}
+						popmenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+					System.out.println("右键点击2");
 				}
 
 			}
@@ -155,13 +165,13 @@ public class MemberButton extends JButton {
 
 	/** 更改聊天状态，返回是否为正在聊天 */
 	public void isChoose(boolean choose) {
-		isChat=choose;
-		if(choose) {
-			envelope=true;
-			count=0;
+		isChat = choose;
+		if (choose) {
+			envelope = true;
+			count = 0;
 		}
-		if(!choose) {
-		this.setBackground(Theme.COLOR3);
+		if (!choose) {
+			this.setBackground(Theme.COLOR3);
 		}
 	}
 
@@ -180,10 +190,10 @@ public class MemberButton extends JButton {
 }
 
 class UButtonMouse extends MouseAdapter {
-	private JPopupMenu popmenu;
-	private JMenuItem item[];
-	private String username;
-	private ActionListener ItemMonitor;
+	protected JPopupMenu popmenu;
+	protected JMenuItem item[];
+	protected String username;
+	protected ActionListener ItemMonitor;
 
 	public UButtonMouse(String[] str, ActionListener actionListener) {
 		super();
@@ -218,9 +228,25 @@ class UButtonMouse extends MouseAdapter {
 				}
 				popmenu.show(e.getComponent(), e.getX(), e.getY());
 			}
-			System.out.println("右键点击");
+			System.out.println("右键点击1");
 		}
 
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		super.mouseClicked(e);
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			if (e.isPopupTrigger()) {
+				username = ((MemberButton) e.getSource()).getMemberName();
+				for (int i = 0; i < item.length; i++) {
+					item[i].setActionCommand(username);
+					popmenu.add(item[i]);
+				}
+				popmenu.show(e.getComponent(), e.getX(), e.getY());
+			}
+		}
 	}
 }
 
