@@ -14,7 +14,6 @@ import client.frame.Theme;
 import client.frame.info.SubjectInfoFrame;
 import client.frame.selection.SelectFrame;
 import client.frame.selection.SelectGroupFrame;
-import client.frame.selection.SendGroupFrame;
 import resmgt.UserResource;
 
 public class ChatInfoPanel extends JPanel {
@@ -53,7 +52,7 @@ public class ChatInfoPanel extends JPanel {
 				for (int i = 0; i < 20; i++) {
 					users.add("lyl");
 				}
-				SelectFrame frame = new SendGroupFrame(users, "ssj");
+				SelectFrame frame = new SelectGroupFrame(users, "ssj");
 				frame.setVisible(true);
 				
 			}

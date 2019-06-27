@@ -74,7 +74,7 @@ public class FileSenderManager {
 		nbt.setBoolean(file.getName(), true);
 		info.save();
 	}
-
+	
 	@SubscribeEvent
 	public static void onHourChange(EventHour e) {
 		if (e.newDay()) {
@@ -93,6 +93,7 @@ public class FileSenderManager {
 				Logger.log.warn("读取到的File记录临时文件数据的数据类型错误！");
 				return;
 			}
+			
 			NBTTagCompound nbt = info.getNBT();
 			for (Entry<String, NBTBase> entry : nbt) {
 				String str = entry.getKey();

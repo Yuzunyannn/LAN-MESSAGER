@@ -27,25 +27,23 @@ public class FileBubble extends Bubble {
 		public void mousePressed(java.awt.event.MouseEvent e) {
 			if (progress.getType() == TransferType.DOWNLOAD) {
 				if (progress.getE() == null) {
-					
+
 				} else {
 					try {
 						Desktop.getDesktop().open(new File("./tmp/" + progress.getE().getTempName()));
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-						Logger.log.warn("打开下载文件失败");
+						Logger.log.warn("打开下载文件失败", e1);
 					}
 				}
 			} else {
 				if (this.hasClicked) {
 					progress.setVisible(false);
 					hasClicked = false;
-					//e.getComponent().getParent().revalidate();
+					// e.getComponent().getParent().revalidate();
 					System.out.println("removed");
 				} else {
 					progress.setVisible(true);
-					//e.getComponent().getParent().revalidate();
+					// e.getComponent().getParent().revalidate();
 					hasClicked = true;
 					System.out.println("added");
 				}
@@ -66,7 +64,7 @@ public class FileBubble extends Bubble {
 				progress = new ProgressPanel(TransferType.UPLOAD);
 			} else {
 				progress = new ProgressPanel(TransferType.DOWNLOAD);
-			}			
+			}
 			progress.setSize(this.getSize());
 			this.add(progress, BorderLayout.SOUTH);
 			this.fileButton.addMouseListener(this.mouse);
@@ -74,10 +72,9 @@ public class FileBubble extends Bubble {
 			System.out.println("暂不支持图标显示的文件类型");
 		}
 	}
-	
+
 	public void toggleProgressBar(EventFile e) {
 		this.progress.toggleProgress(e);
 	}
-
 
 }

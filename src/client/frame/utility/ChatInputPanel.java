@@ -177,8 +177,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		scroll.setBorder(null);
 		this.add(scroll);
 		//this.setBorder(null);
-		// 初始化memes
-		memeFrame = new MemeFrame("Test Area");
+		
 		// 添加发送按钮
 		JButton button = new JButton("发送");
 		button.setFont(new Font("黑体", 0, 16));// 这句设置字体，在运行前，会发白一下？
@@ -230,6 +229,9 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				// 初始化memes
+				ChatPanel parent = (ChatPanel) ChatInputPanel.this.getParent();
+				memeFrame = new MemeFrame("Test Area", parent.getChatTo().getUserName());
 				memeFrame.setSize(400, 400);
 				memeFrame.setLocation(e.getX() - memeFrame.getWidth(), e.getY() - memeFrame.getHeight());
 				memeFrame.setLocationRelativeTo(null);

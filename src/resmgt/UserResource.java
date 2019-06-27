@@ -39,6 +39,23 @@ public class UserResource {
 			return this.str;
 		}
 	}
+	
+	public static enum MemeSize {
+		STANDARD(30, "small");
+
+		final public int size;
+		final public String str;
+
+		MemeSize(int size, String s) {
+			this.size = size;
+			this.str = s;
+		}
+
+		@Override
+		public String toString() {
+			return this.str;
+		}
+	}
 
 	static {
 		// headicon
@@ -52,8 +69,8 @@ public class UserResource {
 		// icon-reply
 		info = ResourceManagement.instance.getPackResource("img/icons/icon-reply.png");
 		info = ResourceManagement.instance.loadTmpResource(info, "icon-reply");
-		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size, IconSize.STANDARD.size,
-				IconSize.STANDARD.size));
+		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size + 5, IconSize.STANDARD.size + 5,
+				IconSize.STANDARD.size + 5));
 		// icon-tool
 		info = ResourceManagement.instance.getPackResource("img/icons/icon-tool.png");
 		info = ResourceManagement.instance.loadTmpResource(info, "icon-tool");
@@ -69,6 +86,12 @@ public class UserResource {
 		info = ResourceManagement.instance.loadTmpResource(info, "icon-user");
 		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size, IconSize.STANDARD.size,
 				IconSize.STANDARD.size));
+
+		// MEME-1
+		info = ResourceManagement.instance.getPackResource("img/memes/1.jpg");
+		info = ResourceManagement.instance.loadTmpResource(info, "meme-1");
+		info.setData(info.getImage().getScaledInstance(MemeSize.STANDARD.size, MemeSize.STANDARD.size,
+				MemeSize.STANDARD.size));
 	}
 
 	/** 获取用户头像 */
@@ -78,6 +101,11 @@ public class UserResource {
 
 	/** 获取系统图标 */
 	static public ImageIcon getSysIcon(String iconPath) {
+		return new ImageIcon(ResourceManagement.instance.getTmpResource(iconPath).getImage());
+	}
+	
+	/** 获取表情包 */
+	static public ImageIcon getMeme(String iconPath) {
 		return new ImageIcon(ResourceManagement.instance.getTmpResource(iconPath).getImage());
 	}
 }
