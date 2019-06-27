@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import log.Logger;
+import resmgt.UserResource;
 import transfer.EventFile;
 
 public class FileBubble extends Bubble {
@@ -39,11 +40,9 @@ public class FileBubble extends Bubble {
 				if (this.hasClicked) {
 					progress.setVisible(false);
 					hasClicked = false;
-					// e.getComponent().getParent().revalidate();
 					System.out.println("removed");
 				} else {
 					progress.setVisible(true);
-					// e.getComponent().getParent().revalidate();
 					hasClicked = true;
 					System.out.println("added");
 				}
@@ -53,11 +52,9 @@ public class FileBubble extends Bubble {
 
 	public FileBubble(String name, boolean isMySelf) {
 		super(name, BubbleType.FILE);
-		if (Bubble.checkFileType(name) == BubbleType.FILE) {
-			imageIcon = new ImageIcon("src/resources/img/icons/" + "icon-document.jpg");
-			imageIcon.setImage(imageIcon.getImage().getScaledInstance(40, 40, 40));
+		//if (Bubble.checkFileType(name) == BubbleType.FILE) {
 			fileButton = new JButton();
-			fileButton.setIcon(imageIcon);
+			fileButton.setIcon(UserResource.getSysIcon("icon-document"));
 			fileButton.setBorderPainted(false);
 			this.add(fileButton, BorderLayout.EAST);
 			if (isMySelf) {
@@ -68,9 +65,9 @@ public class FileBubble extends Bubble {
 			progress.setSize(this.getSize());
 			this.add(progress, BorderLayout.SOUTH);
 			this.fileButton.addMouseListener(this.mouse);
-		} else {
-			System.out.println("暂不支持图标显示的文件类型");
-		}
+		//} else {
+		//	System.out.println("暂不支持图标显示的文件类型");
+		//}
 	}
 
 	public void toggleProgressBar(EventFile e) {

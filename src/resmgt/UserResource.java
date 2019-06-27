@@ -24,7 +24,8 @@ public class UserResource {
 	}
 
 	public static enum IconSize {
-		STANDARD(30, "small");
+		STANDARD(30, "small"),
+		LARGE(40, "large");
 
 		final public int size;
 		final public String str;
@@ -39,7 +40,7 @@ public class UserResource {
 			return this.str;
 		}
 	}
-	
+
 	public static enum MemeSize {
 		STANDARD(30, "small");
 
@@ -87,6 +88,12 @@ public class UserResource {
 		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size, IconSize.STANDARD.size,
 				IconSize.STANDARD.size));
 
+		// icon-document
+		info = ResourceManagement.instance.getPackResource("img/icons/icon-document.jpg");
+		info = ResourceManagement.instance.loadTmpResource(info, "icon-document");
+		info.setData(info.getImage().getScaledInstance(IconSize.LARGE.size, IconSize.LARGE.size,
+				IconSize.STANDARD.size));
+
 		// MEME-1
 		info = ResourceManagement.instance.getPackResource("img/memes/1.jpg");
 		info = ResourceManagement.instance.loadTmpResource(info, "meme-1");
@@ -103,7 +110,7 @@ public class UserResource {
 	static public ImageIcon getSysIcon(String iconPath) {
 		return new ImageIcon(ResourceManagement.instance.getTmpResource(iconPath).getImage());
 	}
-	
+
 	/** 获取表情包 */
 	static public ImageIcon getMeme(String iconPath) {
 		return new ImageIcon(ResourceManagement.instance.getTmpResource(iconPath).getImage());
