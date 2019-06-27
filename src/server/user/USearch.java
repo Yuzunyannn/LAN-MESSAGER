@@ -30,7 +30,6 @@ public class USearch implements Runnable {
 	};
 
 	private boolean search(String name) {
-		String str[] = { "1234", "123", "12", "1" };
 		SearchHelper sh=new SearchHelper();
 		list=(LinkedList<User>)sh.search(UOnline.getInstance().getOnlineUsers(), name);
 		if (list.isEmpty())

@@ -52,17 +52,35 @@ public class ULogin extends RecvDealMessage {
 	}
 
 	static private boolean debug(String username, String password) {
-		if (username.equals("guest")) {
-			return true;
-		} else if (username.equals("ssj") && password.equals("123")) {
-			return true;
-		} else if (username.equals("ycy") && password.equals("tatsuu")) {
-			return true;
-		} else if (username.equals("lyl") && password.equals("666")) {
-			return true;
-		} else if (username.equals("myk") && password.equals("yyy")) {
-			return true;
+		if (username.isEmpty())
+			return false;
+		if (username.length() < 3)
+			return false;
+		if (username.indexOf('#') != -1)
+			return false;
+		if (username.indexOf('?') != -1)
+			return false;
+		if (username.indexOf('!') != -1)
+			return false;
+		if (username.indexOf('*') != -1)
+			return false;
+		if (username.equals("yuzuyannn")) {
+			if (password.equals("java8"))
+				return true;
+			return false;
+		} else if (username.equals("Bevis")) {
+			if (password.equals("java8"))
+				return true;
+			return false;
+		} else if (username.equals("tatsuu")) {
+			if (password.equals("java8"))
+				return true;
+			return false;
+		} else if (username.equals("dispute")) {
+			if (password.equals("java8"))
+				return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 }
