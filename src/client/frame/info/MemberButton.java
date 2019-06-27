@@ -155,10 +155,14 @@ public class MemberButton extends JButton {
 
 	/** 更改聊天状态，返回是否为正在聊天 */
 	public void isChoose(boolean choose) {
-		isChat = choose;
-		if (!choose)
-			this.setBackground(Theme.COLOR3);
-
+		isChat=choose;
+		if(choose) {
+			envelope=true;
+			count=0;
+		}
+		if(!choose) {
+		this.setBackground(Theme.COLOR3);
+		}
 	}
 
 	/**
