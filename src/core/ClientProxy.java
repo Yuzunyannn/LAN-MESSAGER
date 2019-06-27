@@ -4,6 +4,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import client.event.EventsBridge;
 import client.frame.LoginFrame;
 import client.frame.MainFrame;
@@ -49,6 +51,7 @@ public class ClientProxy extends Proxy implements Runnable {
 		frame.initEvent(EventsBridge.frontendEventHandle);
 		EventsBridge.frontendEventHandle.register(this);
 		FileSenderManager.eventHandle.register(EventsBridge.class);
+		Network.eventHandle.register(UOnlineClient.class);
 	}
 
 	@Override
@@ -72,6 +75,32 @@ public class ClientProxy extends Proxy implements Runnable {
 
 	/** 发送的用户名 */
 	private String sendUsername;
+
+	@Override
+	public void run() {
+		try {
+			if (toServer == null) {
+				toServer = new Connection(Core.SERVER_IP, Core.SERVER_PORT);
+				if (!RecvDealValidation.check(toServer)) {
+					toServer = null;
+					Logger.log.warn("服务器拒绝您的登录！");
+					return;
+				}
+				UserClient.toServer = toServer;
+			}
+			String username = logFrame.getUserName();
+			if (username == null || username.isEmpty()) {
+				Logger.log.impart("请输入用户名");
+				return;
+			}
+			sendUsername = username;
+			UserClient.sendToServer(new MessageLogin(username, logFrame.getPassword(), Side.CLIENT));
+		} catch (IOException e1) {
+			logFrame.setLoginButtonEnable(true);
+			logFrame.setHint("无法连接到服务器！");
+			Logger.log.warn("连接服务器出现异常！", e1);
+		}
+	}
 
 	@SubscribeEvent
 	public void onLogin(client.event.EventLogin e) {
@@ -98,29 +127,17 @@ public class ClientProxy extends Proxy implements Runnable {
 		}
 	}
 
-	@Override
-	public void run() {
-		try {
-			if (toServer == null) {
-				toServer = new Connection(Core.SERVER_IP, Core.SERVER_PORT);
-				if (!RecvDealValidation.check(toServer)) {
-					toServer = null;
-					Logger.log.warn("服务器拒绝您的登录！");
-					return;
-				}
-				UserClient.toServer = toServer;
-			}
-			String username = logFrame.getUserName();
-			if (username == null || username.isEmpty()) {
-				Logger.log.impart("请输入用户名");
-				return;
-			}
-			sendUsername = username;
-			UserClient.sendToServer(new MessageLogin(username, logFrame.getPassword(), Side.CLIENT));
-		} catch (IOException e1) {
-			logFrame.setLoginButtonEnable(true);
-			logFrame.setHint("无法连接到服务器！");
-			Logger.log.warn("连接服务器出现异常！", e1);
-		}
+	@SubscribeEvent
+	public void onLogout(client.event.EventLogout e) {
+		if (UserClient.toServer.isClosed())
+			UserClient.toServer = null;
+		logFrame.setHint("");
+		logFrame.setVisible(true);
+		frame.setVisible(false);
+	}
+
+	@SubscribeEvent
+	public void emergency(client.event.EventEmergency e) {
+		JOptionPane.showMessageDialog(null, e.info, "服务端异常", JOptionPane.ERROR_MESSAGE);
 	}
 }

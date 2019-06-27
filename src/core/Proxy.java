@@ -18,6 +18,7 @@ import transfer.message.UMFileSendToUser;
 import user.message.MUGULRequest;
 import user.message.MUSSearch;
 import user.message.MUSString;
+import user.message.MessageEmergency;
 import user.message.MessageGroupCreate;
 import user.message.MessageGroupInfo;
 import user.message.MessageLogin;
@@ -90,6 +91,7 @@ public class Proxy {
 		RecvDealMessage.registerMessage("usate_change", MessageUserStateChange.class);
 		RecvDealMessage.registerMessage("ugroup_create", MessageGroupCreate.class);
 		RecvDealMessage.registerMessage("ugroup_info", MessageGroupInfo.class);
+		RecvDealMessage.registerMessage("emergency", MessageEmergency.class);
 	}
 
 	// 注册一个story
