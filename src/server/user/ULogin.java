@@ -64,7 +64,7 @@ public class ULogin extends RecvDealMessage {
 			return false;
 		if (username.indexOf('*') != -1)
 			return false;
-		if (username.equals("yuzuyannn")) {
+		if (username.equals("yuzunyannn")) {
 			if (password.equals("java8"))
 				return true;
 			return false;

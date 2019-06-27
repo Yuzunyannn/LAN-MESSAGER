@@ -6,14 +6,21 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import client.frame.util.TextFocus;
+import client.record.RecordLogInfo;
+import client.record.RecordManagement;
 
 public class LoginFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -47,6 +54,11 @@ public class LoginFrame extends JFrame {
 			label.setLocation((size.width - label.getWidth()) / 2,
 					(size.height - password.getHeight()) / 4 + userName.getHeight() + 16 + password.getHeight() + 16);
 
+			Component help = cons[4];
+			help.setSize(size.width / 3, 35);
+			help.setLocation((size.width - help.getWidth()) / 2,
+					(size.height - help.getHeight()) / 4 * 3 + button.getHeight() + 5);
+
 		}
 
 		@Override
@@ -69,6 +81,7 @@ public class LoginFrame extends JFrame {
 	JTextField userNameText;
 	JPasswordField password;
 	JLabel hint;
+	JButton help;
 
 	public LoginFrame() {
 		// 设置标题
@@ -80,15 +93,13 @@ public class LoginFrame extends JFrame {
 		this.getContentPane().setBackground(Theme.COLOR0);
 
 		// 账号框
-		userNameText = new JTextField("myk");
+		userNameText = new JTextField();
 
 		userNameText.setBorder(BorderFactory.createLineBorder(Theme.COLOR6));
 		this.add(userNameText);
 
 		// 密码框
-		password = new JPasswordField("yyy");
-
-
+		password = new JPasswordField();
 		password.setBorder(BorderFactory.createLineBorder(Theme.COLOR6));
 		this.add(password);
 		// 信息提示
@@ -101,6 +112,11 @@ public class LoginFrame extends JFrame {
 		loginButton.setSize(75, 35);
 		this.add(loginButton);
 		this.setLocationRelativeTo(null);
+		// 临时的帮助信息
+		help = new JButton("帮助");
+		help.setUI(new client.frame.ui.NormalButtonUI());
+		help.setSize(75, 35);
+		this.add(help);
 		// 设置关闭操作
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// 设置最小窗体大小
@@ -115,6 +131,21 @@ public class LoginFrame extends JFrame {
 		int windowsHeight = this.getHeight();
 		// System.out.println(windowsWidth+","+windowsHeight);
 		this.setBounds((width - windowsWidth) / 2, (height - windowsHeight) / 2, windowsWidth, windowsHeight);
+		// 回复记录
+		RecordLogInfo lInfo = RecordManagement.getLogInfo();
+		userNameText.setText(lInfo.username);
+		password.setText(lInfo.password);
+		new TextFocus(userNameText, "请输入用户名");
+		new TextFocus(password, "请输入密码");
+		
+		help.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				JOptionPane.showMessageDialog(LoginFrame.this,
+						"这是软工3组所制作的局域网聊天系统。当前系统处于测试中。随便输入一个3位以上文字作为用户名，无需密码登陆。登陆以后搜索框可以搜索当前在线人数。如果程序出现闪退，请发送logs文件到：bjshenshijun@emails.bjut.edu.cn",
+						"帮助", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 	}
 
 	public void setLoginListener(MouseListener listener) {

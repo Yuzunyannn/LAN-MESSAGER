@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import core.Core;
+import nbt.NBTTagCompound;
+import resmgt.ResourceInfo;
+import resmgt.ResourceManagement;
 import story.ITickable;
 import user.User;
 
@@ -23,6 +26,25 @@ public class RecordManagement implements ITickable {
 		if (!records.containsKey(user))
 			records.put(user, new Record(user));
 		return records.get(user);
+	}
+
+	/** 获取登陆记录信息 */
+	static public RecordLogInfo getLogInfo() {
+		ResourceInfo rinfo = ResourceManagement.instance.loadOrCreateTmpNBT("g357o85l", "loginfo");
+		NBTTagCompound nbt = rinfo.getNBT();
+		RecordLogInfo info = new RecordLogInfo();
+		info.username = nbt.getString("unam");
+		info.password = nbt.getString("paw");
+		return info;
+	}
+
+	/** 记录登陆信息 */
+	static public void setLogInfo(RecordLogInfo info) {
+		ResourceInfo rinfo = ResourceManagement.instance.loadOrCreateTmpNBT("g357o85l", "loginfo");
+		NBTTagCompound nbt = rinfo.getNBT();
+		nbt.setString("unam", info.username);
+		nbt.setString("paw", info.password);
+		rinfo.save();
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import java.util.jar.JarFile;
 
 import core.Core;
 import log.Logger;
+import nbt.NBTTagCompound;
 
 public class ResourceManagement {
 
@@ -296,5 +297,16 @@ public class ResourceManagement {
 			return null;
 		}
 		return info;
+	}
+
+	/** 加载位nbt的数据 */
+	public ResourceInfo loadOrCreateTmpNBT(String realPath, String virtualPath) {
+		ResourceManagement.mkdirTmp();
+		ResourceInfo rinfo = ResourceManagement.instance.loadOrCreateTmpResource(realPath, virtualPath);
+		NBTTagCompound nbt = rinfo.getNBT();
+		if (nbt == null) {
+			rinfo.setData(new NBTTagCompound());
+		}
+		return rinfo;
 	}
 }

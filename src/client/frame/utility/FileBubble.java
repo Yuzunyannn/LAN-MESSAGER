@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import client.frame.Theme;
 import log.Logger;
 import transfer.EventFile;
 
@@ -70,6 +71,7 @@ public class FileBubble extends Bubble {
 			progress.setSize(this.getSize());
 			this.add(progress, BorderLayout.SOUTH);
 			this.fileButton.addMouseListener(this.mouse);
+			fileButton.setBackground(Theme.COLOR0);
 		} else {
 			System.out.println("暂不支持图标显示的文件类型");
 		}

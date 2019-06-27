@@ -2,14 +2,13 @@ package client.frame.info;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -26,9 +25,9 @@ import log.Logger;
 public class SearchPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField search;
-	public static final int SEARCH_FIELD_LENGTH=80;
+	public static final int SEARCH_FIELD_LENGTH = 80;
 	public final String INFO = "单行输入,回车键搜索";
-	boolean entry=false;
+	boolean entry = false;
 	private KeyListener keyListener = new KeyListener() {
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -36,6 +35,7 @@ public class SearchPanel extends JPanel {
 			if (key == '\n')
 				EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
 		}
+
 		@Override
 		public void keyReleased(KeyEvent e) {
 		}
@@ -55,9 +55,8 @@ public class SearchPanel extends JPanel {
 		search.setFont(Theme.FONT3);
 		search.setFocusable(entry);
 
-		//搜索栏鼠标点击事件
-		search.addMouseListener(new MouseAdapter() 
-		{
+		// 搜索栏鼠标点击事件
+		search.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -67,40 +66,49 @@ public class SearchPanel extends JPanel {
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				entry=true;
+				entry = true;
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				entry=false;
+				entry = false;
 			};
 		});
-		//焦点获得/失去
-		search.addFocusListener(new FocusListener(){
+		// 焦点获得/失去
+		search.addFocusListener(new FocusListener() {
 			public void focusLost(FocusEvent e) {
-			//失去焦点执行的代码
-				boolean a=search.isFocusOwner();
-				System.out.println(a+"search失去焦点"+entry);
+				// 失去焦点执行的代码
+				boolean a = search.isFocusOwner();
+				System.out.println(a + "search失去焦点" + entry);
 				search.setFocusable(false);
 			}
+
 			public void focusGained(FocusEvent e) {
-			//获得焦点执行的代码
-				boolean a=search.isFocusOwner();
-				System.out.println(a+"search获得焦点"+entry);
+				// 获得焦点执行的代码
+				boolean a = search.isFocusOwner();
+				System.out.println(a + "search获得焦点" + entry);
 				EventsBridge.frontendEventHandle.post(new EventIPC(EventIPC.SEARCH));
 			}
 		});
-		
-		JButton b1 = new JButton();
+
+		JButton b1 = new JButton() {
+			@Override
+			public void paint(Graphics g) {
+				super.paint(g);
+				final int x = 5;
+				g.drawLine(x, x, x + 20, x + 20);
+				g.drawLine(x + 20, x, x, x + 20);
+			}
+		};
 		JButton b2 = new JButton();
-		SearchPanel stmp=this;
-		MouseAdapter mb=new MouseAdapter() {
+		SearchPanel stmp = this;
+		MouseAdapter mb = new MouseAdapter() {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				EventsBridge.frontendEventHandle.post(new EventIPC(EventIPC.FRIENDS));
 				stmp.searchInit();
-				//测试
+				// 测试
 				Logger.log.impart("点击按钮切换时的测试");
 				search.setBackground(Theme.COLOR4);
 			}
@@ -112,8 +120,8 @@ public class SearchPanel extends JPanel {
 		search.setLocation(10, 20);
 		search.setText(INFO);
 		search.addFocusListener(new DefaultFocusListener(INFO, search));
-		int buttonsize=30;
-		b1.setSize(buttonsize,buttonsize);
+		int buttonsize = 30;
+		b1.setSize(buttonsize, buttonsize);
 		b1.setLocation(220, 23);
 		b2.setSize(buttonsize, buttonsize);
 		b2.setLocation(260, 23);
@@ -122,14 +130,16 @@ public class SearchPanel extends JPanel {
 		this.add(search);
 
 	}
+
 	public void searchInit() {
 		search.setForeground(Color.GRAY);
 		search.setText(INFO);
 		this.setBackground(Theme.COLOR5);
-		entry=false;
+		entry = false;
 		search.setFocusable(entry);
-		
+
 	}
+
 	public void initEvent(IEventBus bus) {
 		bus.register(this);
 	}
@@ -153,7 +163,6 @@ class DefaultFocusListener implements FocusListener {
 			textfield.setText(null);
 			textfield.setBackground(Theme.COLOR0);
 			textfield.setForeground(Color.BLACK);
-			
 
 		}
 	}
@@ -167,5 +176,5 @@ class DefaultFocusListener implements FocusListener {
 		}
 
 	}
-	
+
 }
