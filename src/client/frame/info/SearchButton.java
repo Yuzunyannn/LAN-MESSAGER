@@ -73,7 +73,7 @@ class SearchMenuItemMonitor implements ActionListener {
 		String temp = ((JMenuItem) e.getSource()).getText();
 		if (temp.equals(str[0])) {
 			EventsBridge.frontendEventHandle.post(new EventShow(buttonId, toolId));
-			Logger.log.warn("UtilityPanel部分需要完成一个显示用户信息盘，此处暂时用聊天盘");
+//			Logger.log.warn("UtilityPanel部分需要完成一个显示用户信息盘，此处暂时用聊天盘");
 		} else if (temp.equals(str[1])) {
 			EventsBridge.frontendEventHandle.post(new EventFriendOperation(buttonId, EventFriendOperation.ADDFRIEND));
 		}

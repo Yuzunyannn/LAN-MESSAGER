@@ -114,7 +114,10 @@ public class MemberButton extends JButton {
 		this.addMouseListener(mouse);
 
 	}
-
+	public void envelopechange() {
+		if(count!=0)
+			envelope=false;
+	}
 	public void setToolId(String tid) {
 		toolId = tid;
 	}
@@ -172,6 +175,7 @@ public class MemberButton extends JButton {
 		}
 		if (!choose) {
 			this.setBackground(Theme.COLOR3);
+			
 		}
 	}
 

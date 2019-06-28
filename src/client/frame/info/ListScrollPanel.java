@@ -165,7 +165,20 @@ public class ListScrollPanel extends JScrollPane {
 		standardHeight(super.getPreferredSize());
 		p.setPreferredSize(new Dimension(width, height));
 	}
-
+	public void addNewMember(User user,int count) {
+		if (InfoPanel.userSet.contains(user))
+			return;
+		InfoPanel.userSet.add(user);
+		MemberButton tmp=new MemberButton(user.getUserName());
+		tmp.count=count;
+		p.add(tmp);
+		tmp.envelopechange();
+		content = p.getComponents();
+		height += MemberButton.MEMBERBUTTON_HEIGHT;
+		int width = super.getWidth();
+		standardHeight(super.getPreferredSize());
+		p.setPreferredSize(new Dimension(width, height));
+	}
 	public void deductMember(User user) {
 		boolean done = false;
 		for (int i = p.getComponentCount(); i > 0; i--) {
