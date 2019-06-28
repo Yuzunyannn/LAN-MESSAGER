@@ -113,7 +113,7 @@ public class InfoPanel extends JPanel {
 		else if (e.optype.equals(EventChatOperation.DELETECHAT))
 			memberField.deductMember(UOnline.getInstance().getUser(e.username));
 		else if (e.optype.equals(EventChatOperation.CANELFIXEDCHAT))
-			memberField.canelFixed();
+			memberField.canelFixed(e.username);
 		else if (e.optype.equals(EventChatOperation.ADDCHAT)) {
 			/** 此处需要添加对于是否处于好友列表的判断 */
 			if (e.recvpanel.equals(ListScrollPanel.FRIENDPANEL)) {
