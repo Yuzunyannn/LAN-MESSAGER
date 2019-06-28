@@ -17,6 +17,7 @@ import java.util.jar.JarFile;
 import core.Core;
 import log.Logger;
 import nbt.NBTTagCompound;
+import util.ClassHelper;
 
 public class ResourceManagement {
 
@@ -112,7 +113,7 @@ public class ResourceManagement {
 
 	/** 查找初始化 */
 	private void findInit() {
-		url = ClassLoader.getSystemResource("resources");
+		url = ClassHelper.getRuntimeURL("resources");
 		String protocol = url.getProtocol();
 		if (protocol.equals("file")) {
 			String filePath;

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import core.Core;
 import log.Logger;
 
 public class ClassHelper {
@@ -23,15 +24,16 @@ public class ClassHelper {
 		URL url = null;
 		if (packageName.isEmpty()) {
 			// 先获取一下有的包
-			url = ClassLoader.getSystemResource("core");
+			url = Core.class.getClassLoader().getResource("core");
 			if (url != null)
 				try {
 					url = new URL(url.toString().substring(0, url.toString().length() - 4));
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				}
-		} else
-			url = ClassLoader.getSystemResource(packageName);
+		} else {
+			url = Core.class.getClassLoader().getResource(packageName);
+		}
 		return url;
 	}
 
