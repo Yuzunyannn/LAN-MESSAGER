@@ -42,7 +42,7 @@ public class UserResource {
 	}
 
 	public static enum MemeSize {
-		STANDARD(30, "small");
+		STANDARD(80, "small");
 
 		final public int size;
 		final public String str;
