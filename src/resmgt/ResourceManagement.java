@@ -56,30 +56,7 @@ public class ResourceManagement {
 	/** 记录数据资源路径的map */
 	private final Map<String, ResourceInfo> resData = new HashMap<String, ResourceInfo>();
 	/** 当前运行程序的url */
-	URL url = ClassLoader.getSystemResource("resources");
-
-	public ResourceManagement() {
-		String protocol = url.getProtocol();
-		if (protocol.equals("file")) {
-			String filePath;
-			try {
-				filePath = URLDecoder.decode(url.getFile(), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				ResourceManagement.fail("资源加载失败！", e);
-				return;
-			}
-			this.findInFile(new File(filePath));
-		} else if (protocol.equals("jar")) {
-			JarFile jar;
-			try {
-				jar = ((JarURLConnection) url.openConnection()).getJarFile();
-			} catch (IOException e) {
-				ResourceManagement.fail("资源加载失败！", e);
-				return;
-			}
-			this.findInJar(jar);
-		}
-	}
+	URL url;
 
 	private void findInFile(File rootFile) {
 		if (!rootFile.exists() || !rootFile.isDirectory()) {
@@ -125,9 +102,36 @@ public class ResourceManagement {
 
 	/** 初始化 */
 	public void init() {
+		ResourceManagement.impart("正在启动资源管理！");
+		this.findInit();
 		for (Entry<String, ResourceInfo> entry : resPack.entrySet()) {
 			entry.getValue().load();
 			ResourceManagement.impart("资源加载成功：" + entry.getKey());
+		}
+	}
+
+	/** 查找初始化 */
+	private void findInit() {
+		url = ClassLoader.getSystemResource("resources");
+		String protocol = url.getProtocol();
+		if (protocol.equals("file")) {
+			String filePath;
+			try {
+				filePath = URLDecoder.decode(url.getFile(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				ResourceManagement.fail("资源加载失败！", e);
+				return;
+			}
+			this.findInFile(new File(filePath));
+		} else if (protocol.equals("jar")) {
+			JarFile jar;
+			try {
+				jar = ((JarURLConnection) url.openConnection()).getJarFile();
+			} catch (IOException e) {
+				ResourceManagement.fail("资源加载失败！", e);
+				return;
+			}
+			this.findInJar(jar);
 		}
 	}
 

@@ -9,12 +9,18 @@ import java.util.Calendar;
 
 public class Logger {
 	/** 日志句柄 */
-	static public Logger log = new Logger();
+	static public Logger log = null;
 	/** 日志文件 */
 	private File logFile = null;
 
 	/** 日志输出流 */
 	private PrintStream out = System.out;
+
+	/** 创建或更新log */
+	public static void newLogger() {
+		if (Logger.log == null)
+			Logger.log = new Logger();
+	}
 
 	private Logger() {
 		Calendar cal = Calendar.getInstance();

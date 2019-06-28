@@ -4,6 +4,8 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import log.Logger;
+
 public class UserResource {
 
 	public static enum HeadIconSize {
@@ -24,8 +26,7 @@ public class UserResource {
 	}
 
 	public static enum IconSize {
-		STANDARD(30, "small"),
-		LARGE(40, "large");
+		STANDARD(30, "small"), LARGE(40, "large");
 
 		final public int size;
 		final public String str;
@@ -58,7 +59,8 @@ public class UserResource {
 		}
 	}
 
-	static {
+	static public void init() {
+		Logger.log.impart("开始处理用户资源!");
 		// headicon
 		ResourceInfo info = ResourceManagement.instance.getPackResource("img/debug_headicon.png");
 		info = ResourceManagement.instance.loadTmpResource(info, "headicon/debug_big");
@@ -91,8 +93,8 @@ public class UserResource {
 		// icon-document
 		info = ResourceManagement.instance.getPackResource("img/icons/icon-document.jpg");
 		info = ResourceManagement.instance.loadTmpResource(info, "icon-document");
-		info.setData(info.getImage().getScaledInstance(IconSize.LARGE.size, IconSize.LARGE.size,
-				IconSize.STANDARD.size));
+		info.setData(
+				info.getImage().getScaledInstance(IconSize.LARGE.size, IconSize.LARGE.size, IconSize.STANDARD.size));
 
 		// MEME-1
 		info = ResourceManagement.instance.getPackResource("img/memes/1.jpg");

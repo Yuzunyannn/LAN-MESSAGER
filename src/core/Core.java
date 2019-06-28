@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import log.Logger;
 import platform.Platform;
 import resmgt.ResourceManagement;
+import resmgt.UserResource;
 import story.ITickable;
 import user.UOnline;
 import user.User;
@@ -20,12 +21,9 @@ import user.message.MessageEmergency;
 
 public class Core {
 
-
-//	static final String SERVER_IP = "127.0.0.1";// 
-	static final String SERVER_IP="39.107.94.231";
+	static final String SERVER_IP = "39.107.94.231";
 	static final int SERVER_PORT = 35275;
 	static final Proxy proxy = new ClientProxy();
-//	static final Proxy proxy = new DebugProxy();
 	static final Core core = new Core();
 
 	// 所有运行的任务队列
@@ -40,8 +38,11 @@ public class Core {
 	// 主函数
 	public static void main(String[] args) {
 		try {
+			Logger.newLogger();
 			Logger.log.impart("当前平台：" + Platform.platform);
 			ResourceManagement.instance.init();
+			UserResource.init();
+			// 初始化代理
 			proxy.init();
 			proxy.launch();
 			// 启动核心
