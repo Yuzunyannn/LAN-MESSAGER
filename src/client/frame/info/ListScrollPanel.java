@@ -323,14 +323,14 @@ public class ListScrollPanel extends JScrollPane {
 			return;
 	}
 
-	/** 事件处理 */
-	@SubscribeEvent
-	public void onSearchRequest(EventSearchRequest e) {
-		for (Component i : content) {
-			p.add(i);
-		}
-		this.refresh();
-	}
+//	/** 事件处理 */
+//	@SubscribeEvent
+//	public void onSearchRequest(EventSearchRequest e) {
+//		for (Component i : content) {
+//			p.add(i);
+//		}
+//		this.refresh();
+//	}
 
 	@SubscribeEvent
 	public void onShow(EventShow e) {
