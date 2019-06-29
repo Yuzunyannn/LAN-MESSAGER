@@ -2,7 +2,6 @@ package client.frame.utility;
 
 import java.awt.BorderLayout;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import resmgt.UserResource;
@@ -12,7 +11,6 @@ public class PictureBubble extends Bubble {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ImageIcon imageIcon;
 	private JButton picButton = new JButton();
 
 	public PictureBubble(String picName, BubbleType type) {

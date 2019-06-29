@@ -3,10 +3,10 @@ package client.frame.utility;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import log.Logger;
@@ -20,12 +20,12 @@ public class FileBubble extends Bubble {
 	private static final long serialVersionUID = 1L;
 	private JButton fileButton;
 	private ProgressPanel progress;
-	private ImageIcon imageIcon;
 	private MouseAdapter mouse = new MouseAdapter() {
 		public boolean hasClicked = false;
-
+		
 		@Override
-		public void mousePressed(java.awt.event.MouseEvent e) {
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
 			if (progress.getType() == TransferType.DOWNLOAD) {
 				if (progress.getE() == null) {
 
@@ -47,7 +47,7 @@ public class FileBubble extends Bubble {
 					System.out.println("added");
 				}
 			}
-		};
+		}
 	};
 
 	public FileBubble(String name, boolean isMySelf) {

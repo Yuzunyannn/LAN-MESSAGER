@@ -7,13 +7,21 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import client.frame.Theme;
-import javafx.scene.control.ButtonBar.ButtonData;
 
 public class Bubble extends JPanel {
 
@@ -24,8 +32,10 @@ public class Bubble extends JPanel {
 	private JLabel words;
 	private RButton rbutton;
 	private int h;
+	private JPopupMenu popMenu = new JPopupMenu();
 
 	public Bubble(String words, BubbleType type) {
+		popMenu.add(this.getItemMenu("复制文本"));
 		this.words = new JLabel(words);
 		this.setLayout(new BorderLayout());
 		if (type == BubbleType.FILE) {
@@ -34,25 +44,51 @@ public class Bubble extends JPanel {
 			this.words.setSize(300, 0);
 		}
 		int lines = this.JlabelSetText(this.words, words);
-//		View v = javax.swing.plaf.basic.BasicHTML.createHTMLView(this.words, this.words.getText());
-//		v.setSize(300, Integer.MAX_VALUE);
-//		this.h = (int) v.getMinimumSpan(View.Y_AXIS);
-//		if (h <30) {
-//			h = 40;
-//		}
 		h = lines * this.words.getFontMetrics(this.words.getFont()).getHeight();
 		this.words.setSize(new Dimension(300, h));
-		// System.out.println(this.words.getText());
 		this.rbutton = new RButton(this.words.getText());
-		// this.add(this.words);
 		this.add(rbutton, BorderLayout.WEST);
 		this.setOpaque(true);
 		this.setBackground(Theme.COLOR0);
+		this.rbutton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					popMenu.show(e.getComponent(), e.getX(), e.getY());
+				}
+			}
+		});
+		this.setBorder(BorderFactory.createLineBorder(Theme.COLOR6, 2));
 		this.setVisible(true);
+	}
+
+	/** 将字符串复制到剪切板 */
+	public void setSysClipboardText(String writeMe) {
+		Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
+		Transferable tText = new StringSelection(writeMe);
+		clip.setContents(tText, null);
 	}
 
 	public int getH() {
 		return h;
+	}
+
+	/** 设置右键菜单项 */
+	private JMenuItem getItemMenu(String title) {
+		JMenuItem item = new JMenuItem(title);
+		item.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (title.equals("复制文本")) {
+					String str = rbutton.getText();
+					str = str.replace("<html>", "");
+					str = str.replace("</html>", "");
+					str = str.replace("<br/>", "");
+					setSysClipboardText(str);
+				}
+			}
+		});
+		return item;
 	}
 
 	/** 文字换行 */
@@ -98,7 +134,7 @@ public class Bubble extends JPanel {
 				return BubbleType.PICTURE;
 			default:
 				return BubbleType.FILE;
-			
+
 			}
 		} else {
 			suffix = name.substring(name.length() - 4, name.length());

@@ -7,14 +7,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import client.event.EventSendInputWords;
 import client.event.EventSendPicture;
 import client.event.EventsBridge;
 import resmgt.UserResource;;

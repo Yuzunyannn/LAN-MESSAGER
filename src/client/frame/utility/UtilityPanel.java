@@ -260,11 +260,11 @@ public class UtilityPanel extends JPanel implements ITickable {
 		System.out.println("Pic event got!");
 		if (e.type == BubbleType.MEME) {
 			List<Word> words = new LinkedList<Word>();
-			Word word = new WordString("{/0x" + e.picName.substring(0,e.picName.length()-4) + "/}");
+			Word word = new WordString("{/0x" + e.picName.substring(0, e.picName.length() - 4) + "/}");
 			System.out.println(word.getValue());
 			words.add(word);
 			User user = UOnline.getInstance().getUser(e.toUser);
-			EventsBridge.frontendEventHandle.post(new EventSendInputWords(words,user));
+			EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, user));
 		}
 		((ChatPanel) this.currPanel).onSendPics(e.picName, e.type);
 
@@ -286,12 +286,12 @@ public class UtilityPanel extends JPanel implements ITickable {
 		if (!info.canUse()) {
 			info.reborn();
 		}
-		//if (Bubble.checkFileType(e.getFileName()) == BubbleType.FILE) {
-			((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
-			((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
-		//} else if (Bubble.checkFileType(e.getFileName()) == BubbleType.PICTURE) {
+		// if (Bubble.checkFileType(e.getFileName()) == BubbleType.FILE) {
+		((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
+		((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
+		// } else if (Bubble.checkFileType(e.getFileName()) == BubbleType.PICTURE) {
 
-		//}
+		// }
 	}
 
 }

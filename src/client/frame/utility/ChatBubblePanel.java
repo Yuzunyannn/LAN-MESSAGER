@@ -97,6 +97,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 		nbt.setBoolean("isMyself", this.userID);
 		nbt.setBoolean("Status", this.userMessageStatus);
 		nbt.setInteger("Type", this.type.ordinal());
+		System.out.println("type:" + this.type.ordinal());
 		nbt.setString("UserIcon", this.userIcon);
 		nbt.setString("CBPID", this.CBPID);
 		nbt.setString("Username", this.userName);
@@ -114,6 +115,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 			return;
 		}
 		this.type = BubbleType.values()[nbt.getInteger("Type")];
+		System.out.println("type:" + this.type.ordinal());
 		this.userID = nbt.getBoolean("isMyself");
 		this.CBPID = nbt.getString("CBPID");
 		this.userIcon = nbt.getString("UserIcon");

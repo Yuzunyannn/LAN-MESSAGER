@@ -11,15 +11,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -39,7 +34,6 @@ import client.event.EventDebugInfoOuting;
 import client.event.EventRecv;
 import client.event.EventsBridge;
 import client.frame.Theme;
-import client.frame.selection.SelectFrame;
 import client.word.Word;
 import core.Core;
 import log.Logger;
@@ -51,7 +45,7 @@ import user.UOnline;
 public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagList> {
 
 	private static final long serialVersionUID = 1L;
-	private static boolean test = false;
+	//private static boolean test = false;
 
 	/** 输入框的上下边距 */
 	public static final int EDIT_MARGIN = 35;
@@ -185,7 +179,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		button.setSize(75, (int) (EDIT_MARGIN * 0.8f));
 		button.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
 				ChatInputPanel.this.sendWords();
 			}
 		});
@@ -194,7 +189,6 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		button = new JButton();
 		button.setIcon(UserResource.getSysIcon("icon-reply"));
 		button.setFont(new Font("黑体", 0, 16));
-		//button.setUI(new client.frame.ui.NormalButtonUI());
 		button.setSize(50, (int) (EDIT_MARGIN * 0.8f));
 		button.addMouseListener(new MouseAdapter() {
 			@Override
@@ -216,7 +210,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		button.setOpaque(false);
 		button.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				toolsMenu.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
@@ -228,7 +222,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		button.setSize(50, (int) (EDIT_MARGIN * 0.8f));
 		button.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				// 初始化memes
 				ChatPanel parent = (ChatPanel) ChatInputPanel.this.getParent();
 				memeFrame = new MemeFrame("Test Area", parent.getChatTo().getUserName());
@@ -314,9 +308,9 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {
-			super.mousePressed(e);
+		public void mouseReleased(MouseEvent e) {
 			ChatInputPanel.this.textEdit.insert(str);
+			sendWords();
 		}
 	}
 

@@ -51,14 +51,13 @@ public class SubjectInfoFrame extends JFrame {
 		this.setAlwaysOnTop(true);
 		this.getContentPane().setLayout(new GridLayout(1,0));
 		this.setUp(userName);
+		this.setUndecorated(true);
 		userIcon.setBackground(null);
 		userIcon.setOpaque(false);
 		userLabel.setBackground(null);
 		userLabel.setOpaque(false);
 		this.getContentPane().add(userIcon);
 		this.getContentPane().add(userLabel);
-		// 设置关闭操作
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// 设置最小窗体大小
 		this.setMinimumSize(this.getLayout().minimumLayoutSize(this));
 		// 设置窗体大小和位置

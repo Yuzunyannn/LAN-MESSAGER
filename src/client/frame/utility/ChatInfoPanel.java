@@ -35,10 +35,9 @@ public class ChatInfoPanel extends JPanel {
 		this.userButton = new JButton();
 		this.userButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 				infoFrame.updateInfo(chatToUserName);
-
 			}
 		});
 		this.userButton.setIcon(UserResource.getSysIcon("icon-user"));
