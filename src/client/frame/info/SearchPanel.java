@@ -27,7 +27,7 @@ public class SearchPanel extends JPanel {
 	private JTextField search;
 	private SearchPanel sptmp=this;
 	public static final int SEARCH_FIELD_LENGTH=80;
-	public final String INFO = "单行输入,回车键搜索";
+	public static final String INFO = "单行输入,回车键搜索";
 
 	boolean entry=false;
 

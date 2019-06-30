@@ -13,8 +13,6 @@ import client.frame.Theme;
 public class UserPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int USERLENGTH=140;
-//	private String name = "Tatsuu";
-	private SearchPanel sp;
 	private UserImage img;
 	private JLabel username;
 	public UserPanel() {
@@ -44,9 +42,6 @@ public class UserPanel extends JPanel {
 		this.revalidate();
 	}
 
-	public SearchPanel getSp() {
-		return sp;
-	}
 
 	@Override
 	public void paint(Graphics g) {
@@ -54,8 +49,6 @@ public class UserPanel extends JPanel {
 		int width = super.getWidth();
 		g.setColor(Color.BLACK);
 		g.drawLine(0, 0, width, 0);
-		/* 名字大小测试 */
-//		g.drawRect(MainFrame.INFO_RIGION_WIDTH - 175, 15, 150, 50);
 	}
 
 }

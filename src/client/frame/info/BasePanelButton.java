@@ -24,7 +24,7 @@ import client.frame.Theme;
 import log.Logger;
 
 public class BasePanelButton extends JButton {
-	public static BasePanelButton ListButton = new BasePanelButton();
+	public static BasePanelButton listButton = new BasePanelButton();
 	private static final long serialVersionUID = 1L;
 	public final static int BasePanelButton_HEIGHT = 70;
 	protected String baseName;
