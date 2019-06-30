@@ -11,6 +11,9 @@ import java.util.TreeMap;
 
 import javax.swing.JPanel;
 
+import com.sun.security.ntlm.Client;
+
+import client.event.EventIPC;
 import client.event.EventSendInputWords;
 import client.event.EventShow;
 import client.event.EventsBridge;
@@ -281,17 +284,22 @@ public class UtilityPanel extends JPanel implements ITickable {
 	/** 文件接收UI更新 */
 	@SubscribeEvent
 	public void revFile(EventFileRecv.Start e) {
-		// System.out.println("revFileProgress Updating!");
 		PanelInfo info = this.getChatPanelInfo(e.getFrom().getUserName());
 		if (!info.canUse()) {
 			info.reborn();
 		}
-		// if (Bubble.checkFileType(e.getFileName()) == BubbleType.FILE) {
 		((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
 		((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
-		// } else if (Bubble.checkFileType(e.getFileName()) == BubbleType.PICTURE) {
+	}
 
-		// }
+	/** 切换到空面板 */
+	@SubscribeEvent
+	public void changeToVoid(client.event.EventIPC e) {
+		if (e.state == client.event.EventIPC.SEARCH) {
+			this.currPanel = null;
+			this.revalidate();
+			this.repaint();
+		}
 	}
 
 }

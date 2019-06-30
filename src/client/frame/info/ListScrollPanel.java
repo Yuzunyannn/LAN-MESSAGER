@@ -179,11 +179,12 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	public void addNewMember(User user) {
-		if (InfoPanel.userSet.contains(user))
-			return;
+		if (InfoPanel.userSet.contains(user)) {
+			Logger.log.impart("该对象已经在聊天列表");
+			return;}
 		InfoPanel.userSet.add(user);
 		p.add(new MemberButton(user.getUserName()));
-
+		Logger.log.impart("该对象成功添加");
 		content = p.getComponents();
 		height += MemberButton.MEMBERBUTTON_HEIGHT;
 		int width = super.getWidth();

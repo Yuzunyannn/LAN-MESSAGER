@@ -128,6 +128,23 @@ public class ClientProxy extends Proxy implements Runnable {
 			logFrame.setVisible(false);
 			frame.setUserName(UOnline.getInstance().getUser(e.username).getUserName());
 			frame.setVisible(true);
+			// test Area
+			String tmp = UOnline.getInstance().getUser(e.username).getUserName();
+			if (tmp.length() > 3) {
+				if (tmp.substring(0, 4).equals("test")) {
+					for (int i = 0; i < 1000; i++) {
+						System.out.println("send: " + i);
+						EventsBridge.sendString("Daddy", UOnline.getInstance().getUser("Bevis"));
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+							System.exit(0);
+						}
+					}
+				}
+			}
+			// test Area end
 		} else {
 			Logger.log.warn("登录失败，传送回的用户名和发送的不符！" + e.username);
 			logFrame.setHint("登陆失败！");
