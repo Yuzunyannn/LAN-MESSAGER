@@ -1,6 +1,7 @@
 package client.frame.utility;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -55,6 +56,7 @@ public class FileBubble extends Bubble {
 		// if (Bubble.checkFileType(name) == BubbleType.FILE) {
 		fileButton = new JButton();
 		fileButton.setIcon(UserResource.getSysIcon("icon-document"));
+		fileButton.setBackground(Color.white);
 		fileButton.setBorderPainted(false);
 		this.add(fileButton, BorderLayout.EAST);
 		if (isMySelf) {

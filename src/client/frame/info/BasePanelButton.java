@@ -2,11 +2,9 @@ package client.frame.info;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,15 +14,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-import client.event.EventChatOperation;
-import client.event.EventFriendOperation;
-import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
-import log.Logger;
 
 public class BasePanelButton extends JButton {
-	public static BasePanelButton listen = new BasePanelButton();
+	public static BasePanelButton listButton = new BasePanelButton();
 	private static final long serialVersionUID = 1L;
 	public final static int BasePanelButton_HEIGHT = 70;
 	protected String baseName;

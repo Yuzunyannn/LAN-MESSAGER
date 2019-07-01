@@ -37,31 +37,38 @@ public class ConfirmPane extends JPanel {
 			// TODO Auto-generated method stub
 			System.out.println(SelectFrame.getSelectedList().size());
 			if (e.getSource() == confirm) {
-				if (SelectFrame.getSelectedList().isEmpty() && SendGroupFrame.getSendText() == "") {
+				if (SelectFrame.getSelectedList().isEmpty() && SendGroupFrame.getSendText().equals("")) {
 					SelectFrame.setChoosable(false);
 				} else {
 					SelectFrame.setChoosable(true);
 				}
-				if (getParent().getParent().getParent().getParent() instanceof SendGroupFrame && SelectFrame.getChoosable()) {
-					Component[] cons = ((SendGroupFrame)getParent().getParent().getParent().getParent()).getContentPane().getComponents();
-					Component[] textCons = ((JPanel)cons[1]).getComponents();
-					SendGroupFrame.setSendText(((JTextField)textCons[0]).getText());
+				if (getParent().getParent().getParent().getParent() instanceof SendGroupFrame
+						&& SelectFrame.getChoosable()) {
+					Component[] cons = ((SendGroupFrame) getParent().getParent().getParent().getParent())
+							.getContentPane().getComponents();
+					Component[] textCons = ((JPanel) cons[1]).getComponents();
+					SendGroupFrame.setSendText(((JTextField) textCons[0]).getText());
 					WordString ws = new WordString(SendGroupFrame.getSendText());
 					List<User> users = new ArrayList<User>();
+<<<<<<< HEAD
 					List<String> userList = new ArrayList<String>(SelectFrame.getSelectedList());
 					for (String string : userList) {
+=======
+
+					for (String string : SelectFrame.getSelectedList()) {
+>>>>>>> branch 'master' of https://github.com/Yuzunyannn/LAN-MESSAGER.git
 						users.add(UOnline.getInstance().getUser(string));
 					}
 					EventsBridge.frontendEventHandle.post(new EventGroupSend(userList, ws.getString()));
 					UtilityPanel.sendWordToUsers(users, ws);
 				}
-				if (getParent().getParent().getParent().getParent() instanceof SelectGroupFrame && SelectFrame.getChoosable()) {
+				if (getParent().getParent().getParent().getParent() instanceof SelectGroupFrame
+						&& SelectFrame.getChoosable()) {
 					List<User> users = new ArrayList<User>();
-					List<String> userList = new ArrayList<String>();
-					userList = SelectFrame.getSelectedList();
-					for (String string : userList) {
+					for (String string : SelectFrame.getSelectedList()) {
 						users.add(UOnline.getInstance().getUser(string));
 					}
+
 					MessageGroupCreate GroupMessage = new MessageGroupCreate(users);
 					EventsBridge.groupCreateRequest(GroupMessage);
 				}

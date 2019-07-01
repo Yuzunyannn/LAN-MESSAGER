@@ -221,6 +221,8 @@ public class InfoPanel extends JPanel {
 			break;
 		case EventIPC.SEARCH:
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -232,12 +234,14 @@ public class InfoPanel extends JPanel {
 	public void APanelChange(int state_a) {
 		switch (state_a) {
 		case EventIPC.FRIENDS:
-			memberField.ChatStateClear();
+			memberField.chatStateClear();
 			break;
 		case EventIPC.SEARCH:
 			searchMemberField.deleteAllMember();
 //				searchField.searchInit();
 			Logger.log.warn("进入搜索盘后焦点失去，无法获得焦点");
+			break;
+		default:
 			break;
 		}
 	}
