@@ -50,13 +50,8 @@ public class ConfirmPane extends JPanel {
 					SendGroupFrame.setSendText(((JTextField) textCons[0]).getText());
 					WordString ws = new WordString(SendGroupFrame.getSendText());
 					List<User> users = new ArrayList<User>();
-<<<<<<< HEAD
 					List<String> userList = new ArrayList<String>(SelectFrame.getSelectedList());
 					for (String string : userList) {
-=======
-
-					for (String string : SelectFrame.getSelectedList()) {
->>>>>>> branch 'master' of https://github.com/Yuzunyannn/LAN-MESSAGER.git
 						users.add(UOnline.getInstance().getUser(string));
 					}
 					EventsBridge.frontendEventHandle.post(new EventGroupSend(userList, ws.getString()));
