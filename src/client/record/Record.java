@@ -30,7 +30,7 @@ public class Record {
 		return out;
 	}
 
-	class RecInfo {
+	static class RecInfo {
 		LinkedList<RecordValue> words = new LinkedList<RecordValue>();
 		NBTTagList nbtList = new NBTTagList();
 		boolean isChange = false;

@@ -84,8 +84,8 @@ public class SendGroupFrame extends SelectFrame {
 		SendGroupFrame.sendText = sendText;
 	}
 
-	public SendGroupFrame(List<String> users, String title) {
-		super(users, title, SelectFrame.CHOOSE);
+	public SendGroupFrame(List<String> users) {
+		super(users,  "群发消息", SelectFrame.CHOOSE);
 		// TODO Auto-generated constructor stub
 		textField.setText(hintText);
 		textField.addFocusListener(new FocusListener() {

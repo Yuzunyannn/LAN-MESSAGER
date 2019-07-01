@@ -29,7 +29,7 @@ import user.User;
 
 public class ChatPanel extends JPanelUtility {
 	private static final long serialVersionUID = 1L;
-	
+
 	private static Pattern regularRule = Pattern.compile("\\{/0x(\\d+)/\\}");
 
 	/** 输入区域的大小 */
@@ -152,7 +152,7 @@ public class ChatPanel extends JPanelUtility {
 	public ChatPanel() {
 		this("");
 	}
-	
+
 	public User getChatTo() {
 		return chatTo;
 	}
@@ -292,16 +292,23 @@ public class ChatPanel extends JPanelUtility {
 		EventsBridge.frontendEventHandle.post(new EventSendInputWords(words, chatTo));
 	}
 
+	/** 群发UI改变 */
+	public void sendGroupMsg(String msg) {
+		Date date = new Date();
+		chatDialogPanel.addBubble(true, "", UserClient.getClientUsername(), BubbleType.TIME, date.toString(), "");
+		chatDialogPanel.addBubble(true, msg, UserClient.getClientUsername(), BubbleType.WORD, date.toString(), "");
+	}
+
 	/** 当点击收到消息的时候调用 */
 	public void onRecvMsg(User user, Word word) {
 		Record rec = RecordManagement.getRecord(chatTo);
 		rec.addNew(word, chatTo);
 		BubbleType type = checkType(word.id);
-		java.util.regex.Matcher m =  regularRule.matcher(word.getValue());
+		java.util.regex.Matcher m = regularRule.matcher(word.getValue());
 		Date date = new Date();
 		timeLapse(date.toString(), chatDialogPanel.lastTime);
 		boolean found = false;
-		
+
 		while (m.find()) {
 			found = true;
 			String id = m.group(1);
@@ -315,7 +322,7 @@ public class ChatPanel extends JPanelUtility {
 					chatDialogPanel.addBubble(false, texts[i], user.getUserName(), type, date.toString(), "");
 				}
 			}
-		}else {
+		} else {
 			chatDialogPanel.addBubble(false, word.toString(), user.getUserName(), type, date.toString(), "");
 		}
 	}

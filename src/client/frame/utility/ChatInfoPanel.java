@@ -3,6 +3,9 @@ package client.frame.utility;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -10,9 +13,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import client.frame.Theme;
+import client.frame.info.InfoPanel;
 import client.frame.info.SubjectInfoFrame;
+import client.frame.selection.SelectFrame;
+import client.frame.selection.SendGroupFrame;
 import core.Adminsters;
 import resmgt.UserResource;
+import user.User;
 
 public class ChatInfoPanel extends JPanel {
 
@@ -37,7 +44,15 @@ public class ChatInfoPanel extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				infoFrame.updateInfo(chatToUserName);
+				//infoFrame.updateInfo(chatToUserName);
+				HashSet<User> listUsers = InfoPanel.userSet;
+				List<String> users = new ArrayList<String>();
+ 				for (User user : listUsers) {
+					users.add(user.getUserName());
+				}
+				SelectFrame sendGroupMsg = new SendGroupFrame(users);
+				sendGroupMsg.setVisible(true);
+				
 			}
 		});
 		this.userButton.setIcon(UserResource.getSysIcon("icon-user"));

@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,7 @@ import java.util.TreeMap;
 
 import javax.swing.JPanel;
 
-import com.sun.security.ntlm.Client;
-
-import client.event.EventIPC;
+import client.event.EventGroupSend;
 import client.event.EventSendInputWords;
 import client.event.EventShow;
 import client.event.EventsBridge;
@@ -290,6 +289,21 @@ public class UtilityPanel extends JPanel implements ITickable {
 		}
 		((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
 		((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
+	}
+	
+	/** 群发UI更新 */
+	@SubscribeEvent
+	public void sendGroupMsg(EventGroupSend e) {
+		List<String> users = new ArrayList<String>();
+		users = e.getUsers();
+		
+		for (String string : users) {
+			PanelInfo info = this.getChatPanelInfo(string);
+			if (!info.canUse()) {
+				info.reborn();
+			}
+			((ChatPanel) info.panel).sendGroupMsg(e.getMsg());
+		}
 	}
 
 	/** 切换到空面板 */

@@ -134,7 +134,7 @@ public class ClientProxy extends Proxy implements Runnable {
 				if (tmp.substring(0, 4).equals("test")) {
 					for (int i = 0; i < 1000; i++) {
 						System.out.println("send: " + i);
-						EventsBridge.sendString("Daddy", UOnline.getInstance().getUser("Bevis"));
+						EventsBridge.sendString("message", UOnline.getInstance().getUser("Bevis"));
 						try {
 							Thread.sleep(100);
 						} catch (InterruptedException e1) {
