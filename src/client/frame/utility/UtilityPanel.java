@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.TreeMap;
 
 import javax.swing.JPanel;
 
+import client.event.EventGroupSend;
 import client.event.EventSendInputWords;
 import client.event.EventShow;
 import client.event.EventsBridge;
@@ -281,17 +283,37 @@ public class UtilityPanel extends JPanel implements ITickable {
 	/** 文件接收UI更新 */
 	@SubscribeEvent
 	public void revFile(EventFileRecv.Start e) {
-		// System.out.println("revFileProgress Updating!");
 		PanelInfo info = this.getChatPanelInfo(e.getFrom().getUserName());
 		if (!info.canUse()) {
 			info.reborn();
 		}
-		// if (Bubble.checkFileType(e.getFileName()) == BubbleType.FILE) {
 		((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
 		((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
-		// } else if (Bubble.checkFileType(e.getFileName()) == BubbleType.PICTURE) {
+	}
+	
+	/** 群发UI更新 */
+	@SubscribeEvent
+	public void sendGroupMsg(EventGroupSend e) {
+		List<String> users = new ArrayList<String>();
+		users = e.getUsers();
+		
+		for (String string : users) {
+			PanelInfo info = this.getChatPanelInfo(string);
+			if (!info.canUse()) {
+				info.reborn();
+			}
+			((ChatPanel) info.panel).sendGroupMsg(e.getMsg());
+		}
+	}
 
-		// }
+	/** 切换到空面板 */
+	@SubscribeEvent
+	public void changeToVoid(client.event.EventIPC e) {
+		if (e.state == client.event.EventIPC.SEARCH) {
+			this.currPanel = null;
+			this.revalidate();
+			this.repaint();
+		}
 	}
 
 }

@@ -96,7 +96,7 @@ public class BaseScrollPanel extends JScrollPane {
 		if(fixed==0) {
 			fixed = fixed + 1;
 			System.out.println(((BasePanelButton)content[fixed-1]).getName()+"最新置顶");}
-		else if(((BasePanelButton)content[fixed-1]).getName()!=name) {
+		else if(((BasePanelButton)content[fixed-1]).getName().equals(name)) {
 		fixed = fixed + 1;
 		System.out.println(((BasePanelButton)content[fixed-1]).getName()+"最新置顶");
 	}

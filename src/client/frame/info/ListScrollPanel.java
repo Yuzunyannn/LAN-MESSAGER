@@ -10,7 +10,6 @@ import javax.swing.JScrollPane;
 
 import client.event.EventChatOperation;
 import client.event.EventRecv.EventRecvString;
-import client.event.EventSearchRequest;
 import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.Theme;
@@ -108,7 +107,7 @@ public class ListScrollPanel extends JScrollPane {
 		if(fixed==0) {
 			fixed = fixed + 1;
 			System.out.println(((MemberButton)content[fixed-1]).getMemberName()+"最新置顶");}
-		else if(((MemberButton)content[fixed-1]).getMemberName()!=name) {
+		else if(((MemberButton)content[fixed-1]).getMemberName().equals(name)) {
 		fixed = fixed + 1;
 		System.out.println(((MemberButton)content[fixed-1]).getMemberName()+"最新置顶");
 	}
@@ -179,11 +178,12 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	public void addNewMember(User user) {
-		if (InfoPanel.userSet.contains(user))
-			return;
+		if (InfoPanel.userSet.contains(user)) {
+			Logger.log.impart("该对象已经在聊天列表");
+			return;}
 		InfoPanel.userSet.add(user);
 		p.add(new MemberButton(user.getUserName()));
-
+		Logger.log.impart("该对象成功添加");
 		content = p.getComponents();
 		height += MemberButton.MEMBERBUTTON_HEIGHT;
 		int width = super.getWidth();
@@ -254,7 +254,7 @@ public class ListScrollPanel extends JScrollPane {
 
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.getFrom().getUserName())) {
-				((MemberButton) content[i]).RecvMessage();
+				((MemberButton) content[i]).recvMessage();
 				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
 						+ ((MemberButton) content[i]).count);
 				setTop(((MemberButton) content[i]).getMemberName());
@@ -284,7 +284,7 @@ public class ListScrollPanel extends JScrollPane {
 
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
-				((MemberButton) content[i]).RecvMessage();
+				((MemberButton) content[i]).recvMessage();
 				// ((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
 				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
 						+ ((MemberButton) content[i]).count);
@@ -307,7 +307,7 @@ public class ListScrollPanel extends JScrollPane {
 	/**
 	 * 好友盘专属的函数 好友聊天状态全部还原
 	 */
-	public void ChatStateClear() {
+	public void chatStateClear() {
 		if (state == FRIENDPANEL) {
 			content = p.getComponents();
 			for (Component i : content) {

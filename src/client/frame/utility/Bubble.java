@@ -43,7 +43,7 @@ public class Bubble extends JPanel {
 		} else {
 			this.words.setSize(300, 0);
 		}
-		int lines = this.JlabelSetText(this.words, words);
+		int lines = this.jlabelSetText(this.words, words);
 		h = lines * this.words.getFontMetrics(this.words.getFont()).getHeight();
 		this.words.setSize(new Dimension(300, h));
 		this.rbutton = new RButton(this.words.getText());
@@ -92,7 +92,7 @@ public class Bubble extends JPanel {
 	}
 
 	/** 文字换行 */
-	public int JlabelSetText(JLabel jLabel, String longString) {
+	public int jlabelSetText(JLabel jLabel, String longString) {
 		int lines = 0;
 		StringBuilder builder = new StringBuilder("<html>");
 		char[] chars = longString.toCharArray();

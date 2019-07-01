@@ -95,7 +95,7 @@ public class ChatTextEditPane extends JTextPane implements INBTSerializable<NBTT
 	}
 
 	/** 自动换行的ViewFactory */
-	class WarpViewFactory implements ViewFactory {
+	static class WarpViewFactory implements ViewFactory {
 		final ViewFactory parent;
 
 		public WarpViewFactory(ViewFactory parent) {

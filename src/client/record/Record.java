@@ -23,14 +23,15 @@ import user.User;
 public class Record {
 
 	static private String toRecordString(String str) {
-		String out = "";
+		StringBuffer out =new StringBuffer("") ;
 		for (int i = 0; i < str.length(); i++) {
-			out += (short) str.charAt(i);
+//			out += (short) str.charAt(i);
+			out.append(str.charAt(i));
 		}
-		return out;
+		return out.toString();
 	}
 
-	class RecInfo {
+	static class RecInfo {
 		LinkedList<RecordValue> words = new LinkedList<RecordValue>();
 		NBTTagList nbtList = new NBTTagList();
 		boolean isChange = false;

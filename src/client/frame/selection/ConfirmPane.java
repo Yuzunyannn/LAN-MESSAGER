@@ -1,15 +1,18 @@
 package client.frame.selection;
 
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import client.event.EventGroupSend;
 import client.event.EventsBridge;
 import client.frame.Theme;
 import client.frame.utility.UtilityPanel;
@@ -27,44 +30,40 @@ public class ConfirmPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JButton confirm = new JButton("确认");
 	private JButton cancel = new JButton("取消");
-	private MouseListener listen = new MouseListener() {
-
+	private MouseListener listen = new MouseAdapter() {
+		
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
 			System.out.println(SelectFrame.getSelectedList().size());
 			if (e.getSource() == confirm) {
-				if (SelectFrame.getSelectedList().isEmpty() && SendGroupFrame.getSendText() == "") {
+				if (SelectFrame.getSelectedList().isEmpty() && SendGroupFrame.getSendText().equals("")) {
 					SelectFrame.setChoosable(false);
 				} else {
 					SelectFrame.setChoosable(true);
 				}
-				if (getParent().getParent().getParent().getParent() instanceof SendGroupFrame && SelectFrame.getChoosable()) {
-					Component[] cons = ((SendGroupFrame)getParent().getParent().getParent().getParent()).getContentPane().getComponents();
-					Component[] textCons = ((JPanel)cons[1]).getComponents();
-					SendGroupFrame.setSendText(((JTextField)textCons[0]).getText());
+				if (getParent().getParent().getParent().getParent() instanceof SendGroupFrame
+						&& SelectFrame.getChoosable()) {
+					Component[] cons = ((SendGroupFrame) getParent().getParent().getParent().getParent())
+							.getContentPane().getComponents();
+					Component[] textCons = ((JPanel) cons[1]).getComponents();
+					SendGroupFrame.setSendText(((JTextField) textCons[0]).getText());
 					WordString ws = new WordString(SendGroupFrame.getSendText());
 					List<User> users = new ArrayList<User>();
-					List<String> userList = new ArrayList<String>();
-					userList = SelectFrame.getSelectedList();
+					List<String> userList = new ArrayList<String>(SelectFrame.getSelectedList());
 					for (String string : userList) {
 						users.add(UOnline.getInstance().getUser(string));
 					}
+					EventsBridge.frontendEventHandle.post(new EventGroupSend(userList, ws.getString()));
 					UtilityPanel.sendWordToUsers(users, ws);
 				}
-				if (getParent().getParent().getParent().getParent() instanceof SelectGroupFrame && SelectFrame.getChoosable()) {
+				if (getParent().getParent().getParent().getParent() instanceof SelectGroupFrame
+						&& SelectFrame.getChoosable()) {
 					List<User> users = new ArrayList<User>();
-					List<String> userList = new ArrayList<String>();
-					userList = SelectFrame.getSelectedList();
-					for (String string : userList) {
+					for (String string : SelectFrame.getSelectedList()) {
 						users.add(UOnline.getInstance().getUser(string));
 					}
+
 					MessageGroupCreate GroupMessage = new MessageGroupCreate(users);
 					EventsBridge.groupCreateRequest(GroupMessage);
 				}

@@ -57,7 +57,7 @@ public class FileSenderManager {
 
 	static public boolean hasKey(int key) {
 		for (Entry<Integer, File> k : keys) {
-			if (k.getValue().equals(key))
+			if (k.getKey().equals(key))
 				return true;
 		}
 		return false;

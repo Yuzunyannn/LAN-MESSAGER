@@ -117,7 +117,8 @@ public class InfoPanel extends JPanel {
 		else if (e.optype.equals(EventChatOperation.ADDCHAT)) {
 			/** 此处需要添加对于是否处于好友列表的判断 */
 			if (e.recvpanel.equals(ListScrollPanel.FRIENDPANEL)) {
-				memberField.addNewMember(UOnline.getInstance().getUser(e.username),1);
+				memberField.addNewMember(UOnline.getInstance().getUser(e.username));
+				
 				memberField.setTop(e.username, 1);
 			}
 		}
@@ -138,6 +139,7 @@ public class InfoPanel extends JPanel {
 				} else
 					have = false;
 			if (!have) {
+				Logger.log.impart("添加好友成功");
 				ul.add(new UserClient(e.username));
 				EventsBridge.frontendEventHandle.post(new EventChatOperation(e.username, EventChatOperation.ADDCHAT));
 			}
@@ -155,6 +157,7 @@ public class InfoPanel extends JPanel {
 			if (!have) {
 				Logger.log.impart("并无此好友，删除失败");
 			}
+			else Logger.log.impart("删除成功");
 			// 测试输出ul
 			System.out.print(" 好友列表  ：");
 			for (UserClient tmp : ul) {
@@ -218,6 +221,8 @@ public class InfoPanel extends JPanel {
 			break;
 		case EventIPC.SEARCH:
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -229,12 +234,14 @@ public class InfoPanel extends JPanel {
 	public void APanelChange(int state_a) {
 		switch (state_a) {
 		case EventIPC.FRIENDS:
-			memberField.ChatStateClear();
+			memberField.chatStateClear();
 			break;
 		case EventIPC.SEARCH:
 			searchMemberField.deleteAllMember();
 //				searchField.searchInit();
 			Logger.log.warn("进入搜索盘后焦点失去，无法获得焦点");
+			break;
+		default:
 			break;
 		}
 	}

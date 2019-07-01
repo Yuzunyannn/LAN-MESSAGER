@@ -351,7 +351,7 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 	}
 
 	/** debuginfo输出 */
-	private class DebugInfoMenuItemMouseAdapter extends MouseAdapter {
+	private static class DebugInfoMenuItemMouseAdapter extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			EventDebugInfoOuting debug = new EventDebugInfoOuting();

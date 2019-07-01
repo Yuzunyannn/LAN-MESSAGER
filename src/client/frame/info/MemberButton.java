@@ -182,7 +182,7 @@ public class MemberButton extends JButton {
 	/**
 	 * 收到消息后执行
 	 */
-	public void RecvMessage() {
+	public void recvMessage() {
 		if (isChat) {
 			envelope = true;
 			count = 0;

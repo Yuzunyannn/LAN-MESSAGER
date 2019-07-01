@@ -15,7 +15,7 @@ public class TextFocus extends FocusAdapter {
 	public TextFocus(JTextComponent p, String str) {
 		this.str = str;
 		if (p instanceof JPasswordField)
-			((JPasswordField) p).setEchoChar('好');
+			((JPasswordField) p).setEchoChar('*');
 		this.focusLost(new FocusEvent(p, 0));
 		p.addFocusListener(this);
 	}
@@ -25,7 +25,7 @@ public class TextFocus extends FocusAdapter {
 		String tmp = ((JTextComponent) e.getComponent()).getText();
 		if (tmp.equals(str)) {
 			if (e.getComponent() instanceof JPasswordField) {
-				((JPasswordField) e.getComponent()).setEchoChar('好');
+				((JPasswordField) e.getComponent()).setEchoChar('*');
 			}
 			((JTextComponent) (e.getComponent())).setText("");
 			((JTextComponent) (e.getComponent())).setForeground(Color.black);

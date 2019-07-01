@@ -20,7 +20,7 @@ public ChatScrollPanel() {
 	}
 	
 	/**聊天状态清空*/
-	public void ChatStateClear() {
+	public void chatStateClear() {
 			content = p.getComponents();
 			for (Component i : content) {
 				((ChatListButton) i).isChoose(false);
