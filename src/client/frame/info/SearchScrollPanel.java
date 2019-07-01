@@ -1,7 +1,5 @@
 package client.frame.info;
 
-import java.awt.Component;
-
 import client.event.EventSearchRequest;
 import event.IEventBus;
 import event.SubscribeEvent;

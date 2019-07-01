@@ -23,7 +23,7 @@ public class BaseScrollPanel extends JScrollPane {
 	protected JPanel p;
 	protected Component[] content;
 	private int fixed = 0;
-	static protected HashSet<User> userSet= new HashSet<User>();;
+	static protected HashSet<User> userSet= new HashSet<User>();
 	public BaseScrollPanel() {
 		super();
 		p = new JPanel();
