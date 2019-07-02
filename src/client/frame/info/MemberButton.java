@@ -98,7 +98,8 @@ public class MemberButton extends JButton {
 				}
 
 			}
-
+			@Override
+			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				if (!isChat)
@@ -193,66 +194,7 @@ public class MemberButton extends JButton {
 	}
 }
 
-class UButtonMouse extends MouseAdapter {
-	protected JPopupMenu popmenu;
-	protected JMenuItem item[];
-	protected String username;
-	protected ActionListener ItemMonitor;
 
-	public UButtonMouse(String[] str, ActionListener actionListener) {
-		super();
-		popmenu = new JPopupMenu();
-		item = new JMenuItem[str.length];
-		Border border = BorderFactory.createLineBorder(Theme.COLOR5);
-		ItemMonitor = actionListener;
-		for (int i = 0; i < item.length; i++) {
-			item[i] = new JMenuItem(str[i]);
-			item[i].setFont(Theme.FONT4);
-			item[i].setBackground(Color.WHITE);
-			item[i].setPreferredSize(new Dimension(150, 40));
-			item[i].setHorizontalAlignment(SwingConstants.CENTER);
-			item[i].setBorder(null);
-			item[i].setActionCommand(i + "");
-			item[i].addActionListener(ItemMonitor);
-
-		}
-		popmenu.setBackground(Color.WHITE);
-		popmenu.setBorder(border);
-		// popmenu.setPopupSize(160,200);
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON3) {
-			if (e.isPopupTrigger()) {
-				username = ((MemberButton) e.getSource()).getMemberName();
-				for (int i = 0; i < item.length; i++) {
-					item[i].setActionCommand(username);
-					popmenu.add(item[i]);
-				}
-				popmenu.show(e.getComponent(), e.getX(), e.getY());
-			}
-			System.out.println("右键点击1");
-		}
-
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		super.mouseClicked(e);
-		if (e.getButton() == MouseEvent.BUTTON3) {
-			if (e.isPopupTrigger()) {
-				username = ((MemberButton) e.getSource()).getMemberName();
-				for (int i = 0; i < item.length; i++) {
-					item[i].setActionCommand(username);
-					popmenu.add(item[i]);
-				}
-				popmenu.show(e.getComponent(), e.getX(), e.getY());
-			}
-		}
-	}
-}
 
 class MemberMenuItemMonitor implements ActionListener {
 	@Override
