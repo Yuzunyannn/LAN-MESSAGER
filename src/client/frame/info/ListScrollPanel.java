@@ -296,7 +296,7 @@ public class ListScrollPanel extends JScrollPane {
 				setTop(((MemberButton) content[i]).getMemberName());
 				System.out.println(((MemberButton) content[i]).getMemberName() + ((MemberButton) content[i]).count);
 				if (((MemberButton) content[i]).getIsChat()) {
-					EventsBridge.sendHasRead(e.from);
+//					EventsBridge.sendHasRead(e.from);
 				}
 			}
 		p.removeAll();

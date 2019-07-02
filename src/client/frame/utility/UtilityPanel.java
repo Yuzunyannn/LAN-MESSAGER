@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import javax.swing.JPanel;
 
 import client.event.EventGroupSend;
+import client.event.EventIsShowed;
 import client.event.EventSendInputWords;
 import client.event.EventShow;
 import client.event.EventsBridge;
@@ -236,7 +237,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 //			if(isPerson(e.id)) 
 			{
 				User u = UOnline.getInstance().getUser(e.id);
-				EventsBridge.sendHasRead(u);
+//				EventsBridge.sendHasRead(u);
 			}
 		}
 	}
@@ -265,6 +266,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 	@SubscribeEvent
 	public void debug(client.event.EventDebugInfoOuting e) {
 		e.debufInfos.add("UtilityPanel(" + tick + ")当前板子的id为:" + panelInfo);
+		EventsBridge.frontendEventHandle.post(new EventIsShowed(UOnline.getInstance().getUser("debug")));
 	}
 
 	/** 发送图片or表情 */
