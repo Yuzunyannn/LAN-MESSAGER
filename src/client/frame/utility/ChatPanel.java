@@ -344,4 +344,9 @@ public class ChatPanel extends JPanelUtility {
 		chatInfoPanel = new ChatInfoPanel(chatTo.getUserName());
 	}
 
+	public void displayRead() {
+		// TODO Auto-generated method stub
+		chatDialogPanel.displayRead();
+	}
+
 }

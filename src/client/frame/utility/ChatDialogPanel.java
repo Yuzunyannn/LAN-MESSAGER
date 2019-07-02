@@ -206,4 +206,13 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 		this.revalidate();
 	}
 
+	public void displayRead() {
+		Component[] cons = panel.getComponents();
+		for (Component component : cons) {
+			if (component instanceof ChatBubblePanel) {
+				((ChatBubblePanel)component).setRead();
+			}
+		}
+	}
+
 }

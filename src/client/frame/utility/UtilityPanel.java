@@ -243,11 +243,6 @@ public class UtilityPanel extends JPanel implements ITickable {
 	}
 
 	@SubscribeEvent
-	public void hasRead(client.event.EventIsShowed e) {
-		System.out.println("此处处理消息已读");
-	}
-
-	@SubscribeEvent
 	public void recvString(client.event.EventRecv.EventRecvString e) {
 		this.recvString(e.from, e.sp, e.str);
 	}
@@ -267,6 +262,16 @@ public class UtilityPanel extends JPanel implements ITickable {
 	public void debug(client.event.EventDebugInfoOuting e) {
 		e.debufInfos.add("UtilityPanel(" + tick + ")当前板子的id为:" + panelInfo);
 		EventsBridge.frontendEventHandle.post(new EventIsShowed(UOnline.getInstance().getUser("debug")));
+	}
+	
+	/**已读标记*/
+	@SubscribeEvent
+	public void hasRead(client.event.EventIsShowed e) {
+		PanelInfo info = this.getChatPanelInfo(e.getUser().getUserName());
+		if (!info.canUse()) {
+			info.reborn();
+		}
+		((ChatPanel) info.panel).displayRead();
 	}
 
 	/** 发送图片or表情 */
