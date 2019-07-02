@@ -120,7 +120,7 @@ public class InfoPanel extends JPanel {
 			/** 此处需要添加对于是否处于好友列表的判断 */
 			if (e.recvpanel.equals(ListScrollPanel.FRIENDPANEL)) {
 				memberField.addNewMember(UOnline.getInstance().getUser(e.username));
-				
+
 				memberField.setTop(e.username, 1);
 			}
 		}
@@ -158,8 +158,8 @@ public class InfoPanel extends JPanel {
 					have = false;
 			if (!have) {
 				Logger.log.impart("并无此好友，删除失败");
-			}
-			else Logger.log.impart("删除成功");
+			} else
+				Logger.log.impart("删除成功");
 			// 测试输出ul
 			System.out.print(" 好友列表  ：");
 			for (UserClient tmp : ul) {
@@ -210,6 +210,10 @@ public class InfoPanel extends JPanel {
 
 	public void setUserName(String name) {
 		userField.setName(name);
+	}
+
+	public String getUserName() {
+		return userField.getName();
 	}
 
 	/**

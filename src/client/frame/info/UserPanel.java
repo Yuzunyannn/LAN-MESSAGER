@@ -12,9 +12,10 @@ import client.frame.Theme;
 
 public class UserPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final int USERLENGTH=140;
+	public static final int USERLENGTH = 140;
 	private UserImage img;
 	private JLabel username;
+
 	public UserPanel() {
 		this.setLayout(null);
 		this.setBackground(Theme.COLOR4);
@@ -41,7 +42,6 @@ public class UserPanel extends JPanel {
 		this.repaint();
 		this.revalidate();
 	}
-
 
 	@Override
 	public void paint(Graphics g) {
