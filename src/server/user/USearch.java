@@ -1,6 +1,7 @@
 package server.user;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,10 +31,9 @@ public class USearch implements Runnable {
 	};
 
 	private boolean search(String name) {
-		SearchHelper sh=new SearchHelper();
-		list=(LinkedList<User>)sh.search(UOnline.getInstance().getOnlineUsers(), name);
-		if (list.isEmpty())
-		{
+		SearchHelper sh = new SearchHelper();
+		list = (LinkedList<User>) sh.search(UOnline.getInstance().getOnlineUsers(), name);
+		if (list.isEmpty()) {
 			System.out.println("search helper 没有搜到结果");
 			return false;
 		}
