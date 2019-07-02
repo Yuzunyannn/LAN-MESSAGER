@@ -202,7 +202,21 @@ public class ListScrollPanel extends JScrollPane {
 		} else
 			addNewMember(name);
 	}
-
+	public void addNewMember(MemberButton tmp) {
+		User user=UOnline.getInstance().getUser(tmp.getMemberName());
+		if (InfoPanel.userSet.contains(user)) {
+			Logger.log.impart("该对象已经在聊天列表");
+			return;
+		}
+		InfoPanel.userSet.add(user);
+		p.add(tmp);
+		Logger.log.impart("该对象成功添加");
+		content = p.getComponents();
+		height += MemberButton.MEMBERBUTTON_HEIGHT;
+		int width = super.getWidth();
+		standardHeight(super.getPreferredSize());
+		p.setPreferredSize(new Dimension(width, height));
+	}
 	public void addNewMember(User user) {
 		if (InfoPanel.userSet.contains(user)) {
 			Logger.log.impart("该对象已经在聊天列表");
@@ -372,10 +386,10 @@ public class ListScrollPanel extends JScrollPane {
 
 	@SubscribeEvent
 	public void onShowGroup(EventGroupInfoGet e) {
-		User tmp=new UserClient(e.sp.specialName);
-		/**由于userSet是user类型，(不确定是否可以从Uonline中获取)暂时此处新建一个userclient*/
-			addNewMember(tmp,e.sp.getId());
-			setTop(tmp.getUserName());
+		User user=UOnline.getInstance().getUser(e.sp.specialName);
+		
+			addNewMember(new GroupButton(e.sp.specialName, e.sp.getId(), e.users, e.boss));
+			setTop(user.getUserName());
 			this.refresh();
 	}
 

@@ -12,14 +12,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import client.frame.Theme;
+
 public class TextPanel extends JPanel {
+	public static final  int TEXTFIELD_WIDTH=190;
+	public static final  int TEXTFIELD_HEIGHT=36;
 private JButton button;
 private JTextField textField;
+
 	public TextPanel() {
 		super();
-	int w=	400;
-	int h=400;
-	Point p=this.getLocation();
+	int w=190;
+	int h=36;
 	this.setLayout(null);
 	textField=new JTextField("aacs");
 	button=new JButton();
@@ -29,14 +33,15 @@ private JTextField textField;
 			System.out.println("点击按钮");
 		}
 	});
-	textField.setBounds(0, 0, w-20, h-30);
-	button.setBounds( w-20, 0, 20, h-30);
+	textField.setBounds(3, 3, w-26, h-6);
+	button.setBounds( w-26, 3, 25, h-6);
 	button.setBackground(Color.white);
-	textField.setBackground(Color.yellow);
-	this.setBackground(Color.gray);
-//	this.add(button);
+	textField.setBackground(Theme.COLOR4);
+	this.setBackground(Theme.COLOR5);
+	this.add(button);
+	button.setBorder(null);
 	button.setOpaque(false);
-	textField.setOpaque(false);
+	textField.setOpaque(true);
 	textField.setBorder(null);
 	this.add(textField);
 
@@ -48,14 +53,17 @@ private JTextField textField;
 		Color tmp=g2d.getColor();
 		int w=	this.getWidth();
 		int h=this.getHeight();
-		g2d.setColor(Color.green);
-		g2d.fillRoundRect(0, 0, w+3, h, 3, 3);
+		g2d.setColor(textField.getBackground());
+		g2d.fillRoundRect(0, 0, w-3, h, 3, 3);
 		g2d.setColor(Color.RED);
-		g2d.fillOval(w-20, h/2-10, 20, 20);
+		g2d.fillOval( w-23, h/2-10, 20, 20);
 		g2d.setColor(tmp);
 	}
 	public JTextField getTextField() {
 		return textField;
+	}
+	public JButton getButton() {
+		return button;
 	}
 	
 //	public static void main (String[] args) {

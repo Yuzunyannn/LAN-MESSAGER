@@ -32,10 +32,12 @@ import user.User;
 public class SearchPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField search;
+	private TextPanel textpanel;
 	private SearchPanel sptmp = this;
 	public static final int SEARCH_FIELD_LENGTH = 80;
 	public static final String INFO = "单行输入,回车键搜索";
 	public static final String[] FUCTIONLIST = { "发起群聊", "群发消息" };
+	public static final String[] SETLIST = { "注销" };
 	boolean entry = false;
 
 	private KeyListener keyListener=new KeyListener(){@Override public void keyPressed(KeyEvent e){int key=e.getKeyCode();if(key=='\n'){EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
@@ -55,7 +57,8 @@ public class SearchPanel extends JPanel {
 		this.setMinimumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, SEARCH_FIELD_LENGTH));
 		this.setMaximumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, SEARCH_FIELD_LENGTH));
 		this.setBackground(Theme.COLOR5);
-		search = new RTextField();
+		textpanel=new TextPanel();
+		search = textpanel.getTextField();
 		search.setFont(Theme.FONT3);
 		search.setFocusable(entry);
 
@@ -95,21 +98,13 @@ public class SearchPanel extends JPanel {
 			}
 		});
 
-		JButton b1 = new JButton() {
-			@Override
-			public void paint(Graphics g) {
-				super.paint(g);
-				final int x = 5;
-				g.drawLine(x, x, x + 20, x + 20);
-				g.drawLine(x + 20, x, x, x + 20);
-			}
-		};
-		JButton b2 = new JButton();
 
+		JButton b1 =textpanel.getButton();
+		JButton b2 = new JButton();
+		JButton b3 = new JButton();
 		UButtonMouse mouse=new UButtonMouse(FUCTIONLIST,new fuctionListListener()) {
 			@Override
 			protected void popupShow(MouseEvent e){
-	
 					for (int i = 0; i < item.length; i++) {
 						popmenu.add(item[i]);
 					}
@@ -119,13 +114,10 @@ public class SearchPanel extends JPanel {
 			public void mousePressed(MouseEvent e) {
 
 					popupShow(e);
-				
 			}
 				@Override
 				public void mouseReleased(MouseEvent e) {
 						popupShow(e);
-					
-
 				}
 
 		};
@@ -140,27 +132,39 @@ public class SearchPanel extends JPanel {
 				// 测试
 				Logger.log.impart("点击按钮切换时的测试");
 				search.setBackground(Theme.COLOR4);
+				
 			}
 		};
 		b1.addMouseListener(mb);
+		b3.addMouseListener(new UButtonMouse(SETLIST, new SetListListener(),MouseEvent.BUTTON1) {
+			@Override
+			protected void popupShow(MouseEvent e) {
+
+					for (int i = 0; i < item.length; i++) {
+						item[i].setActionCommand(username);
+						popmenu.add(item[i]);
+					}
+					popmenu.show(e.getComponent(), 10, 20);
+				}
+
+		});
 		search.addKeyListener(keyListener);
 		search.setForeground(Color.GRAY);
-		search.setSize(190, 36);
-		search.setLocation(10, 20);
+		textpanel.setBounds(10,20,190,36);
 		search.setText(INFO);
-		search.addFocusListener(new DefaultFocusListener(INFO, search));
+		search.addFocusListener(new DefaultFocusListener(INFO, textpanel));
 		int buttonsize = 30;
-		search.setLayout(null);
-		b1.setLocation(0,0);
-		search.add(b1);
-		b1.setVisible(true);
-		b1.setSize(buttonsize, buttonsize);
-		b1.setLocation(220, 23);
-		b2.setSize(buttonsize, buttonsize);
-		b2.setLocation(260, 23);
-		this.add(b1);
+//		b1.setSize(buttonsize, buttonsize);
+//		b1.setLocation(220, 23);
+//		b2.setSize(buttonsize, buttonsize);
+//		b2.setLocation(260, 23);
+
+		b2.setBounds(220, 23, buttonsize, buttonsize);
+		b3.setBounds(260,23,buttonsize,buttonsize);
 		this.add(b2);
-		this.add(search);
+		this.add(b3);
+		this.add(textpanel);
+//		this.add(search);
 
 	}
 
@@ -172,13 +176,10 @@ public class SearchPanel extends JPanel {
 		search.setFocusable(entry);
 
 	}
-
 	public void initEvent(IEventBus bus) {
 		bus.register(this);
 	}
-
 }
-
 class fuctionListListener implements ActionListener {
 
 	@Override
@@ -191,7 +192,6 @@ class fuctionListListener implements ActionListener {
 		}
 		/** 群聊 */
 		if (temp.equals(str[0])) {
-			
 			SelectGroupFrame sf=new SelectGroupFrame(ulist, "群聊");
 			Logger.log.impart(str[0]);
 		}
@@ -200,38 +200,47 @@ class fuctionListListener implements ActionListener {
 			SendGroupFrame sgf=new SendGroupFrame(ulist);
 			Logger.log.impart(str[1]);
 		}
-
 	}
-
 }
-
-class DefaultFocusListener implements FocusListener {
-	private String info;
-	private JTextField textfield;
-
-	public DefaultFocusListener(String info, JTextField textfield) {
-		this.info = info;
-		this.textfield = textfield;
-
-	}
+class SetListListener implements ActionListener {
 
 	@Override
+	public void actionPerformed(ActionEvent e) {
+		String[] str = SearchPanel.SETLIST;
+		String temp = ((JMenuItem) e.getSource()).getText();
+		
+		/** 注销 */
+		if (temp.equals(str[0])) {
+			
+			Logger.log.impart(str[0]);
+		}
+	
+	}
+}
+class DefaultFocusListener implements FocusListener {
+	private String info;
+	private TextPanel textfield;
+
+	public DefaultFocusListener(String info, TextPanel textfield) {
+		this.info = info;
+		this.textfield = textfield;
+	}
+	@Override
 	public void focusGained(FocusEvent e) {
-		String temp = textfield.getText();
+		String temp = textfield.getTextField().getText();
 		if (temp.equals(info)) {
-			textfield.setText(null);
-			textfield.setBackground(Theme.COLOR0);
-			textfield.setForeground(Color.BLACK);
+			textfield.getTextField().setText(null);
+			textfield.getTextField().setBackground(Theme.COLOR0);
+			textfield.getTextField().setForeground(Color.BLACK);
 
 		}
 	}
-
 	@Override
 	public void focusLost(FocusEvent e) {
-		String temp = textfield.getText();
+		String temp = textfield.getTextField().getText();
 		if (temp.equals("")) {
-			textfield.setForeground(Color.GRAY);
-			textfield.setText(info);
+			textfield.getTextField().setForeground(Color.GRAY);
+			textfield.getTextField().setText(info);
 		}
 
 	}
