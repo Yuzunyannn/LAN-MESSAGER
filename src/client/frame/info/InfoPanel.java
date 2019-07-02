@@ -121,7 +121,9 @@ public class InfoPanel extends JPanel {
 		else if (e.optype.equals(EventChatOperation.ADDCHAT)) {
 			/** 此处需要添加对于是否处于好友列表的判断 */
 			if (e.recvpanel.equals(ListScrollPanel.FRIENDPANEL)) {
+				if(!e.username.contains("#G"))
 				memberField.addNewMember(UOnline.getInstance().getUser(e.username));
+				
 				memberField.setTop(e.username, 1);
 			}
 		}
