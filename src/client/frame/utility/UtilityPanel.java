@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import javax.swing.JPanel;
 
 import client.event.EventGroupSend;
+import client.event.EventIsShowed;
 import client.event.EventSendInputWords;
 import client.event.EventShow;
 import client.event.EventsBridge;
@@ -232,7 +233,18 @@ public class UtilityPanel extends JPanel implements ITickable {
 	public void changeChat(EventShow e) {
 		if (e.toolId.equals(UtilityPanel.TOOLID_CHATING)) {
 			this.toChat(e.id);
+//判断是个人不是群组	
+//			if(isPerson(e.id)) 
+			{
+				User u = UOnline.getInstance().getUser(e.id);
+//				EventsBridge.sendHasRead(u);
+			}
 		}
+	}
+
+	@SubscribeEvent
+	public void hasRead(client.event.EventIsShowed e) {
+		System.out.println("此处处理消息已读");
 	}
 
 	@SubscribeEvent
@@ -254,6 +266,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 	@SubscribeEvent
 	public void debug(client.event.EventDebugInfoOuting e) {
 		e.debufInfos.add("UtilityPanel(" + tick + ")当前板子的id为:" + panelInfo);
+		EventsBridge.frontendEventHandle.post(new EventIsShowed(UOnline.getInstance().getUser("debug")));
 	}
 
 	/** 发送图片or表情 */
@@ -290,13 +303,13 @@ public class UtilityPanel extends JPanel implements ITickable {
 		((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
 		((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
 	}
-	
+
 	/** 群发UI更新 */
 	@SubscribeEvent
 	public void sendGroupMsg(EventGroupSend e) {
 		List<String> users = new ArrayList<String>();
 		users = e.getUsers();
-		
+
 		for (String string : users) {
 			PanelInfo info = this.getChatPanelInfo(string);
 			if (!info.canUse()) {

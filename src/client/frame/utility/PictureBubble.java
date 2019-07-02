@@ -1,6 +1,7 @@
 package client.frame.utility;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.JButton;
 
@@ -23,6 +24,7 @@ public class PictureBubble extends Bubble {
 //		}
 		this.picButton = new JButton();
 		this.picButton.setIcon(UserResource.getMeme("meme-1"));
+		this.picButton.setBackground(Color.white);
 		this.picButton.setBorderPainted(false);
 		this.setLayout(new BorderLayout());
 		this.add(this.picButton, BorderLayout.CENTER);
