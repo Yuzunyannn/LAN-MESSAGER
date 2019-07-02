@@ -37,6 +37,7 @@ public class MemberButton extends JButton {
 	public int count;
 	private String toolId;
 	MouseAdapter mouse;
+	private boolean isFixed=false;
 	// 显示的信封开闭，true开，false闭
 	private boolean envelope;
 	// 是否正在与该用户聊天
@@ -179,6 +180,9 @@ public class MemberButton extends JButton {
 		this.addMouseListener(mouse);
 
 	}
+	public void fixedState(boolean state) {
+		isFixed=state;
+	}
 	public void envelopechange() {
 		if(count!=0)
 			envelope=false;
@@ -208,6 +212,8 @@ public class MemberButton extends JButton {
 		if (isChat)
 			g.setColor(Theme.COLOR3.darker());
 
+		else if(isFixed)
+			g.setColor(Color.GRAY);
 		else
 			g.setColor(getBackground());
 		g.fillRect(0, 0, width, height);

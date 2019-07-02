@@ -1,5 +1,6 @@
 package client.frame.info;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -78,7 +79,27 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		this.refresh();
 	}
-
+/**设置置顶用的settop*/
+	public void setTop(String name,boolean isfix) {
+		int temp;
+		temp = getMember(name);
+		if (temp == -1 || temp <= fixed - 1)
+			return;
+		Component tempbutton;
+		tempbutton = content[temp];
+		((MemberButton)tempbutton).fixedState(true);
+		for (int i = temp; i > fixed; i--) {
+			content[i] = content[i - 1];
+		}
+		content[fixed] = tempbutton;
+		Component[] re = content;
+		p.removeAll();
+		content = re;
+		for (Component i : content) {
+			p.add(i);
+		}
+		this.refresh();
+	}
 	/** 把成员置顶 */
 	public void setTop(String name) {
 		int temp;
@@ -87,7 +108,7 @@ public class ListScrollPanel extends JScrollPane {
 			return;
 		Component tempbutton;
 		tempbutton = content[temp];
-
+	
 		for (int i = temp; i > fixed; i--) {
 			content[i] = content[i - 1];
 		}
@@ -105,7 +126,7 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	public void setFixed(String name) {
-		setTop(name);
+		setTop(name,true);
 		if (fixed == 0) {
 			fixed = fixed + 1;
 			System.out.println(((MemberButton) content[fixed - 1]).getMemberName() + "最新置顶");
@@ -127,6 +148,7 @@ public class ListScrollPanel extends JScrollPane {
 				return;
 			}
 			Component temp = content[tmpIndex];
+			((MemberButton)temp).fixedState(false);
 			for (int i = tmpIndex; i < fixed - 1; i++) {
 				content[i] = content[i + 1];
 			}

@@ -3,11 +3,14 @@ package client.frame.info;
 import java.awt.Component;
 
 import client.event.EventChatOperation;
+import client.event.EventGroupInfoGet;
 import client.event.EventShow;
 import client.event.EventsBridge;
 import client.event.EventRecv.EventRecvString;
+import client.user.UserClient;
 import event.IEventBus;
 import event.SubscribeEvent;
+import user.UOnline;
 import user.User;
 
 public class ChatScrollPanel extends BaseScrollPanel {
@@ -60,9 +63,16 @@ public ChatScrollPanel() {
 		}
 		
 	}
+	
 	@SubscribeEvent
 	public void onCountFile(transfer.EventFileRecv.Start e) {
 		countChange(e.getFrom());
+	}
+	@SubscribeEvent
+	/**未完成*/
+	public void onShowGroup(EventGroupInfoGet e) {
+		User group=UOnline.getInstance().getUser(e.sp.specialName);
+		
 	}
 
 	@SubscribeEvent
