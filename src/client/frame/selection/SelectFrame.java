@@ -36,6 +36,7 @@ public class SelectFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private SelectPane selectPane;
+	private int type;
 	private JTextField searchField = new JTextField("搜索用户");
 	private JButton revertButton = new JButton("全选");
 	private JPanel searchPanel = new JPanel();
@@ -95,11 +96,16 @@ public class SelectFrame extends JFrame {
 				selectUsers.add(str);
 			}
 		}
+		this.setVisible(false);
 		this.setTitle(title);
 		this.setSize(400, 500);
 		this.setResizable(false);
 		this.setAlwaysOnTop(true);
 		this.setContentPane(new JPanel());
+		this.type = type;
+		if (this.type == VIEW) {
+			revertButton.setText("显示全部");
+		}
 		choosable = false;
 		selectPane = new SelectPane(selectUsers, type);
 		searchField.setSize(new Dimension(100, 40));
@@ -136,7 +142,7 @@ public class SelectFrame extends JFrame {
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				if (searchField.getText().equals("")) {
+				if (searchField.getText().equals("")&&type!=VIEW) {
 					revertButton.setText("全选");
 				} else {
 					List<String> u = new ArrayList<String>();
@@ -145,7 +151,12 @@ public class SelectFrame extends JFrame {
 							u.add(string);
 						}
 					}
-					selectPane.updatePanel(u);
+					if (type == VIEW) {
+						selectPane.updatePanel(u,VIEW);
+					} else {
+						selectPane.updatePanel(u,CHOOSE);
+					}
+
 				}
 			}
 
@@ -158,7 +169,11 @@ public class SelectFrame extends JFrame {
 						u.add(string);
 					}
 				}
-				selectPane.updatePanel(u);
+				if (type == VIEW) {
+					selectPane.updatePanel(u,VIEW);
+				} else {
+					selectPane.updatePanel(u,CHOOSE);
+				}
 			}
 
 			@Override
@@ -172,8 +187,13 @@ public class SelectFrame extends JFrame {
 				if (revertButton.getText().equals("显示全部")) {
 					searchField.setText("搜索用户");
 					searchField.setForeground(Theme.COLOR9);
-					selectPane.updatePanel(selectUsers);
-					revertButton.setText("全选");
+					if (type == VIEW) {
+						selectPane.updatePanel(selectUsers,VIEW);
+					} else {
+						selectPane.updatePanel(selectUsers, CHOOSE);
+						revertButton.setText("全选");
+					}
+					
 				} else if (revertButton.getText().equals("全选")) {
 					for (String string : selectUsers) {
 						if (!selectedList.contains(string)) {
@@ -222,7 +242,7 @@ public class SelectFrame extends JFrame {
 
 			}
 		});
-		this.setVisible(true);
+		// this.setVisible(true);
 	}
 
 	/** 获取被选中的用户们（在获取前一定要判断choosable） */

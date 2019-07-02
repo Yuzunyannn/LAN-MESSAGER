@@ -3,9 +3,7 @@ package client.frame.utility;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -13,17 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import client.frame.LoginFrame;
-import client.frame.MainFrame;
-import client.frame.Restart;
 import client.frame.Theme;
-import client.frame.info.InfoPanel;
 import client.frame.info.SubjectInfoFrame;
 import client.frame.selection.SelectFrame;
-import client.frame.selection.SendGroupFrame;
 import core.Adminsters;
 import resmgt.UserResource;
-import user.User;
 
 public class ChatInfoPanel extends JPanel {
 
@@ -34,11 +26,18 @@ public class ChatInfoPanel extends JPanel {
 	private JLabel userName = new JLabel("None");
 	private JButton userButton;
 	private String chatToUserName = "";
-	private SubjectInfoFrame infoFrame = new SubjectInfoFrame(chatToUserName);
+	//private SubjectInfoFrame infoFrame;
+	private SelectFrame group;
 
 	public ChatInfoPanel(String chatTo) {
 		// TODO Auto-generated constructor stub
 		this.chatToUserName = Adminsters.userToInfo(chatTo);
+		if (chatToUserName.indexOf("#G") == 0) {
+			List<String> users = new ArrayList<String>();
+			group = new SelectFrame(users,"群成员",SelectFrame.VIEW);
+		} else {
+			//infoFrame = new SubjectInfoFrame(chatToUserName);
+		}
 		this.setBackground(Theme.COLOR0);
 		this.setLayout(new BorderLayout());
 		this.userName.setText("  " + this.chatToUserName);
@@ -47,7 +46,11 @@ public class ChatInfoPanel extends JPanel {
 		this.userButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				infoFrame.setVisible(true);
+				if (chatToUserName.indexOf("#G") == 0) {
+					group.setVisible(true);
+				} else {
+					//infoFrame.setVisible(true);
+				}
 			}
 		});
 		this.userButton.setIcon(UserResource.getSysIcon("icon-user"));
@@ -59,6 +62,11 @@ public class ChatInfoPanel extends JPanel {
 		this.setBackground(Theme.COLOR2);
 		this.setBorder(BorderFactory.createLineBorder(Theme.COLOR6, 1));
 		this.setVisible(true);
+	}
+
+	public void addGroupMemeber(List<String> users) {
+		// TODO Auto-generated method stub
+		group = new SelectFrame(users,"群成员",SelectFrame.VIEW);
 	}
 
 }

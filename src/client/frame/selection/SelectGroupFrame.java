@@ -68,7 +68,7 @@ public class SelectGroupFrame extends SelectFrame {
 		// TODO Auto-generated constructor stub
 		this.getContentPane().add(confirmPane);
 		this.getContentPane().setLayout(this.layout);
-		
+		this.setVisible(true);
 	}
 
 }

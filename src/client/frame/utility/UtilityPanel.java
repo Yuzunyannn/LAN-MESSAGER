@@ -240,6 +240,21 @@ public class UtilityPanel extends JPanel implements ITickable {
 			}
 		}
 	}
+	
+	@SubscribeEvent
+	public void checkGroup(EventShow e) {
+		if (e.id.indexOf("#G") == 0) {
+			List<String> users = new ArrayList<String>();
+			for (User user : e.userlist) {
+				users.add(user.getUserName());
+			}
+			PanelInfo info = this.getChatPanelInfo(e.id);
+			if (!info.canUse()) {
+				info.reborn();
+			}
+			((ChatPanel) info.panel).addGroupMemeber(users);
+		}
+	}
 
 	@SubscribeEvent
 	public void recvString(client.event.EventRecv.EventRecvString e) {

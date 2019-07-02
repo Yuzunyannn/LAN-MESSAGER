@@ -120,7 +120,7 @@ public class SendGroupFrame extends SelectFrame {
 		this.add(textPanel);
 		this.add(confirmPane);
 		this.setLayout(layout);
-
+		this.setVisible(true);
 	}
 
 }

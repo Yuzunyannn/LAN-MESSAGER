@@ -345,8 +345,11 @@ public class ChatPanel extends JPanelUtility {
 	}
 
 	public void displayRead() {
-		// TODO Auto-generated method stub
 		chatDialogPanel.displayRead();
+	}
+
+	public void addGroupMemeber(List<String> users) {
+		chatInfoPanel.addGroupMemeber(users);
 	}
 
 }
