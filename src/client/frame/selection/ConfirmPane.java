@@ -5,7 +5,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -17,7 +16,6 @@ import client.event.EventsBridge;
 import client.frame.Theme;
 import client.frame.utility.UtilityPanel;
 import client.word.WordString;
-import event.Event;
 import user.UOnline;
 import user.User;
 import user.message.MessageGroupCreate;
@@ -46,7 +44,7 @@ public class ConfirmPane extends JPanel {
 						&& SelectFrame.getChoosable()) {
 					Component[] cons = ((SendGroupFrame) getParent().getParent().getParent().getParent())
 							.getContentPane().getComponents();
-					Component[] textCons = ((JPanel) cons[1]).getComponents();
+					Component[] textCons = ((JPanel) cons[2]).getComponents();
 					SendGroupFrame.setSendText(((JTextField) textCons[0]).getText());
 					WordString ws = new WordString(SendGroupFrame.getSendText());
 					List<User> users = new ArrayList<User>();

@@ -1,6 +1,7 @@
 package client.frame.selection;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -18,8 +19,6 @@ import javax.swing.JViewport;
 import client.frame.Theme;
 import resmgt.UserResource;
 
-
-
 public class SelectPane extends JScrollPane {
 	/**
 	 * 
@@ -33,14 +32,18 @@ public class SelectPane extends JScrollPane {
 		super(new JPanel());
 		panel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
 		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
+		this.panel.setLayout(new GridBagLayout());
+		addItems(users, type);
+	}
+
+	private void addItems(List<String> users, int type) {
 		JPanel tmp;
 		JCheckBox checkBox;
 		JButton button;
 		JLabel label;
-		this.panel.setLayout(new GridBagLayout());
 		GridBagConstraints con = new GridBagConstraints();
 		con.fill = GridBagConstraints.HORIZONTAL;
-		con.insets = new Insets(0,0,0,0);
+		con.insets = new Insets(0, 0, 0, 0);
 		con.gridx = 0;
 		con.weightx = 100;
 		con.ipady = 40;
@@ -56,6 +59,9 @@ public class SelectPane extends JScrollPane {
 				tmp.add(button, BorderLayout.EAST);
 			} else if (type == SelectFrame.CHOOSE) {
 				checkBox = createCheckBox(string);
+				if (SelectFrame.getSelectedList().contains(string)) {
+					checkBox.setSelected(true);
+				}
 				tmp.add(checkBox, BorderLayout.EAST);
 			}
 			tmp.add(label, BorderLayout.WEST);
@@ -63,6 +69,28 @@ public class SelectPane extends JScrollPane {
 			panel.add(tmp, con);
 			row++;
 		}
+	}
+
+	public void updatePanel(List<String> users) {
+		panel.removeAll();
+		this.addItems(users, SelectFrame.CHOOSE);
+		panel.revalidate();
+		panel.repaint();
+	}
+
+	public void checkAll(boolean isTrue) {
+		Component[] cons = panel.getComponents();
+		for (Component component : cons) {
+			if (component instanceof JPanel) {
+				Component[] subCons = ((JPanel) component).getComponents();
+				((JCheckBox) subCons[0]).setSelected(isTrue);
+			}
+			((JPanel)component).revalidate();
+			((JPanel)component).repaint();
+
+		}
+		panel.revalidate();
+		panel.repaint();
 
 	}
 
