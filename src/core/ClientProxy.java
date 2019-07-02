@@ -35,9 +35,6 @@ public class ClientProxy extends Proxy implements Runnable {
 	/** 登录窗体 */
 	LoginFrame logFrame = null;
 
-	/** 对于server的连接 */
-	Connection toServer = null;
-
 	@Override
 	public void init() {
 		super.init();
@@ -81,14 +78,13 @@ public class ClientProxy extends Proxy implements Runnable {
 	@Override
 	public void run() {
 		try {
-			if (toServer == null) {
-				toServer = new Connection(Core.SERVER_IP, Core.SERVER_PORT);
-				if (!RecvDealValidation.check(toServer)) {
-					toServer = null;
+			if (UserClient.toServer == null) {
+				UserClient.toServer = new Connection(Core.SERVER_IP, Core.SERVER_PORT);
+				if (!RecvDealValidation.check(UserClient.toServer)) {
+					UserClient.toServer = null;
 					Logger.log.warn("服务器拒绝您的登录！");
 					return;
 				}
-				UserClient.toServer = toServer;
 			}
 			String username = logFrame.getUserName();
 			if (username == null || username.isEmpty()) {
@@ -153,6 +149,7 @@ public class ClientProxy extends Proxy implements Runnable {
 
 	@SubscribeEvent
 	public void onLogout(client.event.EventLogout e) {
+		UserClient.toServer.close();
 		UserClient.toServer = null;
 		logFrame.setHint("");
 		logFrame.setVisible(true);

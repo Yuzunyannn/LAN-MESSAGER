@@ -1,6 +1,5 @@
 package client.event;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import event.Event;

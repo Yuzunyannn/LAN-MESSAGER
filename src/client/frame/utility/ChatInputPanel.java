@@ -45,7 +45,7 @@ import user.UOnline;
 public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagList> {
 
 	private static final long serialVersionUID = 1L;
-	//private static boolean test = false;
+	// private static boolean test = false;
 
 	/** 输入框的上下边距 */
 	public static final int EDIT_MARGIN = 35;
@@ -170,8 +170,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		scroll.setVerticalScrollBar(bar);
 		scroll.setBorder(null);
 		this.add(scroll);
-		//this.setBorder(null);
-		
+		// this.setBorder(null);
+
 		// 添加发送按钮
 		JButton button = new JButton("发送");
 		button.setFont(new Font("黑体", 0, 16));// 这句设置字体，在运行前，会发白一下？
@@ -275,8 +275,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 			else {
 				for (Word word : words) {
 					if (word.id == Word.STRING) {
-						if (word.toString().length()>1232) {
-							JOptionPane.showMessageDialog(this.getParent().getParent(), "输入字符数量超出限制");
+						if (word.toString().length() > 140) {
+							JOptionPane.showMessageDialog(this.getParent().getParent(), "输入字符数量超出140");
 							return;
 						}
 					}

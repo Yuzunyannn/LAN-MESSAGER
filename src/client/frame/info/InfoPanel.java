@@ -16,6 +16,7 @@ import client.event.EventSearchRequest;
 import client.event.EventULChange;
 import client.event.EventsBridge;
 import client.frame.Theme;
+import client.record.Record;
 import client.user.UserClient;
 import event.IEventBus;
 import event.SubscribeEvent;
@@ -57,10 +58,10 @@ public class InfoPanel extends JPanel {
 		userField.setPreferredSize(new Dimension(0, UserPanel.USERLENGTH));
 		searchField.setPreferredSize(new Dimension(0, SearchPanel.SEARCH_FIELD_LENGTH));
 		// 好友测试用
-		ul.add(new UserClient("lyl"));
-		ul.add(new UserClient("ycy"));
-		ul.add(new UserClient("ssj"));
-		ul.add(new UserClient("myk"));
+//		ul.add(new UserClient("lyl"));
+//		ul.add(new UserClient("ycy"));
+//		ul.add(new UserClient("ssj"));
+//		ul.add(new UserClient("myk"));
 	}
 
 	// 事件注册
@@ -110,8 +111,11 @@ public class InfoPanel extends JPanel {
 	public void onChatOperator(EventChatOperation e) {
 		if (e.optype.equals(EventChatOperation.FIXEDCHAT))
 			memberField.setFixed(e.username);
-		else if (e.optype.equals(EventChatOperation.DELETECHAT))
+		else if (e.optype.equals(EventChatOperation.DELETECHAT)) {
+			//删除聊天记录
+			Record.deleteRecord(e.username);
 			memberField.deductMember(UOnline.getInstance().getUser(e.username));
+		}
 		else if (e.optype.equals(EventChatOperation.CANELFIXEDCHAT))
 			memberField.canelFixed(e.username);
 		else if (e.optype.equals(EventChatOperation.ADDCHAT)) {
@@ -158,6 +162,7 @@ public class InfoPanel extends JPanel {
 				Logger.log.impart("并无此好友，删除失败");
 			}
 			else Logger.log.impart("删除成功");
+			
 			// 测试输出ul
 			System.out.print(" 好友列表  ：");
 			for (UserClient tmp : ul) {

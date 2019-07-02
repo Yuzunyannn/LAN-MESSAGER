@@ -3,6 +3,7 @@ package client.frame.utility;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import client.frame.LoginFrame;
+import client.frame.MainFrame;
+import client.frame.Restart;
 import client.frame.Theme;
 import client.frame.info.InfoPanel;
 import client.frame.info.SubjectInfoFrame;
@@ -43,15 +47,24 @@ public class ChatInfoPanel extends JPanel {
 		this.userButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				//infoFrame.updateInfo(chatToUserName);
 				HashSet<User> listUsers = InfoPanel.userSet;
 				List<String> users = new ArrayList<String>();
  				for (User user : listUsers) {
 					users.add(user.getUserName());
 				}
+//				List<String> users = new ArrayList<String>();
+//				for (int i = 0; i < 10; i++) {
+//					if (i == 9) {
+//						users.add("ycy");
+//					} else {
+//						users.add("lyl");
+//					}
+//				
+//				}
 				SelectFrame sendGroupMsg = new SendGroupFrame(users);
 				sendGroupMsg.setVisible(true);
+				
+				Restart.restartApplication();
 				
 			}
 		});

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import client.user.UserClient;
 import core.Core;
 import nbt.NBTTagCompound;
 import resmgt.ResourceInfo;
@@ -49,6 +50,7 @@ public class RecordManagement implements ITickable {
 
 	@Override
 	public int update() {
+		if(UserClient.toServer==null)return ITickable.SUCCESS;
 		tick++;
 		if (tick % (20 * 5) == 0) {
 			Iterator<Entry<User, Record>> iter = records.entrySet().iterator();
