@@ -134,7 +134,6 @@ public class BaseScrollPanel extends JScrollPane {
 		for (int i = 0; i < content.length; i++) {
 			temp = (BasePanelButton) content[i];
 			if (temp.getName().equals(name)) {
-				// System.out.println(i);
 				return i;
 
 			}

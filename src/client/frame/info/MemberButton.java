@@ -95,7 +95,6 @@ public class MemberButton extends JButton {
 						}
 						popmenu.show(e.getComponent(), e.getX(), e.getY());
 					}
-					System.out.println("右键点击2");
 				}
 
 			}
@@ -163,7 +162,6 @@ public class MemberButton extends JButton {
 						}
 						popmenu.show(e.getComponent(), e.getX(), e.getY());
 					}
-					System.out.println("右键点击2");
 				}
 
 			}

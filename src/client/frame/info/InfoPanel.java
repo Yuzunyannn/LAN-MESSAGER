@@ -3,6 +3,7 @@ package client.frame.info;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -21,6 +22,7 @@ import client.user.UserClient;
 import event.IEventBus;
 import event.SubscribeEvent;
 import log.Logger;
+import user.SearchHelper;
 import user.UOnline;
 import user.User;
 import user.message.MUSSearch;
@@ -40,6 +42,9 @@ public class InfoPanel extends JPanel {
 	private int state;
 	private LinkedList<UserClient> ul;
 	static public HashSet<User> userSet = new HashSet<User>();
+	// 上一次搜索结果
+	private String lastSearch = "";
+	private HashSet<User> searchSet = new HashSet<User>();
 
 	public InfoPanel() {
 		this.setBackground(Theme.COLOR5);
@@ -181,9 +186,18 @@ public class InfoPanel extends JPanel {
 			remoteSearch = false;
 		else {
 			remoteSearch = true;
-			for (int i = 0; i < e.name.size(); i++)
-				searchMemberField.addNewMember(e.name.get(i), remoteSearch);
-
+			Collection<User> searchResult = e.name;
+			searchMemberField.deleteAllMember();
+			if(!e.source)
+			{
+				searchSet.clear();
+				searchSet.addAll(e.name);
+			}
+			if (!searchResult.isEmpty()) {
+				for (User u : searchResult) {
+					searchMemberField.addNewMember(u, true);
+				}
+			}
 		}
 		System.out.println(searchMemberField.getComponentCount());
 		this.refresh();
@@ -194,7 +208,24 @@ public class InfoPanel extends JPanel {
 	 */
 	@SubscribeEvent
 	public void onSearch(client.event.EventSearch e) {
-		UserClient.sendToServer(new MUSSearch(e.search));
+		// 本地搜索
+		if (lastSearch != "" && e.search.indexOf(lastSearch) != -1) {
+			HashSet<User> s = new HashSet<User>(userSet);
+			if (!searchSet.isEmpty()) {
+				for (User u : searchSet) {
+					s.add(u);
+				}
+			}
+			SearchHelper sh = new SearchHelper();
+
+			EventsBridge.frontendEventHandle
+					.post(new EventSearchRequest((LinkedList<User>) sh.search(s, e.search), true));
+			System.out.println("本地搜索");
+		} else {
+			lastSearch = e.search;
+			UserClient.sendToServer(new MUSSearch(e.search));
+			System.out.println("远程搜索");
+		}
 	}
 
 	@SubscribeEvent
