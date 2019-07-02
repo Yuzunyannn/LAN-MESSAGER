@@ -115,6 +115,70 @@ public class MemberButton extends JButton {
 		this.addMouseListener(mouse);
 
 	}
+	public MemberButton(String name,String label) {
+		toolId = UtilityPanel.TOOLID_CHATING;
+		memberName = name;
+		count = 0;
+		envelope = true;
+		isChat = false;
+		// 发布测试
+		name = Adminsters.userToInfo(name);
+		JLabel member = new JLabel(label);
+		MemberButton mtmp = this;
+		this.setLayout(null);
+		member.setSize(175, 30);
+		member.setLocation(20, 20);// 90,20
+		member.setFont(Theme.FONT2);
+		this.setBackground(Theme.COLOR3);
+		this.add(member);
+		Dimension size = new Dimension(MainFrame.INFO_RIGION_WIDTH, MEMBERBUTTON_HEIGHT);
+		this.setPreferredSize(size);
+		this.setMinimumSize(size);
+		this.setMaximumSize(size);
+		this.setContentAreaFilled(false);
+		ActionListener memberItemListener = new MemberMenuItemMonitor();
+		// 右键菜单的监听器
+		mouse = new UButtonMouse(MEMBERITEMSTR, memberItemListener) {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// 产生选择事件
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					isChat = true;
+					count = 0;
+					// 产生选择事件
+					EventsBridge.frontendEventHandle.post(new EventShow(toolId, memberName));
+					// count=0;
+//					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("sdsds"),"test"));
+				} else if (e.getButton() == MouseEvent.BUTTON3) {
+						if (e.isPopupTrigger()) {
+						username = ((MemberButton) e.getSource()).getMemberName();
+						for (int i = 0; i < item.length; i++) {
+							item[i].setActionCommand(username);
+							popmenu.add(item[i]);
+						}
+						popmenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+					System.out.println("右键点击2");
+				}
+
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (!isChat)
+					mtmp.setBackground(Theme.COLOR8);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!isChat)
+					mtmp.setBackground(Theme.COLOR3);
+			}
+		};
+		this.addMouseListener(mouse);
+
+	}
 	public void envelopechange() {
 		if(count!=0)
 			envelope=false;

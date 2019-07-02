@@ -24,6 +24,7 @@ import client.event.EventsBridge;
 import client.frame.MainFrame;
 import client.frame.Theme;
 import client.frame.selection.SelectGroupFrame;
+import client.frame.selection.SendGroupFrame;
 import event.IEventBus;
 import log.Logger;
 import user.User;
@@ -184,18 +185,19 @@ class fuctionListListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String[] str = SearchPanel.FUCTIONLIST;
 		String temp = ((JMenuItem) e.getSource()).getText();
+		ArrayList<String > ulist=new ArrayList<String >();
+		for(User tmp:InfoPanel.userSet) {
+			ulist.add(tmp.userName);
+		}
 		/** 群聊 */
 		if (temp.equals(str[0])) {
 			
+			SelectGroupFrame sf=new SelectGroupFrame(ulist, "群聊");
 			Logger.log.impart(str[0]);
 		}
 		/** 群发 */
 		else if (temp.equals(str[1])) {
-			ArrayList<String > ulist=new ArrayList<String >();
-			for(User tmp:InfoPanel.userSet) {
-				ulist.add(tmp.userName);
-			}
-			SelectGroupFrame sf=new SelectGroupFrame(ulist, "群发");
+			SendGroupFrame sgf=new SendGroupFrame(ulist);
 			Logger.log.impart(str[1]);
 		}
 
