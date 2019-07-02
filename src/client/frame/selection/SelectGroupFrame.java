@@ -12,7 +12,8 @@ public class SelectGroupFrame extends SelectFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int confirmHeight = 70;
+	private int confirmHeight = 30;
+	private int selectHeight = 400;
 	private ConfirmPane confirmPane = new ConfirmPane();
 	private LayoutManager layout = new LayoutManager() {
 
@@ -41,13 +42,18 @@ public class SelectGroupFrame extends SelectFrame {
 			int height = parent.getHeight();
 			int width = parent.getWidth();
 
-			Component confirmArea = cons[1];
+			Component confirmArea = cons[2];
 			confirmArea.setLocation(0, height - confirmHeight - 1);
 			confirmArea.setSize(width, confirmHeight);
 
-			Component selectList = cons[0];
-			selectList.setLocation(0, 0);
-			selectList.setSize(width, height - confirmHeight);
+			Component selectList = cons[1];
+			selectList.setLocation(0, height - confirmHeight - selectHeight - 1);
+			selectList.setSize(width, selectHeight);
+			
+			Component searchArea = cons[0];
+			searchArea.setLocation(0, 0);
+			searchArea.setSize(width, height - confirmHeight - selectHeight);
+			
 		}
 
 		@Override

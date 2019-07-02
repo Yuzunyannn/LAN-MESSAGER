@@ -47,11 +47,11 @@ public class ChatInfoPanel extends JPanel {
 		this.userButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				HashSet<User> listUsers = InfoPanel.userSet;
-				List<String> users = new ArrayList<String>();
- 				for (User user : listUsers) {
-					users.add(user.getUserName());
-				}
+//				HashSet<User> listUsers = InfoPanel.userSet;
+//				List<String> users = new ArrayList<String>();
+// 				for (User user : listUsers) {
+//					users.add(user.getUserName());
+//				}
 //				List<String> users = new ArrayList<String>();
 //				for (int i = 0; i < 10; i++) {
 //					if (i == 9) {
@@ -61,10 +61,11 @@ public class ChatInfoPanel extends JPanel {
 //					}
 //				
 //				}
-				SelectFrame sendGroupMsg = new SendGroupFrame(users);
-				sendGroupMsg.setVisible(true);
-				
-				Restart.restartApplication();
+//				SelectFrame sendGroupMsg = new SendGroupFrame(users);
+//				sendGroupMsg.setVisible(true);
+//				
+//				Restart.restartApplication();
+				infoFrame.setVisible(true);
 				
 			}
 		});
