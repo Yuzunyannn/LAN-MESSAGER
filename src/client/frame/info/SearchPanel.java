@@ -40,15 +40,24 @@ public class SearchPanel extends JPanel {
 	public static final String[] SETLIST = { "注销" };
 	boolean entry = false;
 
-	private KeyListener keyListener=new KeyListener(){@Override public void keyPressed(KeyEvent e){int key=e.getKeyCode();if(key=='\n'){EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
+	private KeyListener keyListener = new KeyListener() {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			int key = e.getKeyCode();
+			if (key == '\n') {
+				EventsBridge.frontendEventHandle.post(new EventSearch(search.getText()));
 
-	}
+			}
 
-	}
+		}
 
-	@Override public void keyReleased(KeyEvent e){}
+		@Override
+		public void keyReleased(KeyEvent e) {
+		}
 
-	@Override public void keyTyped(KeyEvent e){}
+		@Override
+		public void keyTyped(KeyEvent e) {
+		}
 
 	};
 
@@ -57,7 +66,7 @@ public class SearchPanel extends JPanel {
 		this.setMinimumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, SEARCH_FIELD_LENGTH));
 		this.setMaximumSize(new Dimension(MainFrame.INFO_RIGION_WIDTH, SEARCH_FIELD_LENGTH));
 		this.setBackground(Theme.COLOR5);
-		textpanel=new TextPanel();
+		textpanel = new TextPanel();
 		search = textpanel.getTextField();
 		search.setFont(Theme.FONT3);
 		search.setFocusable(entry);
@@ -98,30 +107,31 @@ public class SearchPanel extends JPanel {
 			}
 		});
 
-
-		JButton b1 =textpanel.getButton();
+		JButton b1 = textpanel.getButton();
 		JButton b2 = new JButton();
 		JButton b3 = new JButton();
-		UButtonMouse mouse=new UButtonMouse(FUCTIONLIST,new fuctionListListener()) {
+		UButtonMouse mouse = new UButtonMouse(FUCTIONLIST, new fuctionListListener()) {
 			@Override
-			protected void popupShow(MouseEvent e){
-					for (int i = 0; i < item.length; i++) {
-						popmenu.add(item[i]);
-					}
-					popmenu.show(e.getComponent(),10 ,20);
+			protected void popupShow(MouseEvent e) {
+				for (int i = 0; i < item.length; i++) {
+					popmenu.add(item[i]);
 				}
-			@Override 
+				popmenu.show(e.getComponent(), 10, 20);
+			}
+
+			@Override
 			public void mousePressed(MouseEvent e) {
 
-					popupShow(e);
+				popupShow(e);
 			}
-				@Override
-				public void mouseReleased(MouseEvent e) {
-						popupShow(e);
-				}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				popupShow(e);
+			}
 
 		};
-		b2.addMouseListener(mouse) ;
+		b2.addMouseListener(mouse);
 		SearchPanel stmp = this;
 		MouseAdapter mb = new MouseAdapter() {
 
@@ -132,39 +142,39 @@ public class SearchPanel extends JPanel {
 				// 测试
 				Logger.log.impart("点击按钮切换时的测试");
 				search.setBackground(Theme.COLOR4);
-				
+
 			}
 		};
 		b1.addMouseListener(mb);
-		b3.addMouseListener(new UButtonMouse(SETLIST, new SetListListener(),MouseEvent.BUTTON1) {
+		b3.addMouseListener(new UButtonMouse(SETLIST, new SetListListener(), MouseEvent.BUTTON1) {
 			@Override
 			protected void popupShow(MouseEvent e) {
 
-					for (int i = 0; i < item.length; i++) {
-						item[i].setActionCommand(username);
-						popmenu.add(item[i]);
-					}
-					popmenu.show(e.getComponent(), 10, 20);
+				for (int i = 0; i < item.length; i++) {
+					item[i].setActionCommand(username);
+					popmenu.add(item[i]);
 				}
+				popmenu.show(e.getComponent(), 10, 20);
+			}
 
 		});
 		search.addKeyListener(keyListener);
 		search.setForeground(Color.GRAY);
-		textpanel.setBounds(10,20,190,36);
+		textpanel.setBounds(10, 20, 190, 36);
 		search.setText(INFO);
 		search.addFocusListener(new DefaultFocusListener(INFO, textpanel));
 		int buttonsize = 30;
-//		b1.setSize(buttonsize, buttonsize);
-//		b1.setLocation(220, 23);
-//		b2.setSize(buttonsize, buttonsize);
-//		b2.setLocation(260, 23);
+		// b1.setSize(buttonsize, buttonsize);
+		// b1.setLocation(220, 23);
+		// b2.setSize(buttonsize, buttonsize);
+		// b2.setLocation(260, 23);
 
 		b2.setBounds(220, 23, buttonsize, buttonsize);
-		b3.setBounds(260,23,buttonsize,buttonsize);
+		b3.setBounds(260, 23, buttonsize, buttonsize);
 		this.add(b2);
 		this.add(b3);
 		this.add(textpanel);
-//		this.add(search);
+		// this.add(search);
 
 	}
 
@@ -174,49 +184,54 @@ public class SearchPanel extends JPanel {
 		this.setBackground(Theme.COLOR5);
 		entry = false;
 		search.setFocusable(entry);
+		textpanel.isSearch=false;
 
 	}
+
 	public void initEvent(IEventBus bus) {
 		bus.register(this);
 	}
 }
+
 class fuctionListListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String[] str = SearchPanel.FUCTIONLIST;
 		String temp = ((JMenuItem) e.getSource()).getText();
-		ArrayList<String > ulist=new ArrayList<String >();
-		for(User tmp:InfoPanel.userSet) {
+		ArrayList<String> ulist = new ArrayList<String>();
+		for (User tmp : InfoPanel.userSet) {
 			ulist.add(tmp.userName);
 		}
 		/** 群聊 */
 		if (temp.equals(str[0])) {
-			SelectGroupFrame sf=new SelectGroupFrame(ulist, "群聊");
+			SelectGroupFrame sf = new SelectGroupFrame(ulist, "群聊");
 			Logger.log.impart(str[0]);
 		}
 		/** 群发 */
 		else if (temp.equals(str[1])) {
-			SendGroupFrame sgf=new SendGroupFrame(ulist);
+			SendGroupFrame sgf = new SendGroupFrame(ulist);
 			Logger.log.impart(str[1]);
 		}
 	}
 }
+
 class SetListListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String[] str = SearchPanel.SETLIST;
 		String temp = ((JMenuItem) e.getSource()).getText();
-		
+
 		/** 注销 */
 		if (temp.equals(str[0])) {
-			
+
 			Logger.log.impart(str[0]);
 		}
-	
+
 	}
 }
+
 class DefaultFocusListener implements FocusListener {
 	private String info;
 	private TextPanel textfield;
@@ -225,6 +240,7 @@ class DefaultFocusListener implements FocusListener {
 		this.info = info;
 		this.textfield = textfield;
 	}
+
 	@Override
 	public void focusGained(FocusEvent e) {
 		String temp = textfield.getTextField().getText();
@@ -232,15 +248,18 @@ class DefaultFocusListener implements FocusListener {
 			textfield.getTextField().setText(null);
 			textfield.getTextField().setBackground(Theme.COLOR0);
 			textfield.getTextField().setForeground(Color.BLACK);
+			textfield.isSearch=true;
 
 		}
 	}
+
 	@Override
 	public void focusLost(FocusEvent e) {
 		String temp = textfield.getTextField().getText();
 		if (temp.equals("")) {
 			textfield.getTextField().setForeground(Color.GRAY);
 			textfield.getTextField().setText(info);
+			textfield.isSearch=false;
 		}
 
 	}
