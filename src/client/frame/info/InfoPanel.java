@@ -110,8 +110,10 @@ public class InfoPanel extends JPanel {
 	public void onChatOperator(EventChatOperation e) {
 		if (e.optype.equals(EventChatOperation.FIXEDCHAT))
 			memberField.setFixed(e.username);
-		else if (e.optype.equals(EventChatOperation.DELETECHAT))
+		else if (e.optype.equals(EventChatOperation.DELETECHAT)) {
 			memberField.deductMember(UOnline.getInstance().getUser(e.username));
+			EventsBridge.frontendEventHandle.post(new EventFriendOperation(e.username, EventFriendOperation.DELETEFRIEND));
+					}
 		else if (e.optype.equals(EventChatOperation.CANELFIXEDCHAT))
 			memberField.canelFixed(e.username);
 		else if (e.optype.equals(EventChatOperation.ADDCHAT)) {

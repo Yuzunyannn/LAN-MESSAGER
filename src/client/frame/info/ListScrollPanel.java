@@ -1,5 +1,6 @@
 package client.frame.info;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -9,10 +10,12 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 import client.event.EventChatOperation;
+import client.event.EventGroupInfoGet;
 import client.event.EventRecv.EventRecvString;
 import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.Theme;
+import client.user.UserClient;
 import event.IEventBus;
 import event.SubscribeEvent;
 import log.Logger;
@@ -77,7 +80,27 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		this.refresh();
 	}
-
+/**设置置顶用的settop*/
+	public void setTop(String name,boolean isfix) {
+		int temp;
+		temp = getMember(name);
+		if (temp == -1 || temp <= fixed - 1)
+			return;
+		Component tempbutton;
+		tempbutton = content[temp];
+		((MemberButton)tempbutton).fixedState(true);
+		for (int i = temp; i > fixed; i--) {
+			content[i] = content[i - 1];
+		}
+		content[fixed] = tempbutton;
+		Component[] re = content;
+		p.removeAll();
+		content = re;
+		for (Component i : content) {
+			p.add(i);
+		}
+		this.refresh();
+	}
 	/** 把成员置顶 */
 	public void setTop(String name) {
 		int temp;
@@ -86,7 +109,7 @@ public class ListScrollPanel extends JScrollPane {
 			return;
 		Component tempbutton;
 		tempbutton = content[temp];
-
+	
 		for (int i = temp; i > fixed; i--) {
 			content[i] = content[i - 1];
 		}
@@ -104,7 +127,7 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	public void setFixed(String name) {
-		setTop(name);
+		setTop(name,true);
 		if (fixed == 0) {
 			fixed = fixed + 1;
 			System.out.println(((MemberButton) content[fixed - 1]).getMemberName() + "最新置顶");
@@ -126,6 +149,7 @@ public class ListScrollPanel extends JScrollPane {
 				return;
 			}
 			Component temp = content[tmpIndex];
+			((MemberButton)temp).fixedState(false);
 			for (int i = tmpIndex; i < fixed - 1; i++) {
 				content[i] = content[i + 1];
 			}
@@ -138,7 +162,6 @@ public class ListScrollPanel extends JScrollPane {
 				System.out.println(((MemberButton) i).getMemberName());
 			}
 			this.refresh();
-//			setTop(name);
 		}
 	}
 
@@ -187,6 +210,20 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		InfoPanel.userSet.add(user);
 		p.add(new MemberButton(user.getUserName()));
+		Logger.log.impart("该对象成功添加");
+		content = p.getComponents();
+		height += MemberButton.MEMBERBUTTON_HEIGHT;
+		int width = super.getWidth();
+		standardHeight(super.getPreferredSize());
+		p.setPreferredSize(new Dimension(width, height));
+	}
+	public void addNewMember(User user,String label) {
+		if (InfoPanel.userSet.contains(user)) {
+			Logger.log.impart("该对象已经在聊天列表");
+			return;
+		}
+		InfoPanel.userSet.add(user);
+		p.add(new MemberButton(user.getUserName(),label));
 		Logger.log.impart("该对象成功添加");
 		content = p.getComponents();
 		height += MemberButton.MEMBERBUTTON_HEIGHT;
@@ -246,6 +283,7 @@ public class ListScrollPanel extends JScrollPane {
 
 	@SubscribeEvent
 	public void onCountFile(transfer.EventFileRecv.Start e) {
+		/**未使用hashset优化*/
 		boolean have = false;
 		for (Component i : content)
 			if (((MemberButton) i).getMemberName().equals(e.getFrom().getUserName())) {
@@ -276,6 +314,7 @@ public class ListScrollPanel extends JScrollPane {
 
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
+		/**未使用hashset优化*/
 		boolean have = false;
 
 		for (Component i : content)
@@ -331,14 +370,14 @@ public class ListScrollPanel extends JScrollPane {
 			return;
 	}
 
-//	/** 事件处理 */
-//	@SubscribeEvent
-//	public void onSearchRequest(EventSearchRequest e) {
-//		for (Component i : content) {
-//			p.add(i);
-//		}
-//		this.refresh();
-//	}
+	@SubscribeEvent
+	public void onShowGroup(EventGroupInfoGet e) {
+		User tmp=new UserClient(e.sp.specialName);
+		/**由于userSet是user类型，(不确定是否可以从Uonline中获取)暂时此处新建一个userclient*/
+			addNewMember(tmp,e.sp.getId());
+			setTop(tmp.getUserName());
+			this.refresh();
+	}
 
 	@SubscribeEvent
 	public void onShow(EventShow e) {

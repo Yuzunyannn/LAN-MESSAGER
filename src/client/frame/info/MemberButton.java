@@ -37,6 +37,7 @@ public class MemberButton extends JButton {
 	public int count;
 	private String toolId;
 	MouseAdapter mouse;
+	private boolean isFixed=false;
 	// 显示的信封开闭，true开，false闭
 	private boolean envelope;
 	// 是否正在与该用户聊天
@@ -98,7 +99,8 @@ public class MemberButton extends JButton {
 				}
 
 			}
-
+			@Override
+			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				if (!isChat)
@@ -117,6 +119,73 @@ public class MemberButton extends JButton {
 
 	public boolean getIsChat() {
 		return isChat;
+	}
+	public MemberButton(String name,String label) {
+		toolId = UtilityPanel.TOOLID_CHATING;
+		memberName = name;
+		count = 0;
+		envelope = true;
+		isChat = false;
+		// 发布测试
+		name = Adminsters.userToInfo(name);
+		JLabel member = new JLabel(label);
+		MemberButton mtmp = this;
+		this.setLayout(null);
+		member.setSize(175, 30);
+		member.setLocation(20, 20);// 90,20
+		member.setFont(Theme.FONT2);
+		this.setBackground(Theme.COLOR3);
+		this.add(member);
+		Dimension size = new Dimension(MainFrame.INFO_RIGION_WIDTH, MEMBERBUTTON_HEIGHT);
+		this.setPreferredSize(size);
+		this.setMinimumSize(size);
+		this.setMaximumSize(size);
+		this.setContentAreaFilled(false);
+		ActionListener memberItemListener = new MemberMenuItemMonitor();
+		// 右键菜单的监听器
+		mouse = new UButtonMouse(MEMBERITEMSTR, memberItemListener) {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// 产生选择事件
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					isChat = true;
+					count = 0;
+					// 产生选择事件
+					EventsBridge.frontendEventHandle.post(new EventShow(toolId, memberName));
+					// count=0;
+//					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("sdsds"),"test"));
+				} else if (e.getButton() == MouseEvent.BUTTON3) {
+						if (e.isPopupTrigger()) {
+						username = ((MemberButton) e.getSource()).getMemberName();
+						for (int i = 0; i < item.length; i++) {
+							item[i].setActionCommand(username);
+							popmenu.add(item[i]);
+						}
+						popmenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+					System.out.println("右键点击2");
+				}
+
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (!isChat)
+					mtmp.setBackground(Theme.COLOR8);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!isChat)
+					mtmp.setBackground(Theme.COLOR3);
+			}
+		};
+		this.addMouseListener(mouse);
+
+	}
+	public void fixedState(boolean state) {
+		isFixed=state;
 	}
 
 	public void envelopechange() {
@@ -149,6 +218,8 @@ public class MemberButton extends JButton {
 		if (isChat)
 			g.setColor(Theme.COLOR3.darker());
 
+		else if(isFixed)
+			g.setColor(Color.GRAY);
 		else
 			g.setColor(getBackground());
 		g.fillRect(0, 0, width, height);
@@ -199,66 +270,7 @@ public class MemberButton extends JButton {
 	}
 }
 
-class UButtonMouse extends MouseAdapter {
-	protected JPopupMenu popmenu;
-	protected JMenuItem item[];
-	protected String username;
-	protected ActionListener ItemMonitor;
 
-	public UButtonMouse(String[] str, ActionListener actionListener) {
-		super();
-		popmenu = new JPopupMenu();
-		item = new JMenuItem[str.length];
-		Border border = BorderFactory.createLineBorder(Theme.COLOR5);
-		ItemMonitor = actionListener;
-		for (int i = 0; i < item.length; i++) {
-			item[i] = new JMenuItem(str[i]);
-			item[i].setFont(Theme.FONT4);
-			item[i].setBackground(Color.WHITE);
-			item[i].setPreferredSize(new Dimension(150, 40));
-			item[i].setHorizontalAlignment(SwingConstants.CENTER);
-			item[i].setBorder(null);
-			item[i].setActionCommand(i + "");
-			item[i].addActionListener(ItemMonitor);
-
-		}
-		popmenu.setBackground(Color.WHITE);
-		popmenu.setBorder(border);
-		// popmenu.setPopupSize(160,200);
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON3) {
-			if (e.isPopupTrigger()) {
-				username = ((MemberButton) e.getSource()).getMemberName();
-				for (int i = 0; i < item.length; i++) {
-					item[i].setActionCommand(username);
-					popmenu.add(item[i]);
-				}
-				popmenu.show(e.getComponent(), e.getX(), e.getY());
-			}
-			System.out.println("右键点击1");
-		}
-
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		super.mouseClicked(e);
-		if (e.getButton() == MouseEvent.BUTTON3) {
-			if (e.isPopupTrigger()) {
-				username = ((MemberButton) e.getSource()).getMemberName();
-				for (int i = 0; i < item.length; i++) {
-					item[i].setActionCommand(username);
-					popmenu.add(item[i]);
-				}
-				popmenu.show(e.getComponent(), e.getX(), e.getY());
-			}
-		}
-	}
-}
 
 class MemberMenuItemMonitor implements ActionListener {
 	@Override

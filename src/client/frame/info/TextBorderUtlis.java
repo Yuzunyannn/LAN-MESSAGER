@@ -27,9 +27,9 @@ public class TextBorderUtlis extends LineBorder {
 		g2.setColor(lineColor);
 		for (i = 0; i < thickness; i++) {
 			if (!roundedCorners) {
-				g2.drawRect(x + i, y + i, width - i - i - 1, height - i - i - 1);
+				g2.drawRect(x + i, y + i, width+50 - i - i - 1, height - i - i - 1);
 			} else {
-				g2.drawRoundRect(x , y, width   - 1, height- 1, 5, 5);
+				g2.drawRoundRect(x , y, width+50   - 1, height- 1, 5, 5);
 			}
 		}
 		g2.setColor(oldColor);
