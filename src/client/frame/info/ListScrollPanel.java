@@ -21,6 +21,7 @@ import event.SubscribeEvent;
 import log.Logger;
 import user.UOnline;
 import user.User;
+import user.message.MessageGroupInfo;
 
 public class ListScrollPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
@@ -338,9 +339,10 @@ public class ListScrollPanel extends JScrollPane {
 			} else
 				have = false;
 		if (!have)
+			if(e.sp==null)
 			EventsBridge.frontendEventHandle
 					.post(new EventChatOperation(e.from.getUserName(), EventChatOperation.ADDCHAT, state));
-
+			else UserClient.sendToServer(new MessageGroupInfo(e.sp));
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
 				((MemberButton) content[i]).recvMessage();

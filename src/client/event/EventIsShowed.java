@@ -9,12 +9,17 @@ import user.User;
  * @param user 对面用户
  */
 public class EventIsShowed extends Event {
-	User user;
+	private User user;
 
 	public EventIsShowed() {
 	}
 
 	public EventIsShowed(User user) {
-		this.user=user;
+		this.user = user;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
 }

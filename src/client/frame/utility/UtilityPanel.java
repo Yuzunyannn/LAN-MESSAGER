@@ -136,7 +136,6 @@ public class UtilityPanel extends JPanel implements ITickable {
 		}
 		panelInfo = newInfo;
 		currPanel = info.panel;
-
 		info.tick = this.tick;
 		UtilityPanel.this.remove(0);
 		UtilityPanel.this.add(currPanel);
@@ -241,10 +240,20 @@ public class UtilityPanel extends JPanel implements ITickable {
 			}
 		}
 	}
-
+	
 	@SubscribeEvent
-	public void hasRead(client.event.EventIsShowed e) {
-		System.out.println("此处处理消息已读");
+	public void checkGroup(EventShow e) {
+		if (e.id.indexOf("#G") == 0) {
+			List<String> users = new ArrayList<String>();
+			for (User user : e.userlist) {
+				users.add(user.getUserName());
+			}
+			PanelInfo info = this.getChatPanelInfo(e.id);
+			if (!info.canUse()) {
+				info.reborn();
+			}
+			((ChatPanel) info.panel).addGroupMemeber(users);
+		}
 	}
 
 	@SubscribeEvent
@@ -267,6 +276,16 @@ public class UtilityPanel extends JPanel implements ITickable {
 	public void debug(client.event.EventDebugInfoOuting e) {
 		e.debufInfos.add("UtilityPanel(" + tick + ")当前板子的id为:" + panelInfo);
 		EventsBridge.frontendEventHandle.post(new EventIsShowed(UOnline.getInstance().getUser("debug")));
+	}
+	
+	/**已读标记*/
+	@SubscribeEvent
+	public void hasRead(client.event.EventIsShowed e) {
+		PanelInfo info = this.getChatPanelInfo(e.getUser().getUserName());
+		if (!info.canUse()) {
+			info.reborn();
+		}
+		((ChatPanel) info.panel).displayRead();
 	}
 
 	/** 发送图片or表情 */

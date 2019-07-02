@@ -344,4 +344,12 @@ public class ChatPanel extends JPanelUtility {
 		chatInfoPanel = new ChatInfoPanel(chatTo.getUserName());
 	}
 
+	public void displayRead() {
+		chatDialogPanel.displayRead();
+	}
+
+	public void addGroupMemeber(List<String> users) {
+		chatInfoPanel.addGroupMemeber(users);
+	}
+
 }

@@ -71,9 +71,9 @@ public class SelectPane extends JScrollPane {
 		}
 	}
 
-	public void updatePanel(List<String> users) {
+	public void updatePanel(List<String> users, int type) {
 		panel.removeAll();
-		this.addItems(users, SelectFrame.CHOOSE);
+		this.addItems(users, type);
 		panel.revalidate();
 		panel.repaint();
 	}

@@ -1,5 +1,6 @@
 package client.frame.utility;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.ImageIcon;
@@ -62,15 +63,14 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 				this.userName = localName;
 			}
 			initalUI(info);
-			//System.out.println(this.dialog.getH());
 			if (type == BubbleType.WORD) {
 				this.setSize(this.getWidth(), this.dialog.getH() + 40);
-			} else if (type == BubbleType.FILE){
+			} else if (type == BubbleType.FILE) {
 				this.setSize(this.getWidth(), 80);
 			} else if (type == BubbleType.MEME) {
 				this.setSize(this.getWidth(), 140);
 			}
-			
+
 			if (type == BubbleType.NULL) {
 				this.setVisible(false);
 			} else {
@@ -168,11 +168,12 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 			displayedName.setText(":" + userName);
 			if (this.userMessageStatus) {
 				this.messageStatus = new JLabel("已读");
+				this.messageStatus.setForeground(Color.BLACK);
 			} else {
 				this.messageStatus = new JLabel("未读");
+				this.messageStatus.setForeground(Theme.COLOR9);
 			}
 			this.messageStatus.setOpaque(false);
-			this.messageStatus.setForeground(Theme.COLOR2);
 			this.add(messageStatus);
 			this.add(dialog);
 			this.add(displayedName);
@@ -201,6 +202,20 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 	/** 获取时间 */
 	public String getTime() {
 		return userTime;
+	}
+
+	public void setRead() {
+		// TODO Auto-generated method stub
+		if (this.userID && this.type != BubbleType.NULL && this.type != BubbleType.TIME
+				&& this.type != BubbleType.LINE) {
+			this.userMessageStatus = true;
+			this.messageStatus.setText("已读");
+			this.messageStatus.setForeground(Color.BLACK);
+			this.revalidate();
+			this.repaint();
+		}
+		System.out.println("test" + this.userDialog);
+
 	}
 
 }
