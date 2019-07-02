@@ -35,13 +35,13 @@ public class MemberButton extends JButton {
 			EventChatOperation.FIXEDCHAT, EventChatOperation.CANELFIXEDCHAT };
 	private String memberName;
 	public int count;
-	private String toolId;
+	protected String toolId;
 	MouseAdapter mouse;
-	private boolean isFixed=false;
+	protected boolean isFixed=false;
 	// 显示的信封开闭，true开，false闭
-	private boolean envelope;
+	protected boolean envelope;
 	// 是否正在与该用户聊天
-	private boolean isChat;
+	protected boolean isChat;
 	// 图片资源
 	public static ImageIcon icon_open = new ImageIcon(
 			ResourceManagement.instance.getPackResource("img/envelope_open.png").getImage());
