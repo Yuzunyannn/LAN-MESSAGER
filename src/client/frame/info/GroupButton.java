@@ -12,5 +12,11 @@ public GroupButton(String id,String label,List<User> user,User boss) {
 	this.userlist=user;
 	this.boss=boss;
 }
+public List<User> getUserlist() {
+	return userlist;
+}
+public User getBoss() {
+	return boss;
+}
 
 }
