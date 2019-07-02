@@ -86,7 +86,7 @@ public class MemberButton extends JButton {
 					// count=0;
 //					EventsBridge.frontendEventHandle.post(new EventRecvString(new UserClient("sdsds"),"test"));
 				} else if (e.getButton() == MouseEvent.BUTTON3) {
-						if (e.isPopupTrigger()) {
+					if (e.isPopupTrigger()) {
 						username = ((MemberButton) e.getSource()).getMemberName();
 						for (int i = 0; i < item.length; i++) {
 							item[i].setActionCommand(username);
@@ -114,10 +114,16 @@ public class MemberButton extends JButton {
 		this.addMouseListener(mouse);
 
 	}
-	public void envelopechange() {
-		if(count!=0)
-			envelope=false;
+
+	public boolean getIsChat() {
+		return isChat;
 	}
+
+	public void envelopechange() {
+		if (count != 0)
+			envelope = false;
+	}
+
 	public void setToolId(String tid) {
 		toolId = tid;
 	}
@@ -175,7 +181,7 @@ public class MemberButton extends JButton {
 		}
 		if (!choose) {
 			this.setBackground(Theme.COLOR3);
-			
+
 		}
 	}
 

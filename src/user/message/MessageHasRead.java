@@ -20,8 +20,10 @@ public class MessageHasRead extends MessageUser {
 
 	@Override
 	protected void executeServer(User from, User to, NBTTagCompound nbt) {
+		//下线接受不到？ycy
 		if (to.isOnline()) {
 			to.sendMesage(new MessageHasRead(from));
+			System.out.println(from.userName+"向"+to.userName+"发送了一条已读消息");
 		}
 	}
 

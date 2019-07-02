@@ -86,9 +86,10 @@ public class EventsBridge {
 	/**[前端]向服务端发送已读消息*/
 	public static void sendHasRead(User toUser) {
 		UserClient.sendToServer(new MessageHasRead(toUser));
+		System.out.println("[前端]向"+toUser.userName+"发送已读消息");
 	}
 	
-	/** [后端]当收到已读消息 */
+	/** [前端]当收到已读消息 */
 	public static void recvHasRead(User from) {
 		EventsBridge.frontendEventHandle.post(new EventIsShowed(from));
 	}

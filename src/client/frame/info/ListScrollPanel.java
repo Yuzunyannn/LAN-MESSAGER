@@ -16,6 +16,7 @@ import client.frame.Theme;
 import event.IEventBus;
 import event.SubscribeEvent;
 import log.Logger;
+import user.UOnline;
 import user.User;
 
 public class ListScrollPanel extends JScrollPane {
@@ -81,7 +82,7 @@ public class ListScrollPanel extends JScrollPane {
 	public void setTop(String name) {
 		int temp;
 		temp = getMember(name);
-		if (temp == -1 || temp<=fixed-1)
+		if (temp == -1 || temp <= fixed - 1)
 			return;
 		Component tempbutton;
 		tempbutton = content[temp];
@@ -104,41 +105,43 @@ public class ListScrollPanel extends JScrollPane {
 
 	public void setFixed(String name) {
 		setTop(name);
-		if(fixed==0) {
+		if (fixed == 0) {
 			fixed = fixed + 1;
-			System.out.println(((MemberButton)content[fixed-1]).getMemberName()+"最新置顶");}
-		else if(((MemberButton)content[fixed-1]).getMemberName().equals(name)) {
-		fixed = fixed + 1;
-		System.out.println(((MemberButton)content[fixed-1]).getMemberName()+"最新置顶");
+			System.out.println(((MemberButton) content[fixed - 1]).getMemberName() + "最新置顶");
+		} else if (((MemberButton) content[fixed - 1]).getMemberName().equals(name)) {
+			fixed = fixed + 1;
+			System.out.println(((MemberButton) content[fixed - 1]).getMemberName() + "最新置顶");
+		} else
+			Logger.log.impart("已置顶  ：" + name);
+
 	}
-		else Logger.log.impart("已置顶  ："+name);
-		
-	}
+
 	public void canelFixed(String name) {
 		if (fixed == 0)
 			return;
 		else {
-			int tmpIndex=getMember(name);
-			if(tmpIndex>fixed-1) {
-				Logger.log.impart(name+" ： 没有被置顶");
+			int tmpIndex = getMember(name);
+			if (tmpIndex > fixed - 1) {
+				Logger.log.impart(name + " ： 没有被置顶");
 				return;
 			}
-			Component temp=content[tmpIndex];
-			for(int i=tmpIndex;i<fixed-1;i++) {
-				content[i]=content[i+1];
+			Component temp = content[tmpIndex];
+			for (int i = tmpIndex; i < fixed - 1; i++) {
+				content[i] = content[i + 1];
 			}
 			fixed = fixed - 1;
-			content[fixed]=temp;
-			
+			content[fixed] = temp;
+
 			p.removeAll();
 			for (Component i : content) {
 				p.add(i);
-				System.out.println(((MemberButton)i).getMemberName());
+				System.out.println(((MemberButton) i).getMemberName());
 			}
 			this.refresh();
 //			setTop(name);
+		}
 	}
-	}
+
 	public int getMember(String name) {
 		MemberButton temp;
 		for (int i = 0; i < content.length; i++) {
@@ -180,7 +183,8 @@ public class ListScrollPanel extends JScrollPane {
 	public void addNewMember(User user) {
 		if (InfoPanel.userSet.contains(user)) {
 			Logger.log.impart("该对象已经在聊天列表");
-			return;}
+			return;
+		}
 		InfoPanel.userSet.add(user);
 		p.add(new MemberButton(user.getUserName()));
 		Logger.log.impart("该对象成功添加");
@@ -190,12 +194,13 @@ public class ListScrollPanel extends JScrollPane {
 		standardHeight(super.getPreferredSize());
 		p.setPreferredSize(new Dimension(width, height));
 	}
-	public void addNewMember(User user,int count) {
+
+	public void addNewMember(User user, int count) {
 		if (InfoPanel.userSet.contains(user))
 			return;
 		InfoPanel.userSet.add(user);
-		MemberButton tmp=new MemberButton(user.getUserName());
-		tmp.count=count;
+		MemberButton tmp = new MemberButton(user.getUserName());
+		tmp.count = count;
 		p.add(tmp);
 		tmp.envelopechange();
 		content = p.getComponents();
@@ -204,9 +209,10 @@ public class ListScrollPanel extends JScrollPane {
 		standardHeight(super.getPreferredSize());
 		p.setPreferredSize(new Dimension(width, height));
 	}
+
 	public void deductMember(User user) {
 		boolean done = false;
-		if(getMember(user.userName)<fixed)
+		if (getMember(user.userName) < fixed)
 			canelFixed(user.userName);
 		for (int i = p.getComponentCount(); i > 0; i--) {
 			MemberButton temp = (MemberButton) p.getComponent(i - 1);
@@ -285,11 +291,13 @@ public class ListScrollPanel extends JScrollPane {
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
 				((MemberButton) content[i]).recvMessage();
-				// ((MemberButton) content[i]).count = ((MemberButton) content[i]).count + 1;
 				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
 						+ ((MemberButton) content[i]).count);
 				setTop(((MemberButton) content[i]).getMemberName());
 				System.out.println(((MemberButton) content[i]).getMemberName() + ((MemberButton) content[i]).count);
+				if (((MemberButton) content[i]).getIsChat()) {
+					EventsBridge.sendHasRead(e.from);
+				}
 			}
 		p.removeAll();
 		for (Component i : content) {
