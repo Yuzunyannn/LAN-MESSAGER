@@ -232,7 +232,18 @@ public class UtilityPanel extends JPanel implements ITickable {
 	public void changeChat(EventShow e) {
 		if (e.toolId.equals(UtilityPanel.TOOLID_CHATING)) {
 			this.toChat(e.id);
+//判断是个人不是群组	
+//			if(isPerson(e.id)) 
+			{
+				User u = UOnline.getInstance().getUser(e.id);
+				EventsBridge.sendHasRead(u);
+			}
 		}
+	}
+
+	@SubscribeEvent
+	public void hasRead(client.event.EventIsShowed e) {
+		System.out.println("此处处理消息已读");
 	}
 
 	@SubscribeEvent
@@ -290,13 +301,13 @@ public class UtilityPanel extends JPanel implements ITickable {
 		((ChatPanel) info.panel).onRevFile(e.getFileName(), e.getTempName());
 		((ChatPanel) info.panel).onRevFileProgress(e.getTempName(), e);
 	}
-	
+
 	/** 群发UI更新 */
 	@SubscribeEvent
 	public void sendGroupMsg(EventGroupSend e) {
 		List<String> users = new ArrayList<String>();
 		users = e.getUsers();
-		
+
 		for (String string : users) {
 			PanelInfo info = this.getChatPanelInfo(string);
 			if (!info.canUse()) {

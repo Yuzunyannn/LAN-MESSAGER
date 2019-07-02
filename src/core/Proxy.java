@@ -21,6 +21,7 @@ import user.message.MUSString;
 import user.message.MessageEmergency;
 import user.message.MessageGroupCreate;
 import user.message.MessageGroupInfo;
+import user.message.MessageHasRead;
 import user.message.MessageLogin;
 import user.message.MessageUserStateChange;
 import util.ClassHelper;
@@ -92,6 +93,7 @@ public class Proxy {
 		RecvDealMessage.registerMessage("ugroup_create", MessageGroupCreate.class);
 		RecvDealMessage.registerMessage("ugroup_info", MessageGroupInfo.class);
 		RecvDealMessage.registerMessage("emergency", MessageEmergency.class);
+		RecvDealMessage.registerMessage("m_has_read", MessageHasRead.class);
 	}
 
 	// 注册一个story
