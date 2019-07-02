@@ -136,7 +136,6 @@ public class UtilityPanel extends JPanel implements ITickable {
 		}
 		panelInfo = newInfo;
 		currPanel = info.panel;
-
 		info.tick = this.tick;
 		UtilityPanel.this.remove(0);
 		UtilityPanel.this.add(currPanel);
