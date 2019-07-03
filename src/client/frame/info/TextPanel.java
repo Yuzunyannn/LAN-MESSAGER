@@ -72,14 +72,4 @@ public static ImageIcon icon_cross = new ImageIcon(
 	public JButton getButton() {
 		return button;
 	}
-	
-//	public static void main (String[] args) {
-//		JFrame f=new JFrame();
-//		f.setLayout(null);
-//		TextPanel t=new TextPanel();
-//		f.add(t);
-//		t.setBounds(100, 100, 400, 400);
-//		f.setSize(500, 500);
-//		f.setVisible(true);
-//	}
 }
