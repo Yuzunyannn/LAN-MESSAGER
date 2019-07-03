@@ -44,6 +44,7 @@ public static ImageIcon icon_cross = new ImageIcon(
 	this.setBackground(Theme.COLOR5);
 	this.add(button);
 	button.setBorder(null);
+	button.setContentAreaFilled(false);
 	button.setOpaque(false);
 	textField.setOpaque(true);
 	textField.setBorder(null);
@@ -59,7 +60,7 @@ public static ImageIcon icon_cross = new ImageIcon(
 		int h=this.getHeight();
 		g2d.setColor(textField.getBackground());
 		g2d.fillRoundRect(0, 0, w-3, h, 3, 3);
-		g2d.setColor(Color.RED);
+//		g2d.setColor(Color.RED);
 		if(isSearch)
 		g2d.drawImage(icon_cross.getImage(), w-23,h/2-8 ,16,16, null);
 //		g2d.fillOval( w-23, h/2-10, 20, 20);
