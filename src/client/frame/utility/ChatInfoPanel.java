@@ -26,18 +26,16 @@ public class ChatInfoPanel extends JPanel {
 	private JLabel userName = new JLabel("None");
 	private JButton userButton;
 	private String chatToUserName = "";
-	//private SubjectInfoFrame infoFrame;
 	private SelectFrame group;
 
 	public ChatInfoPanel(String chatTo) {
 		// TODO Auto-generated constructor stub
 		this.chatToUserName = Adminsters.userToInfo(chatTo);
-		if (chatToUserName.indexOf("#G") == 0) {
+//		if (chatToUserName.indexOf("#G") == 0) {
 			List<String> users = new ArrayList<String>();
+			users.add(chatToUserName);
 			group = new SelectFrame(users,"群成员",SelectFrame.VIEW);
-		} else {
-			//infoFrame = new SubjectInfoFrame(chatToUserName);
-		}
+		
 		this.setBackground(Theme.COLOR0);
 		this.setLayout(new BorderLayout());
 		this.userName.setText("  " + this.chatToUserName);
@@ -46,11 +44,9 @@ public class ChatInfoPanel extends JPanel {
 		this.userButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (chatToUserName.indexOf("#G") == 0) {
+//				if (chatToUserName.indexOf("#G") == 0) {
 					group.setVisible(true);
-				} else {
-					//infoFrame.setVisible(true);
-				}
+				
 			}
 		});
 		this.userButton.setIcon(UserResource.getSysIcon("icon-user"));

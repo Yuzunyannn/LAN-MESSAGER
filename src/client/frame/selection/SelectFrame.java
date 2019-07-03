@@ -97,54 +97,73 @@ public class SelectFrame extends JFrame {
 			}
 		}
 		this.setVisible(false);
-		this.setTitle(title);
-		this.setSize(400, 500);
-		this.setResizable(false);
-		this.setAlwaysOnTop(true);
-		this.setContentPane(new JPanel());
-		this.type = type;
-		if (this.type == VIEW) {
-			revertButton.setText("显示全部");
-		}
-		choosable = false;
-		selectPane = new SelectPane(selectUsers, type);
-		searchField.setSize(new Dimension(100, 40));
-		searchField.setForeground(Theme.COLOR9);
-		searchField.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-
+		if (users.size() != 1) {
+			this.setTitle(title);
+			this.setSize(400, 500);
+			this.setResizable(false);
+			this.setAlwaysOnTop(true);
+			this.setContentPane(new JPanel());
+			this.type = type;
+			if (this.type == VIEW) {
+				revertButton.setText("显示全部");
 			}
+			choosable = false;
+			selectPane = new SelectPane(selectUsers, type);
+			searchField.setSize(new Dimension(100, 40));
+			searchField.setForeground(Theme.COLOR9);
+			searchField.addFocusListener(new FocusListener() {
 
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (searchField.getText().equals("搜索用户")) {
-					searchField.setForeground(Color.BLACK);
-					searchField.setText("");
-				}
-			}
-		});
-		searchField.addActionListener(new ActionListener() {
+				@Override
+				public void focusLost(FocusEvent e) {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (searchField.getText().equals("")) {
-
-				} else {
-					System.out.println("changed!");
 				}
 
-			}
-		});
-		Document document = searchField.getDocument();
-		document.addDocumentListener(new DocumentListener() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					if (searchField.getText().equals("搜索用户")) {
+						searchField.setForeground(Color.BLACK);
+						searchField.setText("");
+					}
+				}
+			});
+			searchField.addActionListener(new ActionListener() {
 
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				if (searchField.getText().equals("")&&type!=VIEW) {
-					revertButton.setText("全选");
-				} else {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (searchField.getText().equals("")) {
+
+					} else {
+						System.out.println("changed!");
+					}
+
+				}
+			});
+			Document document = searchField.getDocument();
+			document.addDocumentListener(new DocumentListener() {
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					if (searchField.getText().equals("") && type != VIEW) {
+						revertButton.setText("全选");
+					} else {
+						List<String> u = new ArrayList<String>();
+						for (String string : selectUsers) {
+							if (string.indexOf(searchField.getText()) != -1) {
+								u.add(string);
+							}
+						}
+						if (type == VIEW) {
+							selectPane.updatePanel(u, VIEW);
+						} else {
+							selectPane.updatePanel(u, CHOOSE);
+						}
+
+					}
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					revertButton.setText("显示全部");
 					List<String> u = new ArrayList<String>();
 					for (String string : selectUsers) {
 						if (string.indexOf(searchField.getText()) != -1) {
@@ -152,68 +171,59 @@ public class SelectFrame extends JFrame {
 						}
 					}
 					if (type == VIEW) {
-						selectPane.updatePanel(u,VIEW);
+						selectPane.updatePanel(u, VIEW);
 					} else {
-						selectPane.updatePanel(u,CHOOSE);
-					}
-
-				}
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				revertButton.setText("显示全部");
-				List<String> u = new ArrayList<String>();
-				for (String string : selectUsers) {
-					if (string.indexOf(searchField.getText()) != -1) {
-						u.add(string);
+						selectPane.updatePanel(u, CHOOSE);
 					}
 				}
-				if (type == VIEW) {
-					selectPane.updatePanel(u,VIEW);
-				} else {
-					selectPane.updatePanel(u,CHOOSE);
-				}
-			}
 
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				System.out.println("change!");
-			}
-		});
-		revertButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				if (revertButton.getText().equals("显示全部")) {
-					searchField.setText("搜索用户");
-					searchField.setForeground(Theme.COLOR9);
-					if (type == VIEW) {
-						selectPane.updatePanel(selectUsers,VIEW);
-					} else {
-						selectPane.updatePanel(selectUsers, CHOOSE);
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					System.out.println("change!");
+				}
+			});
+			revertButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					if (revertButton.getText().equals("显示全部")) {
+						searchField.setText("搜索用户");
+						searchField.setForeground(Theme.COLOR9);
+						if (type == VIEW) {
+							selectPane.updatePanel(selectUsers, VIEW);
+						} else {
+							selectPane.updatePanel(selectUsers, CHOOSE);
+							revertButton.setText("全选");
+						}
+
+					} else if (revertButton.getText().equals("全选")) {
+						for (String string : selectUsers) {
+							if (!selectedList.contains(string)) {
+								selectedList.add(string);
+							}
+						}
+						selectPane.checkAll(true);
+						revertButton.setText("取消全选");
+					} else if (revertButton.getText().equals("取消全选")) {
+						selectedList.clear();
+						selectPane.checkAll(false);
 						revertButton.setText("全选");
 					}
-					
-				} else if (revertButton.getText().equals("全选")) {
-					for (String string : selectUsers) {
-						if (!selectedList.contains(string)) {
-							selectedList.add(string);
-						}
-					}
-					selectPane.checkAll(true);
-					revertButton.setText("取消全选");
-				} else if (revertButton.getText().equals("取消全选")) {
-					selectedList.clear();
-					selectPane.checkAll(false);
-					revertButton.setText("全选");
-				}
 
-			}
-		});
-		revertButton.setBackground(Color.WHITE);
-		searchPanel.setLayout(new BorderLayout());
-		searchPanel.add(searchField, BorderLayout.CENTER);
-		searchPanel.add(revertButton, BorderLayout.EAST);
+				}
+			});
+			revertButton.setBackground(Color.WHITE);
+			searchPanel.setLayout(new BorderLayout());
+			searchPanel.add(searchField, BorderLayout.CENTER);
+			searchPanel.add(revertButton, BorderLayout.EAST);
+		} else {
+			this.setTitle("个人信息");
+			this.setResizable(false);
+			selectHeight = 100;
+			this.setSize(200, 120);
+			title = "个人信息";
+			selectPane = new SelectPane(users, type);
+			searchField.setVisible(false);
+		}
 		this.add(searchPanel);
 		this.add(selectPane);
 		this.setLayout(layout);
@@ -225,24 +235,6 @@ public class SelectFrame extends JFrame {
 		int windowsHeight = this.getHeight();
 		// System.out.println(windowsWidth+","+windowsHeight);
 		this.setBounds((width - windowsWidth) / 2, (height - windowsHeight) / 2, windowsWidth, windowsHeight);
-		// 失焦即销毁
-		this.addWindowFocusListener(new WindowFocusListener() {
-
-			@Override
-			public void windowLostFocus(WindowEvent e) {
-				// TODO Auto-generated method stub
-				selectedList.clear();
-				SendGroupFrame.setSendText("");
-				dispose();
-			}
-
-			@Override
-			public void windowGainedFocus(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		// this.setVisible(true);
 	}
 
 	/** 获取被选中的用户们（在获取前一定要判断choosable） */

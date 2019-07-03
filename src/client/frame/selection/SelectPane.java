@@ -55,6 +55,7 @@ public class SelectPane extends JScrollPane {
 			label = new JLabel(string);
 			if (type == SelectFrame.VIEW) {
 				button = new JButton();
+				button.setBackground(Theme.COLOR2);
 				button.setIcon(UserResource.getHeadIcon(string, UserResource.HeadIconSize.SMALL));
 				tmp.add(button, BorderLayout.EAST);
 			} else if (type == SelectFrame.CHOOSE) {

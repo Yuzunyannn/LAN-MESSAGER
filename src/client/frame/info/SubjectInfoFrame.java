@@ -48,7 +48,7 @@ public class SubjectInfoFrame extends JFrame {
 		int width = Toolkit.getDefaultToolkit().getScreenSize().width;
 		int height = Toolkit.getDefaultToolkit().getScreenSize().height;
 		// 得到窗体的宽、高
-		this.setSize(new Dimension(600, 400));
+		this.setSize(new Dimension(200, 100));
 		int windowsWidth = this.getWidth();
 		int windowsHeight = this.getHeight();
 		this.setBounds((width - windowsWidth) / 2, (height - windowsHeight) / 2, windowsWidth, windowsHeight);
@@ -69,26 +69,31 @@ public class SubjectInfoFrame extends JFrame {
 			}
 		});
 		this.setAlwaysOnTop(true);
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints constraint = new GridBagConstraints();
-		constraint.gridx = 0;
-		constraint.gridy = 0;
-		this.getContentPane().add(userIcon, constraint);
-		constraint.gridx = 1;
-		constraint.gridy = 0;
-		this.getContentPane().add(userLabel, constraint);
-		constraint.gridx = 0;
-		constraint.gridy = 1;
-		this.add(new JLabel("备注："), constraint);
-		constraint.gridx = 1;
-		constraint.gridy = 1;
-		this.getContentPane().add(new JLabel("备注信息"), constraint);
-		constraint.gridx = 0;
-		constraint.gridy = 2;
-		this.getContentPane().add(new JLabel("地区："), constraint);
-		constraint.gridx = 1;
-		constraint.gridy = 2;
-		this.getContentPane().add(new JLabel("地区："), constraint);
+		
+		this.getContentPane().setLayout(new GridLayout(1,0));
+		setUp(userName);
+		this.getContentPane().add(userIcon);
+		this.getContentPane().add(userLabel);
+//		this.setLayout(new GridBagLayout());
+//		GridBagConstraints constraint = new GridBagConstraints();
+//		constraint.gridx = 0;
+//		constraint.gridy = 0;
+//		this.getContentPane().add(userIcon, constraint);
+//		constraint.gridx = 1;
+//		constraint.gridy = 0;
+//		this.getContentPane().add(userLabel, constraint);
+//		constraint.gridx = 0;
+//		constraint.gridy = 1;
+//		this.add(new JLabel("备注："), constraint);
+//		constraint.gridx = 1;
+//		constraint.gridy = 1;
+//		this.getContentPane().add(new JLabel("备注信息"), constraint);
+//		constraint.gridx = 0;
+//		constraint.gridy = 2;
+//		this.getContentPane().add(new JLabel("地区："), constraint);
+//		constraint.gridx = 1;
+//		constraint.gridy = 2;
+//		this.getContentPane().add(new JLabel("地区："), constraint);
 		
 	}
 
