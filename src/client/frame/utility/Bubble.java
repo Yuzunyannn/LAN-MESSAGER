@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import client.frame.Theme;
+import client.record.Record;
 
 public class Bubble extends JPanel {
 
@@ -36,6 +37,10 @@ public class Bubble extends JPanel {
 
 	public Bubble(String words, BubbleType type) {
 		popMenu.add(this.getItemMenu("复制文本"));
+		int index = words.indexOf(Record.FILEEND);
+		if (index > 0) {
+			words = words.substring(index + Record.FILEEND.length(), words.length());
+		}
 		this.words = new JLabel(words);
 		this.setLayout(new BorderLayout());
 		if (type == BubbleType.FILE) {
