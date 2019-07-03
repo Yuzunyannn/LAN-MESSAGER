@@ -22,6 +22,11 @@ import user.UOnline;
 import user.User;
 
 public class Record {
+	
+	static public String FILEMARK = "#FILE?:";
+	static public String FILEEND = ":?FILEEND#";
+	static public String MEMEMARK = "#MEME?:";
+	static public String TIMEMARK = "#TIME?:";
 
 	static private String toRecordString(String str) {
 		StringBuffer out = new StringBuffer("");

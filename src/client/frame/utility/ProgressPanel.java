@@ -81,6 +81,7 @@ public class ProgressPanel extends JPanel implements ActionListener, ChangeListe
 	/** 设置进度条，应调取事件后响应 */
 	public void toggleProgress(EventFile e) {
 		this.e = e;
+		((FileBubble)getParent()).fileTmpID = e.getTempName();
 		this.timer.start();
 	}
 

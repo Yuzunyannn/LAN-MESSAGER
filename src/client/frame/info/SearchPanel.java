@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -27,6 +28,7 @@ import client.frame.selection.SelectGroupFrame;
 import client.frame.selection.SendGroupFrame;
 import event.IEventBus;
 import log.Logger;
+import resmgt.ResourceManagement;
 import user.User;
 
 public class SearchPanel extends JPanel {
@@ -164,13 +166,12 @@ public class SearchPanel extends JPanel {
 		search.setText(INFO);
 		search.addFocusListener(new DefaultFocusListener(INFO, textpanel));
 		int buttonsize = 30;
-		// b1.setSize(buttonsize, buttonsize);
-		// b1.setLocation(220, 23);
-		// b2.setSize(buttonsize, buttonsize);
-		// b2.setLocation(260, 23);
-
 		b2.setBounds(220, 23, buttonsize, buttonsize);
 		b3.setBounds(260, 23, buttonsize, buttonsize);
+		b2.setIcon(new ImageIcon(ResourceManagement.instance.getPackResource("img/icons/group.png").getImage()));
+		b3.setIcon(new ImageIcon(ResourceManagement.instance.getPackResource("img/icons/settings1.png").getImage()));
+		b2.setBackground(Theme.COLOR2);
+		b3.setBackground(Theme.COLOR2);
 		this.add(b2);
 		this.add(b3);
 		this.add(textpanel);
@@ -184,7 +185,7 @@ public class SearchPanel extends JPanel {
 		this.setBackground(Theme.COLOR5);
 		entry = false;
 		search.setFocusable(entry);
-		textpanel.isSearch=false;
+		textpanel.isSearch = false;
 
 	}
 
@@ -248,7 +249,7 @@ class DefaultFocusListener implements FocusListener {
 			textfield.getTextField().setText(null);
 			textfield.getTextField().setBackground(Theme.COLOR0);
 			textfield.getTextField().setForeground(Color.BLACK);
-			textfield.isSearch=true;
+			textfield.isSearch = true;
 
 		}
 	}
@@ -259,7 +260,7 @@ class DefaultFocusListener implements FocusListener {
 		if (temp.equals("")) {
 			textfield.getTextField().setForeground(Color.GRAY);
 			textfield.getTextField().setText(info);
-			textfield.isSearch=false;
+			textfield.isSearch = false;
 		}
 
 	}

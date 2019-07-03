@@ -240,7 +240,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void checkGroup(EventShow e) {
 		if (e.id.indexOf("#G") == 0) {
@@ -277,8 +277,8 @@ public class UtilityPanel extends JPanel implements ITickable {
 		e.debufInfos.add("UtilityPanel(" + tick + ")当前板子的id为:" + panelInfo);
 		EventsBridge.frontendEventHandle.post(new EventIsShowed(UOnline.getInstance().getUser("debug")));
 	}
-	
-	/**已读标记*/
+
+	/** 已读标记 */
 	@SubscribeEvent
 	public void hasRead(client.event.EventIsShowed e) {
 		PanelInfo info = this.getChatPanelInfo(e.getUser().getUserName());
