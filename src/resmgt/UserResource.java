@@ -1,6 +1,7 @@
 package resmgt;
 
 import java.awt.Image;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 
@@ -58,6 +59,8 @@ public class UserResource {
 			return this.str;
 		}
 	}
+	
+	static public int MEMECOUNT = 0;
 
 	static public void init() {
 		Logger.log.impart("开始处理用户资源!");
@@ -97,10 +100,56 @@ public class UserResource {
 				info.getImage().getScaledInstance(IconSize.LARGE.size, IconSize.LARGE.size, IconSize.STANDARD.size));
 
 		// MEME-1
-		info = ResourceManagement.instance.getPackResource("img/memes/1.jpg");
-		info = ResourceManagement.instance.loadTmpResource(info, "meme-1");
-		info.setData(info.getImage().getScaledInstance(MemeSize.STANDARD.size, MemeSize.STANDARD.size,
-				MemeSize.STANDARD.size));
+		File file = new File("./src/resources/img/memes/");
+		int count = 0;
+		if (file.exists()) {
+			File[] files = file.listFiles();
+			if (files.length == 0) {
+				System.out.println("文件夹是空的!");
+				return;
+			} else {
+				for (File file2 : files) {
+					if (!file2.isDirectory()) {
+						if (file2.getPath().indexOf(".DS_Store")>=0) {
+							continue;
+						}
+						int index = file2.getPath().indexOf("img");
+						String srcImg = file2.getPath().substring(index, file2.getPath().length());
+						info = ResourceManagement.instance.getPackResource(srcImg);
+						String path = "meme-" + srcImg.substring(10, srcImg.indexOf(".jpg"));
+						info = ResourceManagement.instance.loadTmpResource(info, path);
+						info.setData(info.getImage().getScaledInstance(MemeSize.STANDARD.size, MemeSize.STANDARD.size,
+								MemeSize.STANDARD.size));
+						count++;
+						System.out.println("文件:" + file2.getPath());
+					}
+				}
+			}
+		} else {
+			System.out.println("文件不存在!");
+		}
+		MEMECOUNT = count;
+	}
+
+	public void traverseFolder(String path) {
+
+		File file = new File(path);
+		if (file.exists()) {
+			File[] files = file.listFiles();
+			if (files.length == 0) {
+				System.out.println("文件夹是空的!");
+				return;
+			} else {
+				for (File file2 : files) {
+					if (file2.isDirectory()) {
+					} else {
+						System.out.println("文件:" + file2.getPath());
+					}
+				}
+			}
+		} else {
+			System.out.println("文件不存在!");
+		}
 	}
 
 	/** 获取用户头像 */

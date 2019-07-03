@@ -19,7 +19,7 @@ public class MemeFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int TITLE_HEIGHT = 20;
+	//private static final int TITLE_HEIGHT = 20;
 	private EmojiPanel emojiPanel;
 
 //	public MemeFrame() throws HeadlessException {
@@ -59,28 +59,28 @@ public class MemeFrame extends JFrame {
 		this.setOpacity(1);
 	}
 
-	public Insets getInsets() {
-		return new Insets(TITLE_HEIGHT, 1, 1, 1);
-	}
+//	public Insets getInsets() {
+//		return new Insets(TITLE_HEIGHT, 1, 1, 1);
+//	}
 
-	public void paint(Graphics g) {
-		super.paint(g);
-		g.setColor(new Color(0, 0, 128));
-		g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
-		g.fillRect(0, 0, getWidth(), TITLE_HEIGHT);
-
-		FontMetrics fm = g.getFontMetrics();
-		g.setColor(Color.white);
-		g.drawString(getTitle(), 2, (TITLE_HEIGHT - fm.getHeight()) / 2 + fm.getAscent());
-	}
+//	public void paint(Graphics g) {
+//		super.paint(g);
+//		g.setColor(new Color(0, 0, 128));
+//		g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+//		g.fillRect(0, 0, getWidth(), TITLE_HEIGHT);
+//
+//		FontMetrics fm = g.getFontMetrics();
+//		g.setColor(Color.white);
+//		g.drawString(getTitle(), 2, (TITLE_HEIGHT - fm.getHeight()) / 2 + fm.getAscent());
+//	}
 
 	private class MouseHandler extends MouseInputAdapter {
 		private Point point;
 
 		public void mousePressed(MouseEvent e) {
-			if (e.getY() <= TITLE_HEIGHT) {
-				this.point = e.getPoint();
-			}
+//			if (e.getY() <= TITLE_HEIGHT) {
+//				this.point = e.getPoint();
+//			}
 		}
 
 		public void mouseDragged(MouseEvent e) {

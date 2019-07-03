@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -49,6 +51,8 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 
 	/** 输入框的上下边距 */
 	public static final int EDIT_MARGIN = 35;
+	
+	private static boolean hasClickedMeme = false;
 
 	/** 输入区域自定义布局 */
 	private LayoutManager layout = new LayoutManager() {
@@ -223,14 +227,20 @@ public class ChatInputPanel extends JPanel implements INBTSerializable<NBTTagLis
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// 初始化memes
+				// 初始化memesif
+				if (hasClickedMeme) {
+					hasClickedMeme = false;
+					return;
+				}
 				ChatPanel parent = (ChatPanel) ChatInputPanel.this.getParent();
 				memeFrame = new MemeFrame("Test Area", parent.getChatTo().getUserName());
-				memeFrame.setSize(400, 400);
-				memeFrame.setLocation(e.getX() - memeFrame.getWidth(), e.getY() - memeFrame.getHeight());
-				memeFrame.setLocationRelativeTo(null);
+				memeFrame.setSize(300, 300);
+				Point point = MouseInfo.getPointerInfo().getLocation();
+				memeFrame.setLocation(point.x - memeFrame.getWidth()/2, point.y - memeFrame.getHeight() - 20);
+				//memeFrame.setLocationRelativeTo(null);
 				memeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				memeFrame.setVisible(true);
+				hasClickedMeme = true;
 			}
 		});
 		button.setBorderPainted(false);
