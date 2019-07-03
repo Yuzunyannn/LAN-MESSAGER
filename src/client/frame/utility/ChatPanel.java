@@ -20,6 +20,7 @@ import client.record.RecordManagement;
 import client.record.RecordValue;
 import client.user.UserClient;
 import client.word.Word;
+import client.word.WordString;
 import nbt.NBTTagCompound;
 import nbt.NBTTagList;
 import transfer.EventFileRecv;
@@ -189,12 +190,24 @@ public class ChatPanel extends JPanelUtility {
 		while (!show.isEmpty()) {
 			RecordValue v = show.getLast();
 			show.removeLast();
+			String str = v.word.toString();
+			BubbleType type = BubbleType.WORD;
+			if (v.word.toString().indexOf(Record.FILEMARK) == 0) {
+				type = BubbleType.FILE;
+				str = v.word.toString().substring(Record.FILEMARK.length(), v.word.toString().length());
+			} else if (v.word.toString().indexOf(Record.MEMEMARK) == 0) {
+				type = BubbleType.MEME;
+				str = v.word.toString().substring(Record.MEMEMARK.length(), v.word.toString().length());
+			} else if (v.word.toString().indexOf(Record.TIMEMARK) == 0) {
+				type = BubbleType.TIME;
+				str = v.word.toString().substring(Record.TIMEMARK.length(), v.word.toString().length());
+				chatDialogPanel.addBubble(false, str, chatTo.getUserName(), type, str, "");
+				continue;
+			}
 			if (v.whos.equals(chatTo)) {
-				chatDialogPanel.addBubble(false, v.word.toString(), chatTo.getUserName(), BubbleType.WORD,
-						v.word.getTime(), "");
+				chatDialogPanel.addBubble(false, str, chatTo.getUserName(), type, v.word.getTime(), "");
 			} else {
-				chatDialogPanel.addBubble(true, v.word.toString(), UserClient.getClientUsername(), BubbleType.WORD,
-						v.word.getTime(), "");
+				chatDialogPanel.addBubble(true, str, UserClient.getClientUsername(), type, v.word.getTime(), "");
 			}
 		}
 
@@ -202,15 +215,21 @@ public class ChatPanel extends JPanelUtility {
 
 	/** 时间差大于5分钟则显示时间线 */
 	public void timeLapse(String nowDate, String lastDate) {
+		Record rec = RecordManagement.getRecord(chatTo);
+		Word w;
 		if (chatDialogPanel.firstTime) {
 			int now = Integer.parseInt(nowDate.substring(14, 15));
 			int last = Integer.parseInt(lastDate.substring(14, 15));
 			if ((now - last) >= 5) {
 				chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString(), "");
+				w = new WordString(Record.TIMEMARK + nowDate);
+				rec.addNew(w, chatTo);
 			}
 		} else {
 			chatDialogPanel.firstTime = true;
 			chatDialogPanel.addBubble(false, "", "", BubbleType.TIME, nowDate.toString(), "");
+			w = new WordString(Record.TIMEMARK + nowDate);
+			rec.addNew(w, chatTo);
 		}
 	}
 
@@ -220,6 +239,11 @@ public class ChatPanel extends JPanelUtility {
 		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString(), "");
 		chatDialogPanel.addBubble(true, name, UserClient.getClientUsername(), type, date.toString(), "");
 		this.revalidate();
+		Record rec = RecordManagement.getRecord(chatTo);
+		Word w = new WordString(Record.TIMEMARK + date.toString());
+		rec.addNew(w, UserClient.getClientUser());
+		w = new WordString(Record.MEMEMARK + name);
+		rec.addNew(w, UserClient.getClientUser());
 	}
 
 	/** 发送文件UI更新 */
@@ -243,6 +267,11 @@ public class ChatPanel extends JPanelUtility {
 		chatDialogPanel.addBubble(false, name, UserClient.getClientUsername(), BubbleType.FILE, date.toString(),
 				storyID);
 		this.revalidate();
+		Record rec = RecordManagement.getRecord(chatTo);
+		Word w = new WordString(Record.TIMEMARK + date.toString());
+		rec.addNew(w, chatTo);
+		w = new WordString(Record.FILEMARK + storyID + Record.FILEEND + name);
+		rec.addNew(w, chatTo);
 	}
 
 	/** 接收图片UI更新 */
@@ -252,6 +281,9 @@ public class ChatPanel extends JPanelUtility {
 		chatDialogPanel.addBubble(false, name, UserClient.getClientUsername(), BubbleType.PICTURE, date.toString(),
 				storyID);
 		this.revalidate();
+		Word w = new WordString(Record.MEMEMARK + name);
+		Record rec = RecordManagement.getRecord(chatTo);
+		rec.addNew(w, chatTo);
 	}
 
 	/** 接收文件进度UI更新 */
@@ -279,13 +311,17 @@ public class ChatPanel extends JPanelUtility {
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words) {
 			Record rec = RecordManagement.getRecord(chatTo);
-			rec.addNew(w, UserClient.getClientUser());
-			BubbleType type = checkType(w.id);
-			if (type == BubbleType.FILE) {
-				continue;
-			}
 			Date date = new Date();
 			timeLapse(date.toString(), chatDialogPanel.lastTime);
+			BubbleType type = checkType(w.id);
+			if (type == BubbleType.FILE) {
+				w = new WordString(Record.FILEMARK + w.toString());
+				rec.addNew(w, UserClient.getClientUser());
+				continue;
+			} else {
+				rec.addNew(w, UserClient.getClientUser());
+			}
+			
 			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString(), "");
 		}
 		this.revalidate();
@@ -297,33 +333,40 @@ public class ChatPanel extends JPanelUtility {
 		Date date = new Date();
 		chatDialogPanel.addBubble(true, "", UserClient.getClientUsername(), BubbleType.TIME, date.toString(), "");
 		chatDialogPanel.addBubble(true, msg, UserClient.getClientUsername(), BubbleType.WORD, date.toString(), "");
+		Word w = new WordString(msg);
+		Record rec = RecordManagement.getRecord(chatTo);
+		rec.addNew(w, UserClient.getClientUser());
 	}
 
 	/** 当点击收到消息的时候调用 */
 	public void onRecvMsg(User user, Word word) {
 		Record rec = RecordManagement.getRecord(chatTo);
-		rec.addNew(word, chatTo);
 		BubbleType type = checkType(word.id);
 		java.util.regex.Matcher m = regularRule.matcher(word.getValue());
 		Date date = new Date();
 		timeLapse(date.toString(), chatDialogPanel.lastTime);
 		boolean found = false;
-
+		Word tmp;
 		while (m.find()) {
 			found = true;
 			String id = m.group(1);
 			System.out.print(id);
 			chatDialogPanel.addBubble(false, id + ".jpg", user.getUserName(), BubbleType.MEME, date.toString(), "");
+			tmp = new WordString(Record.MEMEMARK + id);
+			rec.addNew(tmp, chatTo);
 		}
 		if (found) {
 			String[] texts = regularRule.split(word.getValue());
 			if (texts != null) {
 				for (int i = 0; i < texts.length; i++) {
 					chatDialogPanel.addBubble(false, texts[i], user.getUserName(), type, date.toString(), "");
+					tmp = new WordString(texts[i]);
+					rec.addNew(tmp, chatTo);
 				}
 			}
 		} else {
 			chatDialogPanel.addBubble(false, word.toString(), user.getUserName(), type, date.toString(), "");
+			rec.addNew(word, chatTo);
 		}
 	}
 
