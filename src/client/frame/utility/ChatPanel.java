@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.swing.JOptionPane;
+
 import client.event.EventSendInputWords;
 import client.event.EventsBridge;
 import client.frame.Theme;
@@ -312,18 +314,25 @@ public class ChatPanel extends JPanelUtility {
 	/** 当点击发送时候调用 */
 	public void onSendMsg(List<Word> words) {
 		for (Word w : words) {
+			BubbleType type = checkType(w.id);
+			if (type.equals(BubbleType.FILE) ) {
+				if (chatTo.getUserName().indexOf("#G")==0) {
+					JOptionPane.showMessageDialog(this, "群组不支持发文件");
+					return;
+				}
+			}
 			Record rec = RecordManagement.getRecord(chatTo);
 			Date date = new Date();
 			timeLapse(date.toString(), chatDialogPanel.lastTime);
-			BubbleType type = checkType(w.id);
-			if (type == BubbleType.FILE) {
+			if (type.equals(BubbleType.FILE)) {
+				System.out.println(chatTo.getSpecialUser().getId());
+				System.out.println(chatTo.getUserName());
 				w = new WordString(Record.FILEMARK + w.toString());
 				rec.addNew(w, UserClient.getClientUser());
 				continue;
 			} else {
 				rec.addNew(w, UserClient.getClientUser());
 			}
-			
 			chatDialogPanel.addBubble(true, w.toString(), UserClient.getClientUsername(), type, date.toString(), "");
 		}
 		this.revalidate();

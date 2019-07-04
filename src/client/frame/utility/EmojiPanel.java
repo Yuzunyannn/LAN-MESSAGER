@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
+import javax.swing.plaf.ScrollBarUI;
 
 import client.event.EventSendPicture;
 import client.event.EventsBridge;
@@ -55,7 +56,7 @@ public class EmojiPanel extends JScrollPane {
 			});
 			this.contentPanel.add(btn);
 		}
-
+		scrollBar.setUI(new client.frame.ui.ScrollBarUI());
 		this.contentPanel.setVisible(true);
 	}
 

@@ -252,7 +252,6 @@ public class Record {
 
 	/** 添加一条新纪录 */
 	public void addNew(Word word, User whos) {
-		System.out.println("getPic lalalala :" + word.getValue());
 		Calendar cal = Calendar.getInstance();
 		RecInfo info = this.getWords(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 		NBTTagCompound nbt = new NBTTagCompound();

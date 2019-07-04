@@ -255,7 +255,9 @@ public class UtilityPanel extends JPanel implements ITickable {
 	
 	@SubscribeEvent
 	public void changeBlankChatOnDelete(EventChatOperation e) {
-		this.toBlank();
+		if (e.optype.equals(EventChatOperation.DELETECHAT)) {
+			this.toBlank();
+		}
 	}
 	
 	@SubscribeEvent
