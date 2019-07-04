@@ -351,7 +351,10 @@ public class ListScrollPanel extends JScrollPane {
 			if(e.sp==null)
 			EventsBridge.frontendEventHandle
 					.post(new EventChatOperation(e.from.getUserName(), EventChatOperation.ADDCHAT, state));
-			else UserClient.sendToServer(new MessageGroupInfo(e.sp));
+			else {
+				UserClient.sendToServer(new MessageGroupInfo(e.sp));
+			}
+		if(e.sp==null) {
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
 				((MemberButton) content[i]).recvMessage();
@@ -363,6 +366,16 @@ public class ListScrollPanel extends JScrollPane {
 					EventsBridge.sendHasRead(e.from);
 				}
 			}
+		
+		}else
+			for (int i = 0; i < content.length; i++)
+				if (((MemberButton) content[i]).getMemberName().equals(e.sp.specialName)) {
+					((MemberButton) content[i]).recvMessage();
+					setTop(((MemberButton) content[i]).getMemberName());
+					if (((MemberButton) content[i]).getIsChat()) {
+						EventsBridge.sendHasRead(e.from);
+					}
+				}
 		p.removeAll();
 		for (Component i : content) {
 			p.add(i);
