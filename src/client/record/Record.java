@@ -50,7 +50,27 @@ public class Record {
 		userChatToList = readTxtFile(file);
 		return userChatToList;
 	}
+	
+	/**删除一个聊天对象*/
+	static public void deleteUserFile(String thisUser, String addUser) {
+		File userListDir = new File("./tmp/UserChatList/");
+		if (!userListDir.exists()) {
+			return;
+		}
+		File userListFile = new File("./tmp/UserChatList/" + thisUser + ".txt");
+		if (!userListFile.exists() || !userListFile.isFile()) {
+			return;
+		}
+		List<String> userChatToList = readTxtFile(userListFile);
+		if (userChatToList.contains(addUser)) {
+			userChatToList.remove(addUser);
+			if (!writeTxtFile(userListFile, userChatToList)) {
+				System.out.println("写入文件失败！");
+			}
+		}
+	}
 
+	/**添加一个聊天对象*/
 	static public void updateUserFile(String thisUser, String addUser) {
 		File userListDir = new File("./tmp/UserChatList/");
 		if (!userListDir.exists()) {

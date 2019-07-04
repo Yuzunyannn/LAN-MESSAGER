@@ -169,10 +169,14 @@ public class SearchPanel extends JPanel {
 		int buttonsize = 30;
 		b2.setBounds(220, 23, buttonsize, buttonsize);
 		b3.setBounds(260, 23, buttonsize, buttonsize);
-		b2.setIcon(new ImageIcon(ResourceManagement.instance.getPackResource("img/icons/group.png").getImage()));
-		b3.setIcon(new ImageIcon(ResourceManagement.instance.getPackResource("img/icons/settings1.png").getImage()));
-		b2.setBackground(Theme.COLOR2);
-		b3.setBackground(Theme.COLOR2);
+		b2.setIcon(new ImageIcon(ResourceManagement.instance.getTmpResource("icon-plane").getImage()));
+		b3.setIcon(new ImageIcon(ResourceManagement.instance.getTmpResource("icon-add").getImage()));
+		b2.setBackground(Color.black);
+		b3.setBackground(Color.black);
+		b2.setBorder(null);
+		b3.setBorder(null);
+		b2.setOpaque(false);
+		b3.setOpaque(false);
 		this.add(b2);
 		this.add(b3);
 		this.add(textpanel);

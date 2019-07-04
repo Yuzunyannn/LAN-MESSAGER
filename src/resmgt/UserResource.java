@@ -59,7 +59,7 @@ public class UserResource {
 			return this.str;
 		}
 	}
-	
+
 	static public int MEMECOUNT = 0;
 
 	static public void init() {
@@ -85,7 +85,7 @@ public class UserResource {
 		// icon-emoji
 		info = ResourceManagement.instance.getPackResource("img/icons/icon-emoji.png");
 		info = ResourceManagement.instance.loadTmpResource(info, "icon-emoji");
-		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size - 5, IconSize.STANDARD.size - 5,
+		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size-5, IconSize.STANDARD.size - 5,
 				IconSize.STANDARD.size - 5));
 		// icon-user
 		info = ResourceManagement.instance.getPackResource("img/icons/icon-user.png");
@@ -98,7 +98,16 @@ public class UserResource {
 		info = ResourceManagement.instance.loadTmpResource(info, "icon-document");
 		info.setData(
 				info.getImage().getScaledInstance(IconSize.LARGE.size, IconSize.LARGE.size, IconSize.STANDARD.size));
-
+		// icon-plane
+		info = ResourceManagement.instance.getPackResource("img/icons/plane.png");
+		info = ResourceManagement.instance.loadTmpResource(info, "icon-plane");
+		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size-5, IconSize.STANDARD.size-5,
+				IconSize.STANDARD.size-5));
+		// icon-add
+		info = ResourceManagement.instance.getPackResource("img/icons/add.png");
+		info = ResourceManagement.instance.loadTmpResource(info, "icon-add");
+		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size-5, IconSize.STANDARD.size-5,
+				IconSize.STANDARD.size-5));
 		// MEME-1
 		File file = new File("./src/resources/img/memes/");
 		int count = 0;
@@ -110,7 +119,7 @@ public class UserResource {
 			} else {
 				for (File file2 : files) {
 					if (!file2.isDirectory()) {
-						if (file2.getPath().indexOf(".DS_Store")>=0) {
+						if (file2.getPath().indexOf(".DS_Store") >= 0) {
 							continue;
 						}
 						int index = file2.getPath().indexOf("img");

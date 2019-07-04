@@ -46,6 +46,7 @@ public class SelectFrame extends JFrame {
 	static private boolean choosable = false;
 	public static final int CHOOSE = 0;
 	public static final int VIEW = 1;
+	public boolean entry = false;
 
 	private LayoutManager layout = new LayoutManager() {
 
@@ -111,6 +112,26 @@ public class SelectFrame extends JFrame {
 			selectPane = new SelectPane(selectUsers, type);
 			searchField.setSize(new Dimension(100, 40));
 			searchField.setForeground(Theme.COLOR9);
+			searchField.setFocusable(false);
+			searchField.addMouseListener(new MouseAdapter() {
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					searchField.setFocusable(entry);
+					searchField.requestFocus();
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					entry = true;
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					entry = false;
+				};
+				
+			});
 			searchField.addFocusListener(new FocusListener() {
 
 				@Override
@@ -212,6 +233,7 @@ public class SelectFrame extends JFrame {
 				}
 			});
 			revertButton.setBackground(Color.WHITE);
+			revertButton.requestFocus();
 			searchPanel.setLayout(new BorderLayout());
 			searchPanel.add(searchField, BorderLayout.CENTER);
 			searchPanel.add(revertButton, BorderLayout.EAST);
