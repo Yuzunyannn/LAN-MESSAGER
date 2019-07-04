@@ -5,10 +5,14 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import client.event.EventNeedSave;
+import client.event.EventsBridge;
 import client.frame.info.InfoPanel;
 import client.frame.utility.UtilityPanel;
 import event.IEventBus;
@@ -79,14 +83,21 @@ public class MainFrame extends JFrame {
 		this.setMinimumSize(layout.minimumLayoutSize(this));
 		// 设置窗体大小和位置
 		this.fixed();
-		//居中显示
+		// 居中显示
 		int width = Toolkit.getDefaultToolkit().getScreenSize().width;
 		int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+		// 窗体关闭
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				EventsBridge.dealEventHandle.post(new EventNeedSave());
+			}
+		});
 		// 得到窗体的宽、高
 		int windowsWidth = this.getWidth();
 		int windowsHeight = this.getHeight();
-		//System.out.println(windowsWidth+","+windowsHeight);
-		this.setBounds((width - windowsWidth) / 2,(height - windowsHeight) / 2, windowsWidth, windowsHeight);
+		// System.out.println(windowsWidth+","+windowsHeight);
+		this.setBounds((width - windowsWidth) / 2, (height - windowsHeight) / 2, windowsWidth, windowsHeight);
 	}
 
 	public void initEvent(IEventBus bus) {
@@ -98,9 +109,8 @@ public class MainFrame extends JFrame {
 	public InfoPanel getInfoPanel() {
 		return infoPanel;
 	}
-	
-	public void setUserName(String name) 
-	{
+
+	public void setUserName(String name) {
 		infoPanel.setUserName(name);
 	}
 

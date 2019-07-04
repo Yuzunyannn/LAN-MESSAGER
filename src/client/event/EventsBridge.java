@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import client.user.UserClient;
+import event.EventBusSynchronized;
 import event.EventBusTask;
 import event.IEventBus;
 import event.SubscribeEvent;
@@ -21,6 +22,8 @@ import user.message.MessageHasRead;
 public class EventsBridge {
 
 	public static final IEventBus frontendEventHandle = new EventBusTask();
+	//传递EventNeedSave
+	public static final IEventBus dealEventHandle = new EventBusSynchronized();
 
 	/** [后端] 当登陆结果返回时的处理 */
 	public static void login(String recvUsername, String info) {

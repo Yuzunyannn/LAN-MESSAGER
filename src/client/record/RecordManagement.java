@@ -5,8 +5,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import client.event.EventNeedSave;
 import client.user.UserClient;
 import core.Core;
+import event.SubscribeEvent;
 import nbt.NBTTagCompound;
 import resmgt.ResourceInfo;
 import resmgt.ResourceManagement;
@@ -50,16 +52,11 @@ public class RecordManagement implements ITickable {
 
 	@Override
 	public int update() {
-		if(UserClient.toServer==null)return ITickable.SUCCESS;
+		if (UserClient.toServer == null)
+			return ITickable.SUCCESS;
 		tick++;
-		if (tick % (20 * 5) == 0) {
-			Iterator<Entry<User, Record>> iter = records.entrySet().iterator();
-			while (iter.hasNext()) {
-				Entry<User, Record> entry = iter.next();
-				Record rec = entry.getValue();
-				rec.save();
-			}
-		}
+		if (tick % (20 * 5) == 0)
+			saveOnce();
 		if (tick % (20 * 60) == 0) {
 			Iterator<Entry<User, Record>> iter = records.entrySet().iterator();
 			while (iter.hasNext()) {
@@ -71,6 +68,20 @@ public class RecordManagement implements ITickable {
 			}
 		}
 		return ITickable.SUCCESS;
+	}
+	/** 进行一次保存 */
+	private static void saveOnce() {
+		Iterator<Entry<User, Record>> iter = records.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<User, Record> entry = iter.next();
+			Record rec = entry.getValue();
+			rec.save();
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onClose(EventNeedSave e) {
+		saveOnce();
 	}
 
 }

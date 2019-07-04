@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import client.event.EventNeedSave;
 import client.event.EventsBridge;
 import client.frame.LoginFrame;
 import client.frame.MainFrame;
@@ -49,6 +50,7 @@ public class ClientProxy extends Proxy implements Runnable {
 		// 注册事件
 		frame.initEvent(EventsBridge.frontendEventHandle);
 		EventsBridge.frontendEventHandle.register(this);
+		EventsBridge.dealEventHandle.register(RecordManagement.class);
 		FileSenderManager.eventHandle.register(EventsBridge.class);
 		Network.eventHandle.register(UOnlineClient.class);
 	}
@@ -149,6 +151,7 @@ public class ClientProxy extends Proxy implements Runnable {
 
 	@SubscribeEvent
 	public void onLogout(client.event.EventLogout e) {
+		EventsBridge.dealEventHandle.post(new EventNeedSave());
 		UserClient.toServer.close();
 		UserClient.toServer = null;
 		logFrame.setHint("");
