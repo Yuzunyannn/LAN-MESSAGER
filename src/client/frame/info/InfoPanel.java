@@ -193,10 +193,8 @@ public class InfoPanel extends JPanel {
 			System.out.println("搜索请求返回");
 			Collection<User> searchResult = e.name;
 			searchMemberField.deleteAllMember();
-			if (!e.source) {
-				searchSet.clear();
-				searchSet.addAll(e.name);
-			}
+			searchSet.clear();
+			searchSet.addAll(e.name);
 			if (!searchResult.isEmpty()) {
 				for (User u : searchResult) {
 					searchMemberField.addNewMember(u, true);
@@ -214,7 +212,7 @@ public class InfoPanel extends JPanel {
 	public void onSearch(client.event.EventSearch e) {
 		// 本地搜索
 		if (lastSearch != "" && e.search.indexOf(lastSearch) != -1) {
-			HashSet<User> s = new HashSet<User>(userSet);
+			HashSet<User> s = new HashSet<User>();
 			if (!searchSet.isEmpty()) {
 				for (User u : searchSet) {
 					s.add(u);

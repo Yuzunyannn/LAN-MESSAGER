@@ -141,10 +141,8 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 					new Dimension(panel.getWidth() - this.scrollBarV.getWidth(), panel.getHeight() + addHeight));
 			panel.setSize(panel.getWidth(), panel.getHeight() + addHeight);
 		}
-		panel.revalidate();
-		this.revalidate();
-		this.repaint();
-		panel.repaint();
+		
+		
 		Core.task(new Runnable() {
 			public void run() {
 				scrollBarV.setValue(scrollBarV.getMaximum());
@@ -152,6 +150,10 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 				scrollBarV.repaint();
 			}
 		}, 50);
+		panel.revalidate();
+		panel.repaint();
+		this.revalidate();
+		this.repaint();
 	}
 
 	@Override
