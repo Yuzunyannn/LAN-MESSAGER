@@ -41,7 +41,8 @@ public class SearchHelper {
 	public boolean find(String str, String text){
 		if(str.length()>=text.length())
 			return str.indexOf(text)!=-1;
-		else throw new ArrayIndexOutOfBoundsException();
+		else 
+			return false;
 	}
 	
 }
