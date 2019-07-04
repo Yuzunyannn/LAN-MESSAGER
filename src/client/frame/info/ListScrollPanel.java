@@ -327,7 +327,15 @@ public class ListScrollPanel extends JScrollPane {
 		content = p.getComponents();
 		this.refresh();
 	}
-
+	@SubscribeEvent
+	public void onRecvFile(transfer.EventFileRecv.Finish e) {
+		for (Component i : content)
+			if (((MemberButton) i).getMemberName().equals(e.getFrom().getUserName())) {
+				if(((MemberButton)i).isChat)
+					EventsBridge.sendHasRead(e.getFrom());
+				break;
+			} 
+	}
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
 		/**未使用hashset优化*/
@@ -352,7 +360,7 @@ public class ListScrollPanel extends JScrollPane {
 				setTop(((MemberButton) content[i]).getMemberName());
 				System.out.println(((MemberButton) content[i]).getMemberName() + ((MemberButton) content[i]).count);
 				if (((MemberButton) content[i]).getIsChat()) {
-//					EventsBridge.sendHasRead(e.from);
+					EventsBridge.sendHasRead(e.from);
 				}
 			}
 		p.removeAll();

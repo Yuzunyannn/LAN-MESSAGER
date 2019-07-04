@@ -236,7 +236,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 //			if(isPerson(e.id)) 
 			{
 				User u = UOnline.getInstance().getUser(e.id);
-//				EventsBridge.sendHasRead(u);
+				EventsBridge.sendHasRead(u);
 			}
 		}
 	}
