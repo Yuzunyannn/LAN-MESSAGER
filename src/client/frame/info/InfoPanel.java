@@ -187,11 +187,10 @@ public class InfoPanel extends JPanel {
 
 	@SubscribeEvent
 	public void onSearchRequest(EventSearchRequest e) {
-		boolean remoteSearch;
 		if (state == EventIPC.FRIENDS)
-			remoteSearch = false;
+			;
 		else {
-			remoteSearch = true;
+			System.out.println("搜索请求返回");
 			Collection<User> searchResult = e.name;
 			searchMemberField.deleteAllMember();
 			if (!e.source) {
