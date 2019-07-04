@@ -100,6 +100,8 @@ public class ConfirmPane extends JPanel {
 		cancel.setBackground(null);
 		confirm.addMouseListener(listen);
 		cancel.addMouseListener(listen);
+		confirm.setFocusPainted(false);
+		cancel.setFocusPainted(false);
 		this.add(confirm);
 		this.add(cancel);
 		this.setVisible(true);

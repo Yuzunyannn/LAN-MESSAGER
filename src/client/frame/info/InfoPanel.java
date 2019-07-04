@@ -16,6 +16,7 @@ import com.sun.xml.internal.bind.api.Bridge;
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventIPC;
+import client.event.EventLogout;
 import client.event.EventSearchRequest;
 import client.event.EventULChange;
 import client.event.EventsBridge;
@@ -251,6 +252,11 @@ public class InfoPanel extends JPanel {
 
 	}
 
+	@SubscribeEvent
+	public void onloginOut(EventLogout e)
+	{
+		userSet.clear();
+	}
 	public void setUserName(String name) {
 		userField.setName(name);
 	}

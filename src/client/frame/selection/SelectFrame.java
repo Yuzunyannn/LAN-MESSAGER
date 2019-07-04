@@ -97,6 +97,7 @@ public class SelectFrame extends JFrame {
 				selectUsers.add(str);
 			}
 		}
+		revertButton.setFocusPainted(false);
 		this.setVisible(false);
 		if (users.size() != 1) {
 			this.setTitle(title);

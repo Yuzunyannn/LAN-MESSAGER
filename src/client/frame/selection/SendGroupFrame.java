@@ -35,7 +35,6 @@ public class SendGroupFrame extends SelectFrame {
 
 		@Override
 		public void removeLayoutComponent(Component comp) {
-			// TODO Auto-generated method stub
 
 		}
 

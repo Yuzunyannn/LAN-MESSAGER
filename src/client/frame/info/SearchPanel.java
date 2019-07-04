@@ -177,6 +177,8 @@ public class SearchPanel extends JPanel {
 		b3.setBorder(null);
 		b2.setOpaque(false);
 		b3.setOpaque(false);
+		b2.setFocusPainted(false);
+		b3.setFocusPainted(false);
 		this.add(b2);
 		this.add(b3);
 		this.add(textpanel);
