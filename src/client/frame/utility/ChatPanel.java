@@ -197,6 +197,7 @@ public class ChatPanel extends JPanelUtility {
 				str = v.word.toString().substring(Record.FILEMARK.length(), v.word.toString().length());
 			} else if (v.word.toString().indexOf(Record.MEMEMARK) == 0) {
 				type = BubbleType.MEME;
+				System.out.println(str);
 				str = v.word.toString().substring(Record.MEMEMARK.length(), v.word.toString().length());
 			} else if (v.word.toString().indexOf(Record.TIMEMARK) == 0) {
 				type = BubbleType.TIME;
@@ -236,14 +237,15 @@ public class ChatPanel extends JPanelUtility {
 	/** 发送图片的UI更新 */
 	public void onSendPics(String name, BubbleType type) {
 		Date date = new Date();
-		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString(), "");
-		chatDialogPanel.addBubble(true, name, UserClient.getClientUsername(), type, date.toString(), "");
-		this.revalidate();
 		Record rec = RecordManagement.getRecord(chatTo);
 		Word w = new WordString(Record.TIMEMARK + date.toString());
 		rec.addNew(w, UserClient.getClientUser());
 		w = new WordString(Record.MEMEMARK + name);
 		rec.addNew(w, UserClient.getClientUser());
+		chatDialogPanel.addBubble(true, "", "", BubbleType.TIME, date.toString(), "");
+		chatDialogPanel.addBubble(true, name, UserClient.getClientUsername(), type, date.toString(), "");
+		this.revalidate();
+		
 	}
 
 	/** 发送文件UI更新 */

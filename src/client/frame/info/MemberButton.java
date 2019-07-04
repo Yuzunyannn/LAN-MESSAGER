@@ -31,7 +31,7 @@ import resmgt.ResourceManagement;
 public class MemberButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	public final static int MEMBERBUTTON_HEIGHT = 70;
-	public static final String[] MEMBERITEMSTR = { EventFriendOperation.DELETEFRIEND, EventChatOperation.DELETECHAT,
+	public static final String[] MEMBERITEMSTR = { EventChatOperation.DELETECHAT,
 			EventChatOperation.FIXEDCHAT, EventChatOperation.CANELFIXEDCHAT };
 	private String memberName;
 	public int count;
@@ -277,17 +277,18 @@ class MemberMenuItemMonitor implements ActionListener {
 		String[] str = MemberButton.MEMBERITEMSTR;
 		String temp = ((JMenuItem) event.getSource()).getText();
 		String username = ((JMenuItem) event.getSource()).getActionCommand();
+//		if (temp.equals(str[0])) {
+//			EventsBridge.frontendEventHandle.post(new EventFriendOperation(username, str[0]));
+//			Logger.log.impart(EventFriendOperation.DELETEFRIEND + username);
+//		} else
 		if (temp.equals(str[0])) {
-			EventsBridge.frontendEventHandle.post(new EventFriendOperation(username, str[0]));
-			Logger.log.impart(EventFriendOperation.DELETEFRIEND + username);
+			EventsBridge.frontendEventHandle.post(new EventChatOperation(username, str[0]));
+			Logger.log.impart(EventChatOperation.DELETECHAT + username);
 		} else if (temp.equals(str[1])) {
 			EventsBridge.frontendEventHandle.post(new EventChatOperation(username, str[1]));
-			Logger.log.impart(EventChatOperation.DELETECHAT + username);
-		} else if (temp.equals(str[2])) {
-			EventsBridge.frontendEventHandle.post(new EventChatOperation(username, str[2]));
 			Logger.log.impart(EventChatOperation.FIXEDCHAT + username);
 		} else {
-			EventsBridge.frontendEventHandle.post(new EventChatOperation(username, str[3]));
+			EventsBridge.frontendEventHandle.post(new EventChatOperation(username, str[2]));
 			Logger.log.impart(EventChatOperation.CANELFIXEDCHAT + username);
 		}
 

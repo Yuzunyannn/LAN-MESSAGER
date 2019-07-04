@@ -1,6 +1,12 @@
 package client.record;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -22,7 +28,7 @@ import user.UOnline;
 import user.User;
 
 public class Record {
-	
+
 	static public String FILEMARK = "#FILE?:";
 	static public String FILEEND = ":?FILEEND#";
 	static public String MEMEMARK = "#MEME?:";
@@ -35,6 +41,75 @@ public class Record {
 			out.append((short) str.charAt(i));
 		}
 		return out.toString();
+	}
+	
+	/**获取本地用户聊天对象记录*/
+	static public List<String> getLocalChatToList(String thisUser) {
+		List<String> userChatToList = new ArrayList<String>();
+		File file = new File("./tmp/UserChatList/" + thisUser + ".txt");
+		userChatToList = readTxtFile(file);
+		return userChatToList;
+	}
+
+	static public void updateUserFile(String thisUser, String addUser) {
+		File userListDir = new File("./tmp/UserChatList/");
+		if (!userListDir.exists()) {
+			userListDir.mkdir();
+		}
+		File userListFile = new File("./tmp/UserChatList/" + thisUser + ".txt");
+		if (!userListFile.exists() || !userListFile.isFile()) {
+			try {
+				userListFile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		List<String> userChatToList = readTxtFile(userListFile);
+		if (!userChatToList.contains(addUser)) {
+			userChatToList.add(addUser);
+			if (!writeTxtFile(userListFile, userChatToList)) {
+				System.out.println("写入文件失败！");
+			}
+		}
+		
+	}
+
+	public static boolean writeTxtFile(File fileName, List<String> addUser) {
+		boolean flag = false;
+		FileOutputStream fileOutputStream = null;
+		try {
+			fileOutputStream = new FileOutputStream(fileName);
+			for (String string : addUser) {
+				fileOutputStream.write(string.getBytes("UTF-8"));
+				fileOutputStream.write("\n".getBytes("UTF-8"));
+			}
+			fileOutputStream.close();
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
+
+	/** 读取txt文件 */
+	public static List<String> readTxtFile(File file) {
+		List<String> userChatToList = new ArrayList<String>();
+		try {
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
+			BufferedReader br = new BufferedReader(reader);
+			String s = null;
+			while ((s = br.readLine()) != null) {
+				userChatToList.add(s);
+				System.out.println("add" + s);
+			}
+			reader.close();
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return userChatToList;
 	}
 
 	/** 删除一个文件夹以这个文件夹下的子目录 */
@@ -173,6 +248,7 @@ public class Record {
 
 	/** 添加一条新纪录 */
 	public void addNew(Word word, User whos) {
+		System.out.println("getPic lalalala :" + word.getValue());
 		Calendar cal = Calendar.getInstance();
 		RecInfo info = this.getWords(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 		NBTTagCompound nbt = new NBTTagCompound();

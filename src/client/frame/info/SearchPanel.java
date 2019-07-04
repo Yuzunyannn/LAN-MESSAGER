@@ -23,6 +23,7 @@ import client.event.EventIPC;
 import client.event.EventSearch;
 import client.event.EventsBridge;
 import client.frame.MainFrame;
+import client.frame.Restart;
 import client.frame.Theme;
 import client.frame.selection.SelectGroupFrame;
 import client.frame.selection.SendGroupFrame;
@@ -226,7 +227,7 @@ class SetListListener implements ActionListener {
 
 		/** 注销 */
 		if (temp.equals(str[0])) {
-
+			Restart.restartApplication();
 			Logger.log.impart(str[0]);
 		}
 

@@ -15,6 +15,7 @@ import client.event.EventRecv.EventRecvString;
 import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.Theme;
+import client.record.Record;
 import client.user.UserClient;
 import event.IEventBus;
 import event.SubscribeEvent;
@@ -392,6 +393,7 @@ public class ListScrollPanel extends JScrollPane {
 		
 			addNewMember(new GroupButton(e.sp.specialName, e.sp.getId(), e.users, e.boss));
 			setTop(user.getUserName());
+			Record.updateUserFile(UserClient.getClientUsername(), e.sp.specialName);
 			this.refresh();
 	}
 
