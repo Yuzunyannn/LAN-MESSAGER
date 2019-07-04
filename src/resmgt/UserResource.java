@@ -60,8 +60,6 @@ public class UserResource {
 		}
 	}
 
-	static public int MEMECOUNT = 0;
-
 	static public void init() {
 		Logger.log.impart("开始处理用户资源!");
 		// headicon
@@ -85,7 +83,7 @@ public class UserResource {
 		// icon-emoji
 		info = ResourceManagement.instance.getPackResource("img/icons/icon-emoji.png");
 		info = ResourceManagement.instance.loadTmpResource(info, "icon-emoji");
-		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size-5, IconSize.STANDARD.size - 5,
+		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size - 5, IconSize.STANDARD.size - 5,
 				IconSize.STANDARD.size - 5));
 		// icon-user
 		info = ResourceManagement.instance.getPackResource("img/icons/icon-user.png");
@@ -101,43 +99,26 @@ public class UserResource {
 		// icon-plane
 		info = ResourceManagement.instance.getPackResource("img/icons/plane.png");
 		info = ResourceManagement.instance.loadTmpResource(info, "icon-plane");
-		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size-5, IconSize.STANDARD.size-5,
-				IconSize.STANDARD.size-5));
+		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size - 5, IconSize.STANDARD.size - 5,
+				IconSize.STANDARD.size - 5));
 		// icon-add
 		info = ResourceManagement.instance.getPackResource("img/icons/add.png");
 		info = ResourceManagement.instance.loadTmpResource(info, "icon-add");
-		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size-5, IconSize.STANDARD.size-5,
-				IconSize.STANDARD.size-5));
-		// MEME-1
-		File file = new File("./src/resources/img/memes/");
-		int count = 0;
-		if (file.exists()) {
-			File[] files = file.listFiles();
-			if (files.length == 0) {
-				System.out.println("文件夹是空的!");
-				return;
-			} else {
-				for (File file2 : files) {
-					if (!file2.isDirectory()) {
-						if (file2.getPath().indexOf(".DS_Store") >= 0) {
-							continue;
-						}
-						int index = file2.getPath().indexOf("img");
-						String srcImg = file2.getPath().substring(index, file2.getPath().length());
-						info = ResourceManagement.instance.getPackResource(srcImg);
-						String path = "meme-" + srcImg.substring(10, srcImg.indexOf(".jpg"));
-						info = ResourceManagement.instance.loadTmpResource(info, path);
-						info.setData(info.getImage().getScaledInstance(MemeSize.STANDARD.size, MemeSize.STANDARD.size,
-								MemeSize.STANDARD.size));
-						count++;
-						System.out.println("文件:" + file2.getPath());
-					}
-				}
-			}
-		} else {
-			System.out.println("文件不存在!");
+		info.setData(info.getImage().getScaledInstance(IconSize.STANDARD.size - 5, IconSize.STANDARD.size - 5,
+				IconSize.STANDARD.size - 5));
+
+		// Meme
+		String path = "img/memes/";
+		int count = 1;
+		for (int i = 1; i <= 10; i++) {
+			Logger.log.impart("正在处理表情图片：" + i);
+			String tmpPath = path + Integer.toString(i) + ".jpg";
+			info = ResourceManagement.instance.getPackResource(tmpPath);
+			info = ResourceManagement.instance.loadTmpResource(info, "meme-" + Integer.toString(i));
+			info.setData(info.getImage().getScaledInstance(MemeSize.STANDARD.size, MemeSize.STANDARD.size,
+					MemeSize.STANDARD.size));
 		}
-		MEMECOUNT = count;
+
 	}
 
 	public void traverseFolder(String path) {

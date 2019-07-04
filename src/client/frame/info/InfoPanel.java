@@ -11,8 +11,6 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import com.sun.xml.internal.bind.api.Bridge;
-
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
 import client.event.EventIPC;
@@ -170,6 +168,7 @@ public class InfoPanel extends JPanel {
 				Logger.log.impart("并无此好友，删除失败");
 			} else
 				Logger.log.impart("删除成功");
+			userSet.remove(UOnline.getInstance().getUser(e.username));
 			// 测试输出ul
 			System.out.print(" 好友列表  ：");
 			for (UserClient tmp : ul) {

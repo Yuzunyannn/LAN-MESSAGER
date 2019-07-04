@@ -68,7 +68,7 @@ public class ListScrollPanel extends JScrollPane {
 			return;
 		Component tempbutton;
 		tempbutton = content[temp];
-
+		((MemberButton) tempbutton).envelopechange();
 		for (int i = temp; i > fixed; i--) {
 			content[i] = content[i - 1];
 		}
@@ -82,15 +82,16 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		this.refresh();
 	}
-/**设置置顶用的settop*/
-	public void setTop(String name,boolean isfix) {
+
+	/** 设置置顶用的settop */
+	public void setTop(String name, boolean isfix) {
 		int temp;
 		temp = getMember(name);
 		if (temp == -1 || temp <= fixed - 1)
 			return;
 		Component tempbutton;
 		tempbutton = content[temp];
-		((MemberButton)tempbutton).fixedState(true);
+		((MemberButton) tempbutton).fixedState(true);
 		for (int i = temp; i > fixed; i--) {
 			content[i] = content[i - 1];
 		}
@@ -103,6 +104,7 @@ public class ListScrollPanel extends JScrollPane {
 		}
 		this.refresh();
 	}
+
 	/** 把成员置顶 */
 	public void setTop(String name) {
 		int temp;
@@ -111,7 +113,7 @@ public class ListScrollPanel extends JScrollPane {
 			return;
 		Component tempbutton;
 		tempbutton = content[temp];
-	
+
 		for (int i = temp; i > fixed; i--) {
 			content[i] = content[i - 1];
 		}
@@ -129,7 +131,7 @@ public class ListScrollPanel extends JScrollPane {
 	}
 
 	public void setFixed(String name) {
-		setTop(name,true);
+		setTop(name, true);
 		if (fixed == 0) {
 			fixed = fixed + 1;
 			System.out.println(((MemberButton) content[fixed - 1]).getMemberName() + "最新置顶");
@@ -151,7 +153,7 @@ public class ListScrollPanel extends JScrollPane {
 				return;
 			}
 			Component temp = content[tmpIndex];
-			((MemberButton)temp).fixedState(false);
+			((MemberButton) temp).fixedState(false);
 			for (int i = tmpIndex; i < fixed - 1; i++) {
 				content[i] = content[i + 1];
 			}
@@ -204,8 +206,9 @@ public class ListScrollPanel extends JScrollPane {
 		} else
 			addNewMember(name);
 	}
+
 	public void addNewMember(MemberButton tmp) {
-		User user=UOnline.getInstance().getUser(tmp.getMemberName());
+		User user = UOnline.getInstance().getUser(tmp.getMemberName());
 		if (InfoPanel.userSet.contains(user)) {
 			Logger.log.impart("该对象已经在聊天列表");
 			return;
@@ -219,6 +222,7 @@ public class ListScrollPanel extends JScrollPane {
 		standardHeight(super.getPreferredSize());
 		p.setPreferredSize(new Dimension(width, height));
 	}
+
 	public void addNewMember(User user) {
 		if (InfoPanel.userSet.contains(user)) {
 			Logger.log.impart("该对象已经在聊天列表");
@@ -233,13 +237,14 @@ public class ListScrollPanel extends JScrollPane {
 		standardHeight(super.getPreferredSize());
 		p.setPreferredSize(new Dimension(width, height));
 	}
-	public void addNewMember(User user,String label) {
+
+	public void addNewMember(User user, String label) {
 		if (InfoPanel.userSet.contains(user)) {
 			Logger.log.impart("该对象已经在聊天列表");
 			return;
 		}
 		InfoPanel.userSet.add(user);
-		p.add(new MemberButton(user.getUserName(),label));
+		p.add(new MemberButton(user.getUserName(), label));
 		Logger.log.impart("该对象成功添加");
 		content = p.getComponents();
 		height += MemberButton.MEMBERBUTTON_HEIGHT;
@@ -299,7 +304,7 @@ public class ListScrollPanel extends JScrollPane {
 
 	@SubscribeEvent
 	public void onCountFile(transfer.EventFileRecv.Start e) {
-		/**未使用hashset优化*/
+		/** 未使用hashset优化 */
 		boolean have = false;
 		for (Component i : content)
 			if (((MemberButton) i).getMemberName().equals(e.getFrom().getUserName())) {
@@ -327,18 +332,20 @@ public class ListScrollPanel extends JScrollPane {
 		content = p.getComponents();
 		this.refresh();
 	}
+
 	@SubscribeEvent
 	public void onRecvFile(transfer.EventFileRecv.Finish e) {
 		for (Component i : content)
 			if (((MemberButton) i).getMemberName().equals(e.getFrom().getUserName())) {
-				if(((MemberButton)i).isChat)
+				if (((MemberButton) i).isChat)
 					EventsBridge.sendHasRead(e.getFrom());
 				break;
-			} 
+			}
 	}
+
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
-		/**未使用hashset优化*/
+		/** 未使用hashset优化 */
 		boolean have = false;
 
 		for (Component i : content)
@@ -348,26 +355,26 @@ public class ListScrollPanel extends JScrollPane {
 			} else
 				have = false;
 		if (!have)
-			if(e.sp==null)
-			EventsBridge.frontendEventHandle
-					.post(new EventChatOperation(e.from.getUserName(), EventChatOperation.ADDCHAT, state));
+			if (e.sp == null)
+				EventsBridge.frontendEventHandle
+						.post(new EventChatOperation(e.from.getUserName(), EventChatOperation.ADDCHAT, state));
 			else {
 				UserClient.sendToServer(new MessageGroupInfo(e.sp));
 			}
-		if(e.sp==null) {
-		for (int i = 0; i < content.length; i++)
-			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
-				((MemberButton) content[i]).recvMessage();
-				System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
-						+ ((MemberButton) content[i]).count);
-				setTop(((MemberButton) content[i]).getMemberName());
-				System.out.println(((MemberButton) content[i]).getMemberName() + ((MemberButton) content[i]).count);
-				if (((MemberButton) content[i]).getIsChat()) {
-					EventsBridge.sendHasRead(e.from);
+		if (e.sp == null) {
+			for (int i = 0; i < content.length; i++)
+				if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
+					((MemberButton) content[i]).recvMessage();
+					System.out.println("name :" + ((MemberButton) content[i]).getMemberName() + " count :"
+							+ ((MemberButton) content[i]).count);
+					setTop(((MemberButton) content[i]).getMemberName());
+					System.out.println(((MemberButton) content[i]).getMemberName() + ((MemberButton) content[i]).count);
+					if (((MemberButton) content[i]).getIsChat()) {
+						EventsBridge.sendHasRead(e.from);
+					}
 				}
-			}
-		
-		}else
+
+		} else
 			for (int i = 0; i < content.length; i++)
 				if (((MemberButton) content[i]).getMemberName().equals(e.sp.specialName)) {
 					((MemberButton) content[i]).recvMessage();
@@ -410,12 +417,12 @@ public class ListScrollPanel extends JScrollPane {
 
 	@SubscribeEvent
 	public void onShowGroup(EventGroupInfoGet e) {
-		User user=UOnline.getInstance().getUser(e.sp.specialName);
-		
-			addNewMember(new GroupButton(e.sp.specialName, e.sp.getId(), e.users, e.boss));
-			setTop(user.getUserName());
-			Record.updateUserFile(UserClient.getClientUsername(), e.sp.specialName);
-			this.refresh();
+		User user = UOnline.getInstance().getUser(e.sp.specialName);
+
+		addNewMember(new GroupButton(e.sp.specialName, e.sp.getId(), e.users, e.boss));
+		setTop(user.getUserName());
+		Record.updateUserFile(UserClient.getClientUsername(), e.sp.specialName);
+		this.refresh();
 	}
 
 	@SubscribeEvent

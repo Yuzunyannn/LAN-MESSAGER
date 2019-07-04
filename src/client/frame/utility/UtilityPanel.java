@@ -127,6 +127,15 @@ public class UtilityPanel extends JPanel implements ITickable {
 		return info;
 	}
 
+	public void toBlank() {
+		panelInfo="";
+		currPanel = blankPanel;
+		UtilityPanel.this.remove(0);
+		UtilityPanel.this.add(currPanel);
+		UtilityPanel.this.revalidate();
+		UtilityPanel.this.repaint();
+	}
+	
 	/** 切换聊天界面 */
 	public void toChat(String username) {
 		String newInfo = UtilityPanel.TOOLID_CHATING + username;
@@ -137,11 +146,7 @@ public class UtilityPanel extends JPanel implements ITickable {
 			info.reborn();
 		}
 		panelInfo = newInfo;
-		if(username == "") {
-			currPanel = blankPanel;
-		} else {
-			currPanel = info.panel;
-		}
+		currPanel = info.panel;
 		
 		info.tick = this.tick;
 		UtilityPanel.this.remove(0);
@@ -250,12 +255,12 @@ public class UtilityPanel extends JPanel implements ITickable {
 	
 	@SubscribeEvent
 	public void changeBlankChatOnDelete(EventChatOperation e) {
-		this.toChat("");
+		this.toBlank();
 	}
 	
 	@SubscribeEvent
 	public void changeBlankChatOnSearch(EventSearch e) {
-		this.toChat("");
+		this.toBlank();
 	}
 	
 	@SubscribeEvent

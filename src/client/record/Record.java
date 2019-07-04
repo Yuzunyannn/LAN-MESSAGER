@@ -22,6 +22,7 @@ import log.Logger;
 import nbt.NBTBase;
 import nbt.NBTTagCompound;
 import nbt.NBTTagList;
+import nbt.NBTTagString;
 import resmgt.ResourceInfo;
 import resmgt.ResourceManagement;
 import user.UOnline;
@@ -37,62 +38,65 @@ public class Record {
 	static private String toRecordString(String str) {
 		StringBuffer out = new StringBuffer("");
 		for (int i = 0; i < str.length(); i++) {
-//			out += (short) str.charAt(i);
 			out.append((short) str.charAt(i));
 		}
 		return out.toString();
 	}
-	
-	/**获取本地用户聊天对象记录*/
+
+	/** 获取本地用户聊天对象记录 */
 	static public List<String> getLocalChatToList(String thisUser) {
 		List<String> userChatToList = new ArrayList<String>();
-		File file = new File("./tmp/UserChatList/" + thisUser + ".txt");
-		userChatToList = readTxtFile(file);
+		ResourceInfo info = ResourceManagement.instance.loadOrCreateTmpNBT("ulist/" + thisUser, "ulist/" + thisUser);
+		NBTTagCompound nbt = info.getNBT();
+		if (!nbt.hasKey("ulist")) {
+			nbt.setTag("ulist", new NBTTagList());
+		}
+		NBTTagList list = (NBTTagList) nbt.getTag("ulist");
+		for (NBTBase nbtBase : list) {
+			userChatToList.add(((NBTTagString)nbtBase).toString());
+		}
 		return userChatToList;
 	}
-	
-	/**删除一个聊天对象*/
+
+	/** 删除一个聊天对象 */
 	static public void deleteUserFile(String thisUser, String addUser) {
-		File userListDir = new File("./tmp/UserChatList/");
-		if (!userListDir.exists()) {
-			return;
+		ResourceInfo info = ResourceManagement.instance.loadOrCreateTmpNBT("ulist/" + thisUser, "ulist/" + thisUser);
+		NBTTagCompound nbt = info.getNBT();
+		if (!nbt.hasKey("ulist")) {
+			nbt.setTag("ulist", new NBTTagList());
 		}
-		File userListFile = new File("./tmp/UserChatList/" + thisUser + ".txt");
-		if (!userListFile.exists() || !userListFile.isFile()) {
-			return;
-		}
-		List<String> userChatToList = readTxtFile(userListFile);
-		if (userChatToList.contains(addUser)) {
-			userChatToList.remove(addUser);
-			if (!writeTxtFile(userListFile, userChatToList)) {
-				System.out.println("写入文件失败！");
+		NBTTagList list = (NBTTagList) nbt.getTag("ulist");
+		Iterator<NBTBase> iter = list.iterator();
+		while(iter.hasNext()) {
+			NBTTagString str = (NBTTagString) iter.next();
+			if(str.get().equals(addUser)) {
+				iter.remove();
+				break;
 			}
 		}
+		info.save();
 	}
 
-	/**添加一个聊天对象*/
+	/** 添加一个聊天对象 */
 	static public void updateUserFile(String thisUser, String addUser) {
-		File userListDir = new File("./tmp/UserChatList/");
-		if (!userListDir.exists()) {
-			userListDir.mkdir();
+		ResourceInfo info = ResourceManagement.instance.loadOrCreateTmpNBT("ulist/" + thisUser, "ulist/" + thisUser);
+		NBTTagCompound nbt = info.getNBT();
+		if (!nbt.hasKey("ulist")) {
+			nbt.setTag("ulist", new NBTTagList());
 		}
-		File userListFile = new File("./tmp/UserChatList/" + thisUser + ".txt");
-		if (!userListFile.exists() || !userListFile.isFile()) {
-			try {
-				userListFile.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		NBTTagList list = (NBTTagList) nbt.getTag("ulist");
+		boolean has = false;
+		for(NBTBase base : list) {
+			NBTTagString str = (NBTTagString) base;
+			if(str.get().equals(addUser)) {
+				has = true;
+				break;
 			}
 		}
-		List<String> userChatToList = readTxtFile(userListFile);
-		if (!userChatToList.contains(addUser)) {
-			userChatToList.add(addUser);
-			if (!writeTxtFile(userListFile, userChatToList)) {
-				System.out.println("写入文件失败！");
-			}
+		if (!has) {
+			list.appendTag(addUser);
+			info.save();
 		}
-		
 	}
 
 	public static boolean writeTxtFile(File fileName, List<String> addUser) {
@@ -110,26 +114,6 @@ public class Record {
 			e.printStackTrace();
 		}
 		return flag;
-	}
-
-	/** 读取txt文件 */
-	public static List<String> readTxtFile(File file) {
-		List<String> userChatToList = new ArrayList<String>();
-		try {
-			InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
-			BufferedReader br = new BufferedReader(reader);
-			String s = null;
-			while ((s = br.readLine()) != null) {
-				userChatToList.add(s);
-				System.out.println("add" + s);
-			}
-			reader.close();
-			br.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return userChatToList;
 	}
 
 	/** 删除一个文件夹以这个文件夹下的子目录 */
@@ -189,9 +173,9 @@ public class Record {
 
 	/** 删除一个对象的聊天记录 */
 	static public void deleteRecord(String chatTo) {
-		String root = toRecordString(chatTo) + toRecordString(UserClient.getClientUsername());
-		Logger.log.impart("正在删除" + chatTo + "的聊天记录");
-		delFolder("./tmp/" + root);
+//		Record rec = RecordManagement.getRecord(UOnline.getInstance().getUser(chatTo));
+//		Logger.log.impart("正在删除" + chatTo + "的聊天记录");
+//		delFolder("./tmp/" + root);
 	}
 
 	static class RecInfo {

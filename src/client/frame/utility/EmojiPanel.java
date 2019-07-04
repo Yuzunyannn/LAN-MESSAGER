@@ -32,17 +32,17 @@ public class EmojiPanel extends JScrollPane {
 		super(new JPanel());
 		this.contentPanel = (JPanel) ((JViewport) this.getComponent(0)).getComponent(0);
 		this.contentPanel.setLayout(new GridLayout(3, 3));
-		int cal = UserResource.MEMECOUNT / 9;
-		int cal_left = UserResource.MEMECOUNT % 9;
+		int cal = 10 / 9;
+		int cal_left = 10 % 9;
 		int total = cal * 9 + cal_left;
 		for (int i = 1; i < total + 1; i++) {
 			EmojiButton btn;
-			if (i<UserResource.MEMECOUNT+1) {
+			if (i < 10 + 1) {
 				btn = new EmojiButton(i, toUser, true);
 			} else {
 				btn = new EmojiButton(i, toUser, false);
 			}
-			
+
 			this.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
