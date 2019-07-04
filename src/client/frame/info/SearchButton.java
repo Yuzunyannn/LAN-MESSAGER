@@ -16,7 +16,7 @@ import log.Logger;
 
 public class SearchButton extends MemberButton {
 	private static final long serialVersionUID = 1L;
-	public static final String SEARCHITEMSTR[] = { "查看信息", "添加好友" };
+	public static final String SEARCHITEMSTR[] = { "添加聊天" };
 
 	public SearchButton(String name) {
 		super(name);
@@ -65,10 +65,11 @@ class SearchMenuItemMonitor implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String[] str = SearchButton.SEARCHITEMSTR;
 		String temp = ((JMenuItem) e.getSource()).getText();
+//		if (temp.equals(str[0])) {
+//			EventsBridge.frontendEventHandle.post(new EventShow(buttonId, toolId));
+////			Logger.log.warn("UtilityPanel部分需要完成一个显示用户信息盘，此处暂时用聊天盘");
+//		} else
 		if (temp.equals(str[0])) {
-			EventsBridge.frontendEventHandle.post(new EventShow(buttonId, toolId));
-//			Logger.log.warn("UtilityPanel部分需要完成一个显示用户信息盘，此处暂时用聊天盘");
-		} else if (temp.equals(str[1])) {
 			EventsBridge.frontendEventHandle.post(new EventFriendOperation(buttonId, EventFriendOperation.ADDFRIEND));
 		}
 	}

@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+
+import com.sun.xml.internal.bind.api.Bridge;
 
 import client.event.EventChatOperation;
 import client.event.EventFriendOperation;
@@ -25,7 +28,9 @@ import log.Logger;
 import user.SearchHelper;
 import user.UOnline;
 import user.User;
+import user.UserSpecial;
 import user.message.MUSSearch;
+import user.message.MessageGroupInfo;
 
 /** 界面左边的区域 用户区域 */
 public class InfoPanel extends JPanel {
@@ -126,10 +131,11 @@ public class InfoPanel extends JPanel {
 		else if (e.optype.equals(EventChatOperation.ADDCHAT)) {
 			/** 此处需要添加对于是否处于好友列表的判断 */
 			if (e.recvpanel.equals(ListScrollPanel.FRIENDPANEL)) {
-				if(!e.username.contains("#G"))
-				memberField.addNewMember(UOnline.getInstance().getUser(e.username));
-				
+				if (!e.username.contains("#G"))
+					memberField.addNewMember(UOnline.getInstance().getUser(e.username));
+
 				memberField.setTop(e.username, 1);
+				Record.updateUserFile(UserClient.getClientUsername(), e.username);
 			}
 		}
 		this.refresh();
@@ -187,8 +193,7 @@ public class InfoPanel extends JPanel {
 			System.out.println("搜索请求返回");
 			Collection<User> searchResult = e.name;
 			searchMemberField.deleteAllMember();
-			if(!e.source)
-			{
+			if (!e.source) {
 				searchSet.clear();
 				searchSet.addAll(e.name);
 			}
@@ -233,10 +238,20 @@ public class InfoPanel extends JPanel {
 		for (EventULChange.ChangeInfo info : e.infos) {
 			if ((info.flags & EventULChange.ADD) != 0) {
 				addMember(info.user);
+				Record.updateUserFile(UserClient.getClientUsername(), info.user.getUserName());
 			} else if ((info.flags & EventULChange.REMOVE) != 0) {
 				removeMember(info.user);
 			}
 
+		}
+		List<String> chatToUserList = Record.getLocalChatToList(UserClient.getClientUsername());
+		for (String string : chatToUserList) {
+			if (string.indexOf("#G") == 0) {
+				UserSpecial sp = new UserSpecial(string);
+				UserClient.sendToServer(new MessageGroupInfo(sp));
+			} else {
+				addMember(UOnline.getInstance().getUser(string));
+			}
 		}
 		this.refresh();
 

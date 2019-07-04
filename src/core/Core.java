@@ -20,13 +20,13 @@ import user.User;
 import user.message.MessageEmergency;
 
 public class Core {
-	static final String SERVER_IP = "127.0.0.1";
-	static final int SERVER_PORT = 35275;
-	static final Proxy proxy = new DebugProxy();
-	
-//	static final String SERVER_IP = "39.107.94.231";
+//	static final String SERVER_IP = "127.0.0.1";
 //	static final int SERVER_PORT = 35275;
-//	static final Proxy proxy = new ClientProxy();
+//	static final Proxy proxy = new DebugProxy();
+	
+	static final String SERVER_IP = "39.107.94.231";
+	static final int SERVER_PORT = 35275;
+	static final Proxy proxy = new ClientProxy();
 	
 	static final Core core = new Core();
 

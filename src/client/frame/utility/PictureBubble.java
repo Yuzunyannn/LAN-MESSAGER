@@ -29,7 +29,7 @@ public class PictureBubble extends Bubble {
 			path = "meme-";
 			path = path + picName.substring(0, index);
 		} else {
-			path = picName;
+			path = "meme-" + picName;
 		}
 		this.picButton.setIcon(UserResource.getMeme(path));
 		this.picButton.setBackground(Color.white);

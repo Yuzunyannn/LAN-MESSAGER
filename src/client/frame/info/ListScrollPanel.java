@@ -15,6 +15,7 @@ import client.event.EventRecv.EventRecvString;
 import client.event.EventShow;
 import client.event.EventsBridge;
 import client.frame.Theme;
+import client.record.Record;
 import client.user.UserClient;
 import event.IEventBus;
 import event.SubscribeEvent;
@@ -326,7 +327,15 @@ public class ListScrollPanel extends JScrollPane {
 		content = p.getComponents();
 		this.refresh();
 	}
-
+	@SubscribeEvent
+	public void onRecvFile(transfer.EventFileRecv.Finish e) {
+		for (Component i : content)
+			if (((MemberButton) i).getMemberName().equals(e.getFrom().getUserName())) {
+				if(((MemberButton)i).isChat)
+					EventsBridge.sendHasRead(e.getFrom());
+				break;
+			} 
+	}
 	@SubscribeEvent
 	public void onCountMsg(EventRecvString e) {
 		/**未使用hashset优化*/
@@ -342,7 +351,10 @@ public class ListScrollPanel extends JScrollPane {
 			if(e.sp==null)
 			EventsBridge.frontendEventHandle
 					.post(new EventChatOperation(e.from.getUserName(), EventChatOperation.ADDCHAT, state));
-			else UserClient.sendToServer(new MessageGroupInfo(e.sp));
+			else {
+				UserClient.sendToServer(new MessageGroupInfo(e.sp));
+			}
+		if(e.sp==null) {
 		for (int i = 0; i < content.length; i++)
 			if (((MemberButton) content[i]).getMemberName().equals(e.from.getUserName())) {
 				((MemberButton) content[i]).recvMessage();
@@ -351,9 +363,19 @@ public class ListScrollPanel extends JScrollPane {
 				setTop(((MemberButton) content[i]).getMemberName());
 				System.out.println(((MemberButton) content[i]).getMemberName() + ((MemberButton) content[i]).count);
 				if (((MemberButton) content[i]).getIsChat()) {
-//					EventsBridge.sendHasRead(e.from);
+					EventsBridge.sendHasRead(e.from);
 				}
 			}
+		
+		}else
+			for (int i = 0; i < content.length; i++)
+				if (((MemberButton) content[i]).getMemberName().equals(e.sp.specialName)) {
+					((MemberButton) content[i]).recvMessage();
+					setTop(((MemberButton) content[i]).getMemberName());
+					if (((MemberButton) content[i]).getIsChat()) {
+						EventsBridge.sendHasRead(e.from);
+					}
+				}
 		p.removeAll();
 		for (Component i : content) {
 			p.add(i);
@@ -392,6 +414,7 @@ public class ListScrollPanel extends JScrollPane {
 		
 			addNewMember(new GroupButton(e.sp.specialName, e.sp.getId(), e.users, e.boss));
 			setTop(user.getUserName());
+			Record.updateUserFile(UserClient.getClientUsername(), e.sp.specialName);
 			this.refresh();
 	}
 
