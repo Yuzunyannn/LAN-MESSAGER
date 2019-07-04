@@ -67,11 +67,6 @@ public class InfoPanel extends JPanel {
 		state = EventIPC.FRIENDS;
 		userField.setPreferredSize(new Dimension(0, UserPanel.USERLENGTH));
 		searchField.setPreferredSize(new Dimension(0, SearchPanel.SEARCH_FIELD_LENGTH));
-		// 好友测试用
-//		ul.add(new UserClient("lyl"));
-//		ul.add(new UserClient("ycy"));
-//		ul.add(new UserClient("ssj"));
-//		ul.add(new UserClient("myk"));
 	}
 
 	// 事件注册
@@ -123,6 +118,7 @@ public class InfoPanel extends JPanel {
 		else if (e.optype.equals(EventChatOperation.DELETECHAT)) {
 			// 删除聊天记录
 			Record.deleteRecord(e.username);
+			Record.deleteUserFile(UserClient.getClientUsername(), e.username);
 			memberField.deductMember(UOnline.getInstance().getUser(e.username));
 			EventsBridge.frontendEventHandle
 					.post(new EventFriendOperation(e.username, EventFriendOperation.DELETEFRIEND));

@@ -44,14 +44,14 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 			this.setLayout(new FlowLayout(FlowLayout.CENTER));
 			this.add(lineLabel);
 			this.setVisible(true);
-			this.setSize(this.getWidth(), 80);
+			this.setSize(this.getWidth(), 50);
 		} else if (type == BubbleType.TIME) {
 			JLabel lineLabel = new JLabel("--------" + time + "--------");
 			lineLabel.setVisible(true);
 			this.setLayout(new FlowLayout(FlowLayout.CENTER));
 			this.add(lineLabel);
 			this.setVisible(true);
-			this.setSize(this.getWidth(), 80);
+			this.setSize(this.getWidth(), 50);
 		} else {
 			this.CBPID = ID;
 			this.userTime = time;
@@ -66,9 +66,9 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 			if (type == BubbleType.WORD) {
 				this.setSize(this.getWidth(), this.dialog.getH() + 40);
 			} else if (type == BubbleType.FILE) {
-				this.setSize(this.getWidth(), 80);
+				this.setSize(this.getWidth(), 50);
 			} else if (type == BubbleType.MEME) {
-				this.setSize(this.getWidth(), 140);
+				this.setSize(this.getWidth(), 100);
 			}
 
 			if (type == BubbleType.NULL) {
@@ -170,7 +170,7 @@ public class ChatBubblePanel extends JPanel implements INBTSerializable<NBTTagCo
 				this.messageStatus = new JLabel("已读");
 				this.messageStatus.setForeground(Color.BLACK);
 			} else {
-				this.messageStatus = new JLabel("未读");
+				this.messageStatus = new JLabel("");
 				this.messageStatus.setForeground(Theme.COLOR9);
 			}
 			this.messageStatus.setOpaque(false);

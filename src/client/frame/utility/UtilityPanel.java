@@ -12,8 +12,10 @@ import java.util.TreeMap;
 
 import javax.swing.JPanel;
 
+import client.event.EventChatOperation;
 import client.event.EventGroupSend;
 import client.event.EventIsShowed;
+import client.event.EventSearch;
 import client.event.EventSendInputWords;
 import client.event.EventShow;
 import client.event.EventsBridge;
@@ -135,7 +137,12 @@ public class UtilityPanel extends JPanel implements ITickable {
 			info.reborn();
 		}
 		panelInfo = newInfo;
-		currPanel = info.panel;
+		if(username == "") {
+			currPanel = blankPanel;
+		} else {
+			currPanel = info.panel;
+		}
+		
 		info.tick = this.tick;
 		UtilityPanel.this.remove(0);
 		UtilityPanel.this.add(currPanel);
@@ -240,7 +247,17 @@ public class UtilityPanel extends JPanel implements ITickable {
 			}
 		}
 	}
-
+	
+	@SubscribeEvent
+	public void changeBlankChatOnDelete(EventChatOperation e) {
+		this.toChat("");
+	}
+	
+	@SubscribeEvent
+	public void changeBlankChatOnSearch(EventSearch e) {
+		this.toChat("");
+	}
+	
 	@SubscribeEvent
 	public void checkGroup(EventShow e) {
 		if (e.id.indexOf("#G") == 0) {

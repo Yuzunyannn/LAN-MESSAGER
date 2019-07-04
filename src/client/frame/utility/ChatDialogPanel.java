@@ -150,6 +150,8 @@ public class ChatDialogPanel extends JScrollPane implements INBTSerializable<NBT
 				scrollBarV.setValue(scrollBarV.getMaximum());
 				scrollBarV.revalidate();
 				scrollBarV.repaint();
+				revalidate();
+				repaint();
 			}
 		}, 50);
 	}

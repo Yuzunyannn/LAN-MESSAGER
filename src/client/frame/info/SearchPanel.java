@@ -173,6 +173,8 @@ public class SearchPanel extends JPanel {
 		b3.setIcon(new ImageIcon(ResourceManagement.instance.getTmpResource("icon-add").getImage()));
 		b2.setBackground(Color.black);
 		b3.setBackground(Color.black);
+		b2.setBorder(null);
+		b3.setBorder(null);
 		b2.setOpaque(false);
 		b3.setOpaque(false);
 		this.add(b2);
