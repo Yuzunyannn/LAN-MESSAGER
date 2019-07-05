@@ -15,6 +15,7 @@ import client.event.EventGroupSend;
 import client.event.EventsBridge;
 import client.frame.Theme;
 import client.frame.utility.UtilityPanel;
+import client.user.UserClient;
 import client.word.WordString;
 import user.UOnline;
 import user.User;
@@ -61,7 +62,7 @@ public class ConfirmPane extends JPanel {
 					for (String string : SelectFrame.getSelectedList()) {
 						users.add(UOnline.getInstance().getUser(string));
 					}
-
+					users.add(UserClient.getClientUser());
 					MessageGroupCreate GroupMessage = new MessageGroupCreate(users);
 					EventsBridge.groupCreateRequest(GroupMessage);
 				}
