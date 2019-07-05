@@ -2,6 +2,9 @@ This project has used the orginal NBT library from Minecraft Forge.
 Minecraft Forge is licensed under the terms of the LGPL 2.1 found
 here http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt and copied
 below.
+The artistic assets in this repository are not covered by the GPL.
+The image file named "debug_headicon.png" is a work of @hanomidori.
+
                    GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
